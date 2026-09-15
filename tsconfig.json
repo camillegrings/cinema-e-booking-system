@@ -9,7 +9,7 @@
     "moduleResolution": "nodenext",
     "target": "esnext",
     "lib": ["esnext", "dom", "dom.iterable"],
-    "types": ["node"],
+    "types": ["node", "vite/client"],
 
     /* React Support */
     "jsx": "react-jsx",
@@ -32,5 +32,8 @@
     "moduleDetection": "force",
     "noUncheckedIndexedAccess": true
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "src/**/*.d.ts"
+  ]
 }
