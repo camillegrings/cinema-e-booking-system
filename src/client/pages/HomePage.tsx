@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
-import { MOCK_MOVIES, Movie } from '../services/mockData.js';
-import { SearchFilterBar } from '../components/SearchFilterBar.css';
-import { MovieCard } from '../components/MovieCard.css';
+import React, { useState, useEffect } from 'react';
+import { Movie } from '../services/movie';
+import { SearchFilterBar } from '../components/SearchFilterBar';
+import { MovieCard } from '../components/MovieCard';
 import './HomePage.css';
 
 export const HomePage: React.FC = () => {
-  const [movies] = useState<Movie[]>(MOCK_MOVIES);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('ALL');
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/movies')
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+        return res.json();
+      })
+      .then((data: Movie[]) => {
+        setMovies(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching movies:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Normalize today's date to midnight for clean comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const filteredMovies = movies.filter((movie) => {
     const matchesTitle = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -16,12 +37,31 @@ export const HomePage: React.FC = () => {
     return matchesTitle && matchesGenre;
   });
 
-  const currentlyRunning = filteredMovies.filter((m) => m.category === 'CURRENTLY_RUNNING');
-  const comingSoon = filteredMovies.filter((m) => m.category === 'COMING_SOON');
+  // Parse release date string safely and normalize time to midnight
+  const currentlyRunning = filteredMovies.filter((m) => {
+    const releaseDate = new Date(m.release_date);
+    // Adjust for UTC offset shift from DATE strings YYYY-MM-DD
+    const normalizedRelease = new Date(
+      releaseDate.getUTCFullYear(),
+      releaseDate.getUTCMonth(),
+      releaseDate.getUTCDate()
+    );
+    return normalizedRelease <= today;
+  });
 
-  const handleSelectMovie = (id: number) => {
-    alert(`Selected Movie ID: ${id}`);
-  };
+  const comingSoon = filteredMovies.filter((m) => {
+    const releaseDate = new Date(m.release_date);
+    const normalizedRelease = new Date(
+      releaseDate.getUTCFullYear(),
+      releaseDate.getUTCMonth(),
+      releaseDate.getUTCDate()
+    );
+    return normalizedRelease > today;
+  });
+
+  if (loading) {
+    return <div style={{ textAlign: 'center', padding: '3rem' }}>Loading catalog...</div>;
+  }
 
   return (
     <div className="homepage-container">
@@ -45,20 +85,28 @@ export const HomePage: React.FC = () => {
         <>
           <section className="movie-section">
             <h2 className="section-title running">Currently Running</h2>
-            <div className="movie-grid">
-              {currentlyRunning.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} onSelectMovie={handleSelectMovie} />
-              ))}
-            </div>
+            {currentlyRunning.length === 0 ? (
+              <p style={{ color: '#888' }}>No currently running movies.</p>
+            ) : (
+              <div className="movie-grid">
+                {currentlyRunning.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} onSelectMovie={(id) => alert(`Selected Movie ID: ${id}`)} />
+                ))}
+              </div>
+            )}
           </section>
 
           <section className="movie-section">
             <h2 className="section-title coming">Coming Soon</h2>
-            <div className="movie-grid">
-              {comingSoon.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} onSelectMovie={handleSelectMovie} />
-              ))}
-            </div>
+            {comingSoon.length === 0 ? (
+              <p style={{ color: '#888' }}>No upcoming movies.</p>
+            ) : (
+              <div className="movie-grid">
+                {comingSoon.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} onSelectMovie={(id) => alert(`Selected Movie ID: ${id}`)} />
+                ))}
+              </div>
+            )}
           </section>
         </>
       )}

@@ -1,42 +1,51 @@
+/* src/client/pages/HomePage.css */
 
-.container {
+.homepage-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.header {
+.homepage-header {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.searchbar {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+.homepage-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
 }
 
-.moviecard {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  width: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.homepage-header p {
+  color: #666;
 }
 
-.sectiontitle {
-  border-bottom: 2px solid #007bff;
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.movie-section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
   padding-bottom: 0.5rem;
 }
 
-.moviegrid {
-  display: flex;
+.section-title.running {
+  border-bottom: 2px solid white;
+}
+
+.section-title.coming {
+  border-bottom: 2px solid white;
+}
+
+.movie-grid {
+  display: grid;
+  /* Automatically fits as many ~220px columns as possible, stretching cleanly across the row */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.5rem;
-  flex-wrap: wrap;
   margin-top: 1rem;
 }
