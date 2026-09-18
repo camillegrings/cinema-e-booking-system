@@ -35,15 +35,15 @@ VALUES
 (
     'Practical Magic 2',
     'Fantasy',
-    'Sandra Bullock, Nicole Kidman, Joey King',
-    'Griffin Dunne',
-    'Denise Di Novi',
-    'The Owens sisters return for another magical adventure as their family faces a new supernatural threat.',
-    'A fun fantasy sequel with a mix of romance, comedy, and magic.',
+    'Sandra Bullock, Nicole Kidman, Joey King, Lee Pace, Maisie Williams, Xolo Maridueña',
+    'Susanne Bier',
+    'Denise Di Novi, Sandra Bullock, Nicole Kidman',
+    'The Owens sisters return to confront a dark curse threatening their family.',
+    'A fantasy sequel featuring magic, family, romance, and comedy.',
     'PG-13',
-    'https://example.com/practical-magic-2.jpg',
-    'https://www.youtube.com/watch?v=example1',
-    '2026-09-10'
+    'https://img.youtube.com/vi/Ho10_4IX1jE/maxresdefault.jpg',
+    'https://www.youtube.com/embed/Ho10_4IX1jE',
+    '2026-09-11'
 ),
 
 (
@@ -53,10 +53,10 @@ VALUES
     'Destin Daniel Cretton',
     'Kevin Feige, Amy Pascal',
     'Peter Parker faces a new chapter of his life as Spider-Man while confronting a dangerous new threat.',
-    'An action-packed superhero movie with familiar characters and a new story.',
+    'An action-packed superhero movie featuring Spider-Man.',
     'PG-13',
-    'https://example.com/spider-man-brand-new-day.jpg',
-    'https://www.youtube.com/watch?v=example2',
+    'https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg',
+    'https://www.youtube.com/embed/8TZMtslA3UY',
     '2026-07-31'
 ),
 
@@ -69,8 +69,8 @@ VALUES
     'A legendary journey home becomes an epic battle against monsters, gods, and the forces of nature.',
     'A visually ambitious adaptation of the classic Greek epic.',
     'PG-13',
-    'https://example.com/the-odyssey.jpg',
-    'https://www.youtube.com/watch?v=example3',
+    'https://img.youtube.com/vi/Mzw2ttJD2qQ/maxresdefault.jpg',
+    'https://www.youtube.com/embed/Mzw2ttJD2qQ',
     '2026-07-17'
 ),
 
@@ -83,8 +83,8 @@ VALUES
     'A mysterious event in a remote community leads to a dangerous investigation into an unknown threat.',
     'A tense science-fiction thriller with an international cast.',
     'R',
-    'https://example.com/hope.jpg',
-    'https://www.youtube.com/watch?v=example4',
+    'https://img.youtube.com/vi/mYRc2Gl7geY/maxresdefault.jpg',
+    'https://www.youtube.com/embed/mYRc2Gl7geY',
     '2026-09-09'
 ),
 
@@ -97,9 +97,79 @@ VALUES
     'A dangerous mission forces a skilled runner to fight his way through a rapidly escalating situation.',
     'An energetic action movie built around fast-paced set pieces.',
     'PG-13',
-    'https://example.com/runner.jpg',
-    'https://www.youtube.com/watch?v=example5',
+    'https://img.youtube.com/vi/m8JUmBgHejI/maxresdefault.jpg',
+    'https://www.youtube.com/embed/m8JUmBgHejI',
     '2026-09-11'
+),
+
+(
+    'Toy Story 5',
+    'Animation',
+    'Tom Hanks, Tim Allen, Joan Cusack, Greta Lee, Conan O''Brien, Tony Hale',
+    'Andrew Stanton',
+    'Lindsey Collins',
+    'Woody, Buzz, Jessie, and the rest of the toys face a new challenge involving a high-tech toy.',
+    'A new animated adventure featuring the beloved Toy Story characters.',
+    'PG',
+    'https://img.youtube.com/vi/s_qpMMkvHYE/maxresdefault.jpg',
+    'https://www.youtube.com/embed/s_qpMMkvHYE',
+    '2026-06-19'
+),
+
+(
+    'Supergirl',
+    'Action',
+    'Milly Alcock, Matthias Schoenaerts, Eve Ridley, David Krumholtz, Emily Beecham, Jason Momoa',
+    'Craig Gillespie',
+    'Peter Safran, James Gunn',
+    'Kara Zor-El joins an unlikely companion on an interstellar journey involving vengeance and justice.',
+    'A superhero adventure following Supergirl on an interstellar journey.',
+    'PG-13',
+    'https://img.youtube.com/vi/s1-pfiVMKAs/maxresdefault.jpg',
+    'https://www.youtube.com/embed/s1-pfiVMKAs',
+    '2026-06-26'
+),
+
+(
+    'The Dog Stars',
+    'Thriller',
+    'Jacob Elordi, Josh Brolin, Margaret Qualley',
+    'Ridley Scott',
+    'Ridley Scott, Michael Pruss, Mark L. Smith',
+    'In a post-apocalyptic world, a young pilot and a survivalist face an uncertain future after receiving a mysterious radio transmission.',
+    'A post-apocalyptic thriller directed by Ridley Scott.',
+    'R',
+    'https://img.youtube.com/vi/cmzVY1goqwQ/maxresdefault.jpg',
+    'https://www.youtube.com/embed/cmzVY1goqwQ',
+    '2026-08-28'
+),
+
+(
+    'PAW Patrol: The Dino Movie',
+    'Animation',
+    'Mckenna Grace, Terry Crews, Ron Pardo, Jennifer Hudson',
+    'Cal Brunker',
+    'Jennifer Dodge, Laura Clunie, Toni Stevens',
+    'The PAW Patrol pups encounter dinosaurs and must work together to save the day.',
+    'An animated adventure featuring the PAW Patrol team.',
+    'PG',
+    'https://img.youtube.com/vi/xgI5iYmOf5Q/maxresdefault.jpg',
+    'https://www.youtube.com/embed/xgI5iYmOf5Q',
+    '2026-08-14'
+),
+
+(
+    'The End of Oak Street',
+    'Sci-Fi',
+    'Anne Hathaway, Ewan McGregor, Maisy Stella, Christian Convery',
+    'David Robert Mitchell',
+    'J.J. Abrams, Hannah Minghella, Jon Cohen, David Robert Mitchell, Matt Jackson, Tommy Harper',
+    'After a mysterious cosmic event transports an entire neighborhood somewhere unknown, a family must work together to survive.',
+    'A science-fiction adventure about a family facing a mysterious cosmic event.',
+    'PG-13',
+    'https://img.youtube.com/vi/IoHWPAN6FPg/maxresdefault.jpg',
+    'https://www.youtube.com/embed/IoHWPAN6FPg',
+    '2026-08-14'
 );
 
 -- SHOWTIMES
@@ -128,4 +198,29 @@ VALUES
 
 -- Runner
 (5, 2, '2026-09-15 18:00:00'),
-(5, 2, '2026-09-16 20:30:00');
+(5, 2, '2026-09-16 20:30:00'),
+
+-- Toy Story 5
+(6, 1, '2026-09-15 15:00:00'),
+(6, 1, '2026-09-16 17:00:00'),
+(6, 2, '2026-09-17 15:00:00'),
+
+-- Supergirl
+(7, 2, '2026-09-15 16:00:00'),
+(7, 1, '2026-09-16 19:30:00'),
+(7, 2, '2026-09-17 20:00:00'),
+
+-- The Dog Stars
+(8, 1, '2026-09-15 20:00:00'),
+(8, 2, '2026-09-16 18:00:00'),
+(8, 1, '2026-09-17 21:00:00'),
+
+-- PAW Patrol: The Dino Movie
+(9, 2, '2026-09-15 14:00:00'),
+(9, 1, '2026-09-16 15:00:00'),
+(9, 2, '2026-09-17 14:30:00'),
+
+-- The End of Oak Street
+(10, 1, '2026-09-15 19:00:00'),
+(10, 2, '2026-09-16 20:00:00'),
+(10, 1, '2026-09-17 18:00:00');
