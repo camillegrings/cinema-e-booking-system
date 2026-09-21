@@ -1,14 +1,39 @@
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
+import mysql from "mysql";
+import config from "./config.js";
 
-dotenv.config();
+const params = {
+	user: config.mysql.user,
+	password: config.mysql.pass,
+	host: config.mysql.host,
+	database: config.mysql.database,
+};
 
-export const db = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'cinema_booking',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-});
+const Connect = async () =>
+	new Promise<mysql.Connection>((resolve, reject) => {
+		const connection = mysql.createConnection(params);
+
+		connection.connect((error) => {
+			if (error) {
+				reject(error);
+				return;
+			}
+
+			resolve(connection);
+		});
+	});
+
+const Query = async <T>(connection: mysql.Connection, query: string) =>
+	new Promise<T>((resolve, reject) => {
+		connection.query(query, connection, (error, result) => {
+			if (error) {
+				reject(error);
+				return;
+			}
+
+			resolve(result);
+
+			connection.end();
+		});
+	});
+
+export { Connect, Query };

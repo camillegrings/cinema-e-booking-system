@@ -1,41 +1,71 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { db } from './db/db.js';
+import express from "express";
+import http from "http";
+import bodyParser from "body-parser";
+import logging from "./db/logging.js";
+import config from "./db/config.js";
+import userRoutes from "./routes/user.js";
+import homeRoutes from "./routes/home.js";
+import movieRoutes from "./routes/movie.js";
 
-dotenv.config();
+const NAMESPACE = "Server";
+const router = express();
 
-const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+router.use((req, res, next) => {
+	// Log the request
+	logging.info(
+		NAMESPACE,
+		`METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`,
+	);
 
-app.use(cors());
-app.use(express.json());
+	res.on("finish", () => {
+		// Log the response
+		logging.info(
+			NAMESPACE,
+			`METHOD: [${req.method}] - URL: [${req.url}] - STATUS: [${res.statusCode}] - IP: [${req.socket.remoteAddress}]`,
+		);
+	});
 
-app.get('/', (req, res) => {
-  res.send('Cinema E-Booking API is running!');
+	next();
 });
 
-app.get('/api/movies', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM movies');
-    res.json(rows);
-  } catch (error) {
-    console.error('MySQL Query Error:', error);
-    res.status(500).json({ error: 'Failed to fetch movies from database' });
-  }
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
+// API Rules
+router.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept, Authorization",
+	);
+
+	if (req.method == "OPTIONS") {
+		res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+		return res.status(200).json({});
+	}
+
+	next();
 });
 
-app.get('/api/movie/:movieId', async (req, res) => {
-  try {
-    const { movieId } = req.params
-    const [rows] = await db.query(`SELECT * FROM movies WHERE id = ${movieId}`);
-    res.json(rows);
-  } catch (error) {
-    console.error('MySQL Query Error:', error);
-    res.status(500).json({ error: 'Failed to fetch movies from database' });
-  }
+// Routes go here
+router.use("/", homeRoutes); // so like this highkey does not do anything bc it isnt being called by HomePage.tsx lol
+router.use("/movies", movieRoutes);
+router.use("/users", userRoutes);
+
+// Error handling
+router.use((req, res, next) => {
+	const error = new Error("Not found");
+
+	res.status(404).json({
+		message: error.message,
+	});
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend listening on http://localhost:${PORT}`);
-});
+const httpServer = http.createServer(router);
+
+httpServer.listen(config.server.port, () =>
+	logging.info(
+		NAMESPACE,
+		`Server is running ${config.server.hostname}:${config.server.port}`,
+	),
+);
