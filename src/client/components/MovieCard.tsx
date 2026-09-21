@@ -5,10 +5,9 @@ import "./MovieCard.css";
 
 interface Props {
 	movie: Movie;
-	onSelectMovie: (id: number) => void;
 }
 
-export const MovieCard: React.FC<Props> = ({ movie, onSelectMovie }) => {
+export const MovieCard: React.FC<Props> = ({ movie }) => {
 	return (
 		<div className='movie-card'>
 			<div>

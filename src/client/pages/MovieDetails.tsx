@@ -12,7 +12,7 @@ export const MovieDetails: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/api/movie/${params.id}`)
+        fetch(`http://localhost:3000/movies/get/${params.id}`)
             .then((res) => {
                 if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
                 return res.json();

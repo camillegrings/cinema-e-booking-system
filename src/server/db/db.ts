@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql from "mysql2";
 import config from "./config.js";
 
 const params = {
@@ -24,13 +24,13 @@ const Connect = async () =>
 
 const Query = async <T>(connection: mysql.Connection, query: string) =>
 	new Promise<T>((resolve, reject) => {
-		connection.query(query, connection, (error, result) => {
+		connection.query(query, (error, result) => {
 			if (error) {
 				reject(error);
 				return;
 			}
 
-			resolve(result);
+			resolve(result as T);
 
 			connection.end();
 		});
