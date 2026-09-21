@@ -29,7 +29,7 @@ VALUES
 
 INSERT INTO movies
 (title, genre, cast, director, producer, synopsis, reviews, mpaa_rating,
- trailer_image_url, trailer_video_url, release_date)
+ trailer_image_url, trailer_video_url, release_date, status)
 VALUES
 
 (
@@ -43,7 +43,8 @@ VALUES
     'PG-13',
     'https://img.youtube.com/vi/Ho10_4IX1jE/maxresdefault.jpg',
     'https://www.youtube.com/embed/Ho10_4IX1jE',
-    '2026-09-11'
+    '2026-09-11',
+    "Currently Running"
 ),
 
 (
@@ -57,7 +58,8 @@ VALUES
     'PG-13',
     'https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg',
     'https://www.youtube.com/embed/8TZMtslA3UY',
-    '2026-07-31'
+    '2026-07-31',
+    "Currently Running"
 ),
 
 (
@@ -71,7 +73,8 @@ VALUES
     'PG-13',
     'https://img.youtube.com/vi/Mzw2ttJD2qQ/maxresdefault.jpg',
     'https://www.youtube.com/embed/Mzw2ttJD2qQ',
-    '2026-07-17'
+    '2026-07-17',
+    "Currently Running"
 ),
 
 (
@@ -85,7 +88,8 @@ VALUES
     'R',
     'https://img.youtube.com/vi/mYRc2Gl7geY/maxresdefault.jpg',
     'https://www.youtube.com/embed/mYRc2Gl7geY',
-    '2026-09-09'
+    '2026-09-09',
+    "Currently Running"
 ),
 
 (
@@ -99,7 +103,8 @@ VALUES
     'PG-13',
     'https://img.youtube.com/vi/m8JUmBgHejI/maxresdefault.jpg',
     'https://www.youtube.com/embed/m8JUmBgHejI',
-    '2026-09-11'
+    '2026-09-11',
+    "Currently Running"
 ),
 
 (
@@ -113,7 +118,8 @@ VALUES
     'PG',
     'https://img.youtube.com/vi/s_qpMMkvHYE/maxresdefault.jpg',
     'https://www.youtube.com/embed/s_qpMMkvHYE',
-    '2026-06-19'
+    '2026-06-19',
+    "Currently Running"
 ),
 
 (
@@ -127,7 +133,8 @@ VALUES
     'PG-13',
     'https://img.youtube.com/vi/s1-pfiVMKAs/maxresdefault.jpg',
     'https://www.youtube.com/embed/s1-pfiVMKAs',
-    '2026-06-26'
+    '2026-06-26',
+    "Currently Running"
 ),
 
 (
@@ -141,7 +148,8 @@ VALUES
     'R',
     'https://img.youtube.com/vi/cmzVY1goqwQ/maxresdefault.jpg',
     'https://www.youtube.com/embed/cmzVY1goqwQ',
-    '2026-08-28'
+    '2026-08-28',
+    "Currently Running"
 ),
 
 (
@@ -155,7 +163,8 @@ VALUES
     'PG',
     'https://img.youtube.com/vi/xgI5iYmOf5Q/maxresdefault.jpg',
     'https://www.youtube.com/embed/xgI5iYmOf5Q',
-    '2026-08-14'
+    '2026-08-14',
+    "Coming Soon"
 ),
 
 (
@@ -169,7 +178,8 @@ VALUES
     'PG-13',
     'https://img.youtube.com/vi/IoHWPAN6FPg/maxresdefault.jpg',
     'https://www.youtube.com/embed/IoHWPAN6FPg',
-    '2026-08-14'
+    '2026-08-14',
+    "Coming Soon"
 );
 
 -- SHOWTIMES
@@ -213,14 +223,5 @@ VALUES
 -- The Dog Stars
 (8, 1, '2026-09-15 20:00:00'),
 (8, 2, '2026-09-16 18:00:00'),
-(8, 1, '2026-09-17 21:00:00'),
+(8, 1, '2026-09-17 21:00:00');
 
--- PAW Patrol: The Dino Movie
-(9, 2, '2026-09-15 14:00:00'),
-(9, 1, '2026-09-16 15:00:00'),
-(9, 2, '2026-09-17 14:30:00'),
-
--- The End of Oak Street
-(10, 1, '2026-09-15 19:00:00'),
-(10, 2, '2026-09-16 20:00:00'),
-(10, 1, '2026-09-17 18:00:00');
