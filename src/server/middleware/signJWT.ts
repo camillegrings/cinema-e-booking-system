@@ -18,21 +18,16 @@ const signJWT = (
 
 	try {
 		jwt.sign(
-			{
-				username: user.username,
-			},
+			{ username: user.username },
 			config.server.token.secret,
 			{
 				issuer: config.server.token.issuer,
 				algorithm: "HS256",
 				expiresIn: expirationTimeInSeconds,
 			},
-			(error, token) => {
-				if (error) {
-					callback(error, null);
-				} else if (token) {
-					callback(null, token);
-				}
+			function (error, token) {
+				if (error) callback(error, null);
+				else if (token) callback(null, token);
 			},
 		);
 	} catch (error) {

@@ -17,8 +17,8 @@ const MYSQL = {
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";
 const SERVER_PORT = process.env.SERVER_PORT || 3000;
 const SERVER_TOKEN_EXPIRETIME = process.env.SERVER_TOKEN_EXPIRETIME || 3600;
-const SERVER_TOKEN_ISSUER = process.env.SERVER_TOKEN_ISSUER || "";
-const SERVER_TOKEN_SECRET = process.env.SERVER_TOKEN_SECRET || "";
+const SERVER_TOKEN_ISSUER = process.env.SERVER_TOKEN_ISSUER || "issuer";
+const SERVER_TOKEN_SECRET = process.env.SERVER_TOKEN_SECRET || "secret";
 
 const SERVER = {
 	hostname: SERVER_HOSTNAME,

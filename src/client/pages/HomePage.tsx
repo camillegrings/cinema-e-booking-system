@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Movie } from "../services/movie.js";
 import { SearchFilterBar } from "../components/SearchFilterBar.js";
 import { MovieCard } from "../components/MovieCard.js";
 import "./HomePage.css";
 
-export const HomePage: React.FC = () => {
+const HomePage: React.FC = () => {
 	const [movies, setMovies] = useState<Movie[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -73,6 +74,7 @@ export const HomePage: React.FC = () => {
 	return (
 		<div className='homepage-container'>
 			<header className='homepage-header'>
+				<Link to='/'></Link>
 				<h1>Cinema E-Booking System</h1>
 				<p>Browse current movies and upcoming releases</p>
 			</header>
@@ -128,3 +130,5 @@ export const HomePage: React.FC = () => {
 		</div>
 	);
 };
+
+export default HomePage;

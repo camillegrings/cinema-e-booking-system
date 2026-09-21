@@ -19,8 +19,11 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 const register = (req: Request, res: Response, next: NextFunction) => {
 	let { username, password } = req.body;
 
+	// const salt = await bcryptjs.genSalt(10);
+
 	bcryptjs.hash(password, 10, (hashError, hash) => {
 		if (hashError) {
+			console.log("genuinely");
 			return res.status(401).json({
 				message: hashError.message,
 				error: hashError,
@@ -69,6 +72,10 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 		.then((connection) => {
 			Query<IUser[]>(connection, query)
 				.then((users) => {
+					// if (!users)
+					// 	return res.status(401).json({
+					// 		message: "No users..?",
+					// 	});
 					bcryptjs.compare(password, users[0].password, (error, result) => {
 						if (error) {
 							return res.status(401).json({
@@ -110,9 +117,9 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 			});
 		});
 };
-/*
+
 const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
-	let query = `SELECT _id, username FROM users`;
+	let query = `SELECT id, username FROM users`;
 
 	Connect()
 		.then((connection) => {
@@ -141,5 +148,5 @@ const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
 			});
 		});
 };
-*/
-export default { validateToken, register, login /*, getAllUsers*/ };
+
+export default { validateToken, register, login, getAllUsers };
