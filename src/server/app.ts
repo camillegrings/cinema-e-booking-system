@@ -25,6 +25,17 @@ app.get('/api/movies', async (req, res) => {
   }
 });
 
+app.get('/api/movie/:movieId', async (req, res) => {
+  try {
+    const { movieId } = req.params
+    const [rows] = await db.query(`SELECT * FROM movies WHERE id = ${movieId}`);
+    res.json(rows);
+  } catch (error) {
+    console.error('MySQL Query Error:', error);
+    res.status(500).json({ error: 'Failed to fetch movies from database' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend listening on http://localhost:${PORT}`);
 });

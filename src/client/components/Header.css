@@ -1,0 +1,13 @@
+.header {
+    display: flex;
+    padding: 10px 2rem;
+}
+
+.header-logo>img {
+    width: 170px;
+    height: 48px;
+}
+
+.header-logo:hover {
+    opacity: 1;
+}

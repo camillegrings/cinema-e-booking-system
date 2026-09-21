@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Movie } from '../services/movie';
 import { SearchFilterBar } from '../components/SearchFilterBar';
 import { MovieCard } from '../components/MovieCard';
+import { Header } from '../components/Header.js'
 import './HomePage.css';
 
 export const HomePage: React.FC = () => {
@@ -65,11 +66,7 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="homepage-container">
-      <header className="homepage-header">
-        <h1>Cinema E-Booking System</h1>
-        <p>Browse current movies and upcoming releases</p>
-      </header>
-
+      <Header />
       <SearchFilterBar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -90,7 +87,7 @@ export const HomePage: React.FC = () => {
             ) : (
               <div className="movie-grid">
                 {currentlyRunning.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} onSelectMovie={(id) => alert(`Selected Movie ID: ${id}`)} />
+                  <MovieCard key={movie.id} movie={movie} />
                 ))}
               </div>
             )}
@@ -103,7 +100,7 @@ export const HomePage: React.FC = () => {
             ) : (
               <div className="movie-grid">
                 {comingSoon.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} onSelectMovie={(id) => alert(`Selected Movie ID: ${id}`)} />
+                  <MovieCard key={movie.id} movie={movie} />
                 ))}
               </div>
             )}

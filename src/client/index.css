@@ -17,6 +17,7 @@ button {
   transition: background-color 0.2s ease-in-out;
 }
 
-button:hover {
+button:hover,
+a:hover {
   opacity: 0.9;
 }
