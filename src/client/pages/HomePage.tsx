@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Movie } from "../services/movie.js";
 import { SearchFilterBar } from "../components/SearchFilterBar.js";
 import { MovieCard } from "../components/MovieCard.js";
+import { Header } from '../components/Header.js'
 import "./HomePage.css";
 
 const HomePage: React.FC = () => {
@@ -73,11 +73,7 @@ const HomePage: React.FC = () => {
 
 	return (
 		<div className='homepage-container'>
-			<header className='homepage-header'>
-				<Link to='/'></Link>
-				<h1>Cinema E-Booking System</h1>
-				<p>Browse current movies and upcoming releases</p>
-			</header>
+			<Header />
 
 			<SearchFilterBar
 				searchTerm={searchTerm}
@@ -102,7 +98,6 @@ const HomePage: React.FC = () => {
 									<MovieCard
 										key={movie.id}
 										movie={movie}
-										onSelectMovie={(id) => alert(`Selected Movie ID: ${id}`)}
 									/>
 								))}
 							</div>
@@ -119,7 +114,6 @@ const HomePage: React.FC = () => {
 									<MovieCard
 										key={movie.id}
 										movie={movie}
-										onSelectMovie={(id) => alert(`Selected Movie ID: ${id}`)}
 									/>
 								))}
 							</div>
@@ -131,4 +125,4 @@ const HomePage: React.FC = () => {
 	);
 };
 
-export default HomePage;
+export { HomePage };

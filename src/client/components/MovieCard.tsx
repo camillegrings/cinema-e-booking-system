@@ -1,13 +1,13 @@
 import React from "react";
 import { Movie } from "../services/movie.js";
+import { Link } from "react-router";
 import "./MovieCard.css";
 
 interface Props {
 	movie: Movie;
-	onSelectMovie: (id: number) => void;
 }
 
-export const MovieCard: React.FC<Props> = ({ movie, onSelectMovie }) => {
+export const MovieCard: React.FC<Props> = ({ movie }) => {
 	return (
 		<div className='movie-card'>
 			<div>
@@ -30,9 +30,7 @@ export const MovieCard: React.FC<Props> = ({ movie, onSelectMovie }) => {
 				</p>
 			</div>
 
-			<button className='btn-details' onClick={() => onSelectMovie(movie.id)}>
-				View Details & Showtimes
-			</button>
+			<Link className="btn-details" to={`/movie/${movie.id}`}>View Details & Showtimes</Link>
 		</div>
 	);
 };

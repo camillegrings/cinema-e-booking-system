@@ -9,19 +9,17 @@ const Register: React.FC = () => {
 		const username = formData.get("username");
 		const password = formData.get("password");
 
-		useEffect(() => {
-			fetch("http://localhost:3000/users/register", {
-				method: "POST",
-				body: JSON.stringify({ username, password }),
+		fetch("http://localhost:3000/users/register", {
+			method: "POST",
+			body: JSON.stringify({ username, password }),
+		})
+			.then((res) => {
+				if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+				return res.json();
 			})
-				.then((res) => {
-					if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-					return res.json();
-				})
-				.catch((err) => {
-					console.error("Error registering.", err);
-				});
-		}, []);
+			.catch((err) => {
+				console.error("Error registering.", err);
+			});
 	};
 
 	return (
