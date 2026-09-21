@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS movies (
     trailer_image_url VARCHAR(500),
     trailer_video_url VARCHAR(500),
     release_date DATE NOT NULL,
+    status VARCHAR(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
