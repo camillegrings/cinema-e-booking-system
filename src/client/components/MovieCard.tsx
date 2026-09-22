@@ -1,6 +1,6 @@
 import React from "react";
 import { Movie } from "../services/movie.js";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import "./MovieCard.css";
 
 interface Props {
