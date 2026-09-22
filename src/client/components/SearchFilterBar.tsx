@@ -4,15 +4,15 @@ import './SearchFilterBar.css';
 interface Props {
     searchTerm: string;
     setSearchTerm: (term: string) => void;
-    genre: string;
-    setGenre: (term: string) => void;
+    selectedGenre: string;
+    setSelectedGenre: (term: string) => void;
 }
 
 export const SearchFilterBar: React.FC<Props> = ({
     searchTerm,
     setSearchTerm,
-    genre,
-    setGenre,
+    selectedGenre,
+    setSelectedGenre,
 }) => {
     return (
         <div className="container">
@@ -24,8 +24,8 @@ export const SearchFilterBar: React.FC<Props> = ({
 
             <select
                 className="select"
-                value={genre}
-                onChange={(e) => setGenre(e.target.value)}>
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(e.target.value)}>
 
                 <option value="ALL">All Genres</option>
                 <option value="Sci-Fi">Sci-Fi</option>

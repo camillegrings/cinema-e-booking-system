@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./HomePage.css";
 
-const Login: React.FC = () => {
+export const Login: React.FC = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
