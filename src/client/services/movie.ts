@@ -11,4 +11,5 @@ export interface Movie {
   trailer_image_url: string;
   trailer_video_url: string;
   release_date: string;
+  status: string;
 }
