@@ -180,6 +180,51 @@ VALUES
     'https://www.youtube.com/embed/IoHWPAN6FPg',
     '2026-08-14',
     "Coming Soon"
+),
+
+(
+    'Heart of the Beast',
+    'Action',
+    'Tom Hiddleston, Ana de Armas',
+    'Andy Serkis',
+    'Andy Serkis, Jonathan Cavendish',
+    'A former special forces soldier must survive in the Alaskan wilderness after a plane crash while protecting his loyal military dog.',
+    'An action adventure focused on survival, loyalty, and the bond between a soldier and his dog.',
+    'PG-13',
+    'https://img.youtube.com/vi/JFQcDFhNh4o/maxresdefault.jpg',
+    'https://www.youtube.com/embed/JFQcDFhNh4o',
+    '2026-09-25',
+    "Coming Soon"
+),
+
+(
+    'Digger',
+    'Thriller',
+    'Tom Cruise',
+    'Doug Liman',
+    'Tom Cruise, Christopher McQuarrie',
+    'A high-stakes environmental thriller centered on a dangerous mission and the people caught in its consequences.',
+    'An upcoming thriller featuring Tom Cruise.',
+    'PG-13',
+    'https://img.youtube.com/vi/qORTe1wW3Wg/maxresdefault.jpg',
+    'https://www.youtube.com/embed/qORTe1wW3Wg',
+    '2026-10-02',
+    "Coming Soon"
+),
+
+(
+    'Verity',
+    'Thriller',
+    'Anne Hathaway, Dakota Johnson, Josh Hartnett',
+    'Michael Showalter',
+    'Anne Hathaway, Josh Hartnett',
+    'A struggling writer is hired to complete the books of an injured bestselling author and discovers disturbing secrets within the author''s home.',
+    'A psychological thriller based on the novel by Colleen Hoover.',
+    'R',
+    'https://img.youtube.com/vi/xdPMKhjMSFs/maxresdefault.jpg',
+    'https://www.youtube.com/embed/xdPMKhjMSFs',
+    '2026-10-02',
+    "Coming Soon"
 );
 
 -- SHOWTIMES
