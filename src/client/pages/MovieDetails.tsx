@@ -35,7 +35,7 @@ export const MovieDetails: React.FC = () => {
                 <div className="movie-details-banner" style={{ backgroundImage: `url(${movie.trailer_image_url})` }}>
                     <h1 className="movie-details-title">{movie.title}</h1>
                     <p className="movie-details-rating">Rating: {movie.mpaa_rating}</p>
-                    <Link className="movie-details-get-ticket-btn" to={`/booking`}>Get Tickets</Link>
+                    <button className="movie-details-get-ticket-btn" onClick={() => window.scrollTo({ top: document.getElementById('showtimes')?.offsetTop, behavior: 'smooth' })}>Get Tickets</button>
                 </div>
                 <div className="movie-details-content">
                     <div>
@@ -43,11 +43,11 @@ export const MovieDetails: React.FC = () => {
                         <p>{movie.synopsis}</p>
                     </div>
                     <div>
-                        <h3 className="movie-details-subtitle">Showtimes</h3>
+                        <h3 className="movie-details-subtitle" id='showtimes'>Showtimes</h3>
                         <div className="movie-details-showtime-wrapper">
-                            <p className="movie-details-showtime">2:00 PM</p>
-                            <p className="movie-details-showtime">5:00 PM</p>
-                            <p className="movie-details-showtime">8:00 PM</p>
+                            <Link className="movie-details-showtime" to={`/booking/1`}>2:00 PM</Link>
+                            <Link className="movie-details-showtime" to={`/booking/2`}>5:00 PM</Link>
+                            <Link className="movie-details-showtime" to={`/booking/3`}>8:00 PM</Link>
                         </div>
                     </div>
                 </div>

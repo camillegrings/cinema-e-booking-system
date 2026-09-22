@@ -14,7 +14,7 @@ export default function App() {
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path="/movie/:id" element={<MovieDetails />} />
-      <Route path="/booking" element={<BookingPage />} />
+      <Route path="/booking/:id" element={<BookingPage />} />
     </Routes>
   )
 }
