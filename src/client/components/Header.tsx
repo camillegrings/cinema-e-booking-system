@@ -5,10 +5,18 @@ import './Header.css';
 
 export const Header: React.FC = () => {
     return (
+        /*
         <header className="header">
             <Link to='/' className="header-logo">
             <img src="/logo.png" alt="Cinema Logo" />
             </Link>
         </header>
+        */
+       <header className="header">
+            Cinema Booking
+            <div className="body">
+                Catered to you! Book tickets now!
+            </div>
+       </header>
     );
 };
