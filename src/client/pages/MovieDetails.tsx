@@ -36,6 +36,9 @@ export const MovieDetails: React.FC = () => {
                     <h1 className="movie-details-title">{movie.title}</h1>
                     <p className="movie-details-rating">Rating: {movie.mpaa_rating}</p>
                     <button className="movie-details-get-ticket-btn" onClick={() => window.scrollTo({ top: document.getElementById('showtimes')?.offsetTop, behavior: 'smooth' })}>Get Tickets</button>
+                    <Link to="/" className="movie-details-return-btn">
+                        Return
+                    </Link>
                 </div>
                 <div className="movie-details-content">
                     <div>
