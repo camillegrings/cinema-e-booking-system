@@ -10,6 +10,7 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: linear-gradient(145deg, #12121a, #630909);
   color: white;
+  min-height: 100vh;
 }
 
 button {
