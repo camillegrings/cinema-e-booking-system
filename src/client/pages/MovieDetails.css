@@ -62,7 +62,7 @@
 }
 
 .movie-details-subtitle {
-    margin-bottom: 20px;
+    margin: 10px 0;
 }
 
 .movie-details-showtime-wrapper {
@@ -80,7 +80,7 @@
 }
 
 .movie-details-trailer-wrapper {
-    padding: 30px 30px;
+    padding: 10px 30px 50px;
 }
 
 .movie-details-not-found {
