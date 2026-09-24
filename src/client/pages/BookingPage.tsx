@@ -91,26 +91,26 @@ export const BookingPage: React.FC = () => {
         <div className="booking-container">
             <Header />
             {toastMsg && <div className="toast-popup">{toastMsg}</div>}
-            <header className="cinema-header">
-                <img
-                    src="https://img.youtube.com/vi/Ho10_4IX1jE/maxresdefault.jpg"
-                    alt="Practical Magic 2"
-                    className="movie-poster-thumb"
-                />
-                <div className="header-details">
-                    <h1 className="movie-title">Practical Magic 2</h1>
-                    <div className="movie-meta-bar">
-                        <span className="meta-item">ROOM 1</span>
-                        <span className="meta-divider">|</span>
-                        <span className="meta-item">SEP 21, 2026</span>
-                        <span className="meta-divider">|</span>
-                        <span>2:00 PM</span>
-                        <span className="meta-divider">|</span>
-                        <span className="rating-badge">PG-13</span>
-                    </div>
-                </div>
-            </header>
             <main className="main-canvas">
+                <section className="cinema-header">
+                    <img
+                        src="https://img.youtube.com/vi/Ho10_4IX1jE/maxresdefault.jpg"
+                        alt="Practical Magic 2"
+                        className="movie-poster-thumb"
+                    />
+                    <div className="header-details">
+                        <h1 className="movie-title">Practical Magic 2</h1>
+                        <div className="movie-meta-bar">
+                            <span className="meta-item">ROOM 1</span>
+                            <span className="meta-divider">|</span>
+                            <span className="meta-item">SEP 21, 2026</span>
+                            <span className="meta-divider">|</span>
+                            <span>2:00 PM</span>
+                            <span className="meta-divider">|</span>
+                            <span className="rating-badge">PG-13</span>
+                        </div>
+                    </div>
+                </section>
                 <section className="ticket-section">
                     <div className="ticket-header">
                         <div className="ticket-title">

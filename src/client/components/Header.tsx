@@ -12,11 +12,11 @@ export const Header: React.FC = () => {
             </Link>
         </header>
         */
-       <header className="header">
-            Cinema Booking
+        <header className="header">
+            <Link to='/'>Cinema Booking</Link>
             <div className="body">
                 Catered to you! Book tickets now!
             </div>
-       </header>
+        </header>
     );
 };
