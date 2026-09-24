@@ -29,22 +29,14 @@ export const MovieDetails: React.FC = () => {
 
     return (
         <div className="movie-details-container">
-            <Header />
+            <div style={{ padding: '1rem 2rem' }}>
+                <Header />
+            </div>
             {loading && <div style={{ textAlign: 'center', padding: '3rem' }}>Loading movie...</div>}
             {movie ? <>
                 <div className="movie-details-banner" style={{ backgroundImage: `url(${movie.trailer_image_url})` }}>
                     <h1 className="movie-details-title">{movie.title}</h1>
                     <p className="movie-details-rating">Rating: {movie.mpaa_rating}</p>
-                    <button className="movie-details-get-ticket-btn" onClick={() => window.scrollTo({ top: document.getElementById('showtimes')?.offsetTop, behavior: 'smooth' })}>Get Tickets</button>
-                    <Link to="/" className="movie-details-return-btn">
-                        Return
-                    </Link>
-                </div>
-                <div className="movie-details-content">
-                    <div>
-                        <h3 className="movie-details-subtitle">Synopsis</h3>
-                        <p>{movie.synopsis}</p>
-                    </div>
                     <div>
                         <h3 className="movie-details-subtitle" id='showtimes'>Showtimes</h3>
                         <div className="movie-details-showtime-wrapper">
@@ -54,10 +46,24 @@ export const MovieDetails: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                <div className="movie-details-content">
+                    <div>
+                        <h3 className="movie-details-subtitle">Synopsis</h3>
+                        <p>{movie.synopsis}</p>
+                        <h3 className="movie-details-subtitle">Reviews</h3>
+                        <p>{movie.reviews}</p>
+                        <h3 className="movie-details-subtitle">Cast</h3>
+                        <p>{movie.cast}</p>
+                        <h3 className="movie-details-subtitle">Director</h3>
+                        <p>{movie.director}</p>
+                        <h3 className="movie-details-subtitle">Producer</h3>
+                        <p>{movie.producer}</p>
+                    </div>
+                </div>
                 <div className="movie-details-trailer-wrapper">
                     <h3 className="movie-details-subtitle">Trailer</h3>
                     <iframe width="620" height="325"
-                        src={movie.trailer_video_url}>
+                        src={movie.trailer_video_url} style={{ width: '100%' }}>
                     </iframe>
                 </div>
             </> : <div className="movie-details-not-found"><p>Movie not found!</p></div>}

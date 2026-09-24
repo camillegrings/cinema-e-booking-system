@@ -2,11 +2,14 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    padding: 2rem;
 }
 
 .cinema-header {
-    border-bottom: 1px solid white;
-    padding: 16px 28px;
+    width: 100%;
+    border-top: 1px solid white;
+    padding-top: 30px;
+    padding: 16px 0;
     display: flex;
     align-items: center;
     gap: 20px;
@@ -97,27 +100,22 @@
 .main-canvas {
     max-width: 960px;
     width: 100%;
-    margin: 0 auto;
-    padding: 24px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
 }
 
 .ticket-section {
     width: 100%;
     border-radius: 16px;
-    padding: 20px 24px;
+    padding: 20px 0;
 }
 
 .ticket-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid white;
     padding-bottom: 12px;
-    margin-bottom: 16px;
 }
 
 .ticket-title {
@@ -152,7 +150,8 @@
 }
 
 .category-card {
-    border: 1px solid #adadad;
+    background: linear-gradient(145deg, #1f1f2e, #161622);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 14px 16px;
     display: flex;
@@ -239,6 +238,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 8px;
+    margin-bottom: 30px;
 }
 
 /* Curved Glowing Arc */
@@ -274,7 +274,8 @@
 }
 
 .seats-card {
-    border: 1px solid #adadad;
+    background: linear-gradient(145deg, #1f1f2e, #161622);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 28px 24px;
     width: 100%;
@@ -362,7 +363,7 @@
 
 .seat-occupied .seat-main {
     fill: #111322;
-    stroke: #9dadc5;
+    stroke: white;
     stroke-width: 1.5;
     stroke-dasharray: 2 2;
 }
