@@ -33,6 +33,8 @@ export const SearchFilterBar: React.FC<Props> = ({
                 <option value="Horror">Horror</option>
                 <option value="Romance">Romance</option>
                 <option value="Animation">Animation</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Thriller">Thriller</option>
             </select>
 
             <input
