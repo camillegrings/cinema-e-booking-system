@@ -98,7 +98,6 @@
 }
 
 .main-canvas {
-    max-width: 960px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -109,6 +108,7 @@
     width: 100%;
     border-radius: 16px;
     padding: 20px 0;
+    max-width: 960px;
 }
 
 .ticket-header {
