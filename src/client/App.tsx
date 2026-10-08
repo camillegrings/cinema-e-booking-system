@@ -6,6 +6,7 @@ import { BookingPage } from './pages/BookingPage.js'
 import { Login } from "./pages/Login.js";
 import { Register } from "./pages/Register.js";
 import { AdminDashboard } from "./pages/AdminDashboard.js"
+import { ProfilePage } from "./pages/ProfilePage.js"
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/movie/:id" element={<MovieDetails />} />
       <Route path="/booking/:id" element={<BookingPage />} />
       <Route path='/admin/dashboard' element={<AdminDashboard />} />
+      <Route path='/profile' element={<ProfilePage />} />
     </Routes>
   )
 }
