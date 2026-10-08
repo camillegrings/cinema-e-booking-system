@@ -1,0 +1,27 @@
+.admin-dashboard-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-dashboard-content {
+    padding-top: 30px;
+}
+
+.admin-dashboard-content>h2 {
+    border-bottom: 2px solid white;
+    padding-bottom: 0.5rem;
+}
+
+.admin-dashboard-menu {
+    padding-left: 16px;
+}
+
+.admin-dashboard-menu>li {
+    padding: 10px 0 5px;
+}
+
+.admin-dashboard-menu>li>a {
+    color: white;
+    font-size: 20px;
+}
