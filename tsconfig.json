@@ -1,39 +1,36 @@
 {
-  "compilerOptions": {
-    /* File Layout */
-    "rootDir": "./src",
-    "outDir": "./dist",
+	"compilerOptions": {
+		/* File Layout */
+		"rootDir": "./src",
+		"outDir": "./dist",
 
-    /* Environment Settings */
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "target": "esnext",
-    "lib": ["esnext", "dom", "dom.iterable"],
-    "types": ["node", "vite/client"],
+		/* Environment Settings */
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"target": "esnext",
+		"lib": ["esnext", "dom", "dom.iterable"],
+		"types": ["node", "vite/client"],
 
-    /* React Support */
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
+		/* React Support */
+		"jsx": "react-jsx",
+		"jsxImportSource": "react",
 
-    /* JavaScript & Interop Support */
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+		/* JavaScript & Interop Support */
+		"allowJs": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
 
-    /* Outputs & Source Maps */
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+		/* Outputs & Source Maps */
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true,
 
-    /* Typechecking Options */
-    "strict": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noUncheckedIndexedAccess": true
-  },
-  "include": [
-    "src/**/*",
-    "src/**/*.d.ts"
-  ]
+		/* Typechecking Options */
+		"strict": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"noUncheckedIndexedAccess": true
+	},
+	"include": ["src/**/*", "src/**/*.d.ts"]
 }

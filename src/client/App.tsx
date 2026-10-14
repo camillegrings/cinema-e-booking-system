@@ -1,6 +1,20 @@
 import React from 'react';
-import { HomePage } from './pages/HomePage';
+import { Routes, Route } from "react-router-dom";
+import { HomePage } from './pages/HomePage.js';
+import { MovieDetails } from './pages/MovieDetails.js';
+import { BookingPage } from './pages/BookingPage.js'
+import { Login } from "./pages/Login.js";
+import { Register } from "./pages/Register.js";
+
 
 export default function App() {
-  return <HomePage />;
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/register' element={<Register />} />
+      <Route path="/movie/:id" element={<MovieDetails />} />
+      <Route path="/booking/:id" element={<BookingPage />} />
+    </Routes>
+  )
 }
