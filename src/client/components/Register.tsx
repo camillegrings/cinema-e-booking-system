@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
-import "./HomePage.css";
+import React, { useState, useEffect, FormEvent } from "react";
+import { Link } from "react-router-dom";
+import { style } from "./FormPage.css";
 
-export const Login: React.FC = () => {
+export const Register: React.FC = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const username = formData.get("username");
 		const password = formData.get("password");
 
-		useEffect(() => {
-			fetch("http://localhost:3000/users/login")
-				.then((res) => {
-					if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-					return res.json();
-				})
-				.catch((err) => {
-					console.error("Error logging in.", err);
-				});
-		}, []);
+		fetch("http://localhost:3000/users/register", {
+			method: "POST",
+			body: JSON.stringify({ username, password }),
+		})
+			.then((res) => {
+				if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+				return res.json();
+			})
+			.catch((err) => {
+				console.error("Error registering.", err);
+			});
 	};
 
 	return (
@@ -33,4 +35,4 @@ export const Login: React.FC = () => {
 	);
 };
 
-export default Login;
+export default Register;
