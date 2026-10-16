@@ -1,35 +1,90 @@
-import React, { useState, useEffect } from "react";
-import { style } from "./FormPage.css";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Form.css";
+import { Header } from "../components/Header.js";
 
-export const Login: React.FC = () => {
-	const handleSubmit = (e) => {
+export const Login = () => {
+	const navigate = useNavigate();
+	const [errorMessage, setErrorMessage] = useState("");
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setErrorMessage("");
+
 		const formData = new FormData(e.currentTarget);
-		const username = formData.get("username");
+		const email = formData.get("email");
 		const password = formData.get("password");
 
-		useEffect(() => {
-			fetch("http://localhost:3000/users/login")
-				.then((res) => {
-					if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-					return res.json();
-				})
-				.catch((err) => {
-					console.error("Error logging in.", err);
-				});
-		}, []);
+		try {
+			const res = await fetch("http://localhost:3000/users/login", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email, password }),
+			});
+
+			if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+
+			const data = await res.json();
+
+			// Store token for Header session check
+			if (data.token) {
+				localStorage.setItem("token", data.token);
+			}
+
+			// Role-based redirect (Admin vs Customer)
+			if (data.role === "admin") {
+				navigate("/admin/dashboard");
+			} else {
+				navigate("/");
+			}
+		} catch (err) {
+			console.error("Error logging in.", err);
+			setErrorMessage("Invalid credentials or server error.");
+		}
 	};
 
 	return (
-		<form onSubmit={handleSubmit} method='post'>
-			<label htmlFor='username'>username</label>
-			<input type='text' name='username' id='username' />
-			<br />
-			<label htmlFor='password'>password</label>
-			<input type='text' name='password' id='password' />
-			<br />
-			<input type='submit' value='Submit' />
-		</form>
+		<div className="container">
+			<Header />
+			<div className="login-card">
+				<h2 className="form-title"> Welcome </h2>
+				<p className="form-subtitle"> Continue to access your account. </p>
+
+				<form onSubmit={handleSubmit} method='post' className="login-form">
+					<div className="input-group">
+						<label htmlFor='email'>Email</label>
+						<input
+							type="email"
+							name="email"
+							id="email"
+							placeholder="Enter your email"
+							required />
+					</div>
+					<div className="input-group">
+						<div className="label-row">
+							<label htmlFor='password'>Password</label>
+							<Link to="/forgot-password" className="forgot-link">
+								Forgot password?
+							</Link>
+						</div>
+						<input
+							type="password"
+							name="password"
+							id="password"
+							placeholder="Enter your password"
+							required
+						/>
+					</div>
+					<button type="submit" className="btn-submit">
+						Submit
+					</button>
+				</form>
+				<p className="signup-prompt">
+					Don't have an account? <Link to="/register">Sign up</Link>
+				</p>
+			</div>
+		</div>
+
 	);
 };
 

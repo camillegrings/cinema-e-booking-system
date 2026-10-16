@@ -38,15 +38,15 @@ export const Header: React.FC = () => {
                 </div>
                 <nav className="nav-links">
                     <Link to="/" className="nav-item"> Home </Link>
-                    <Link to="/favorites" className="nav-item"> Favorites </Link>
 
                     {isLoggedIn ? (
                         <div>
+                            <Link to="/favorites" className="nav-item"> Favorites </Link>
                             <Link to="/profile" className="nav-item"> Profile </Link>
                             <button onClick={handleLogout} className="nav-button logout-btn"> Logout </button>
                         </div>
 
-                    ) : ( 
+                    ) : (
                         <Link to="/login" className="nav-item"> Login </Link>
                     )}
                 </nav>
