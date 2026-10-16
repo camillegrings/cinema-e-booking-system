@@ -12,14 +12,14 @@ export const Login = () => {
 		setErrorMessage("");
 
 		const formData = new FormData(e.currentTarget);
-		const username = formData.get("username");
+		const email = formData.get("email");
 		const password = formData.get("password");
 
 		try {
 			const res = await fetch("http://localhost:3000/users/login", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ username, password }),
+				body: JSON.stringify({ email, password }),
 			});
 
 			if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
@@ -52,17 +52,17 @@ export const Login = () => {
 
 				<form onSubmit={handleSubmit} method='post' className="login-form">
 					<div className="input-group">
-						<label htmlFor='username'>username</label>
+						<label htmlFor='email'>Email</label>
 						<input
-							type="text"
-							name="username"
-							id="username"
-							placeholder="Enter your username"
+							type="email"
+							name="email"
+							id="email"
+							placeholder="Enter your email"
 							required />
 					</div>
 					<div className="input-group">
 						<div className="label-row">
-							<label htmlFor='password'>password</label>
+							<label htmlFor='password'>Password</label>
 							<Link to="/forgot-password" className="forgot-link">
 								Forgot password?
 							</Link>
