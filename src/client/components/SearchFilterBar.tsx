@@ -15,7 +15,7 @@ export const SearchFilterBar: React.FC<Props> = ({
     setSelectedGenre,
 }) => {
     return (
-        <div className="container">
+        <div className="search-bar-container">
             <input
                 type="text"
                 placeholder="Search movies by title..."

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { style } from "./FormPage.css";
+import { style } from "./Form.css";
 
 export const Register: React.FC = () => {
 	const handleSubmit = (e) => {

@@ -3,8 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import { HomePage } from './pages/HomePage.js';
 import { MovieDetails } from './pages/MovieDetails.js';
 import { BookingPage } from './pages/BookingPage.js'
-import { Login } from "./components/Login.js";
-import { Register } from "./components/Register.js";
+import { Login } from './components/Login.js';
+import { Register } from './components/Register.js';
 
 
 export default function App() {
