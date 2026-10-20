@@ -1,33 +1,10 @@
-"use client";
-
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import React from "react";
 import "./Header.css";
+import { useAuth } from "../context/AuthContext.js";
 
 export const Header: React.FC = () => {
-
-    // useState variables for if the user is logged in or not
-    // default is false
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate();
-    // Login tokens
-    useEffect(() => {
-        const checkAuth = () => {
-            const token = localStorage.getItem("token");
-            setIsLoggedIn(!!token);
-        };
-
-        checkAuth();
-        const interval = setInterval(checkAuth, 500);
-        return () => clearInterval(interval);
-    }, []);
-
-    // Logout event
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        setIsLoggedIn(false);
-        navigate("/login");
-    };
+    const { isAuthenticated, logout, user } = useAuth();
 
     return (
         <div className="header">
@@ -38,12 +15,16 @@ export const Header: React.FC = () => {
                     </div>
                     <nav className="nav-links">
                         <Link to="/" className="nav-item"> Home </Link>
-
-                        {isLoggedIn ? (
+                        {isAuthenticated ? (
                             <>
-                                <Link to="/favorites" className="nav-item"> Favorites </Link>
-                                <Link to="/profile" className="nav-item"> Profile </Link>
-                                <button onClick={handleLogout} className="logout-btn"> Logout </button>
+                                {user?.role === "admin" && (<Link to="/admin/dashboard" className="nav-item"> Dashboard </Link>)}
+                                {user?.role === "customer" && (
+                                    <>
+                                        <Link to="/favorites" className="nav-item"> Favorites </Link>
+                                        <Link to="/profile" className="nav-item"> Profile </Link>
+                                    </>
+                                )}
+                                <button onClick={logout} className="logout-btn"> Logout </button>
                             </>
                         ) : (
                             <Link to="/login" className="nav-item"> Login </Link>

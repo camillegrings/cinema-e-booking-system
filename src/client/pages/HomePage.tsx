@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Movie } from "../services/movie.js";
+import { Movie } from "../types/movie.js";
 import { SearchFilterBar } from "../components/SearchFilterBar.js";
 import { MovieCard } from "../components/MovieCard.js";
 import { Header } from "../components/Header.js";
+import { useAuth } from "../context/AuthContext.js";
 import "./HomePage.css";
 
 const HomePage: React.FC = () => {
+    const { isAuthenticated, user } = useAuth();
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
@@ -65,6 +67,7 @@ const HomePage: React.FC = () => {
     return (
         <div className="homepage-container">
             <Header />
+            {isAuthenticated && user?.name && <h2 className="homepage-welcome-user">Welcome, {user.name}!</h2>}
 
             <SearchFilterBar
                 searchTerm={searchTerm}

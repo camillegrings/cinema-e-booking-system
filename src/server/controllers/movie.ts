@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import logging from "../db/logging.js";
 import { Connect, Query } from "../db/db.js";
-import { Movie } from "../../client/services/movie.js";
+import { Movie } from "../../client/types/movie.js";
 import IMySQLResult from "../interfaces/result.js";
 import { QueryResult } from "mysql2";
 

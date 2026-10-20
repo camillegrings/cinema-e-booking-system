@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { Movie } from '../services/movie.js';
+import { Movie } from '../types/movie.js';
 import { Header } from '../components/Header.js'
 import { Link } from "react-router-dom";
 

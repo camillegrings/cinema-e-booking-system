@@ -48,3 +48,9 @@
   gap: 1.5rem;
   margin-top: 1rem;
 }
+
+.homepage-welcome-user {
+  padding-left: 2px;
+  padding-top: 10px;
+  font-size: 30px;
+}

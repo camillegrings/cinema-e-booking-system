@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Form.css";
 import { Header } from "../components/Header.js";
+import { useAuth } from "../context/AuthContext.js";
+
+import type { User } from "../types/auth.js";
 
 export const Login = () => {
+	const { login } = useAuth();
 	const navigate = useNavigate();
 	const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,22 +21,38 @@ export const Login = () => {
 
 		// Mock Account Login
 		setTimeout(() => {
+			let MOCK_USER: User;
+			const MOCK_TOKEN = "mock-jwt-token-customer"
+
 			// 1. Test Customer Credentials
 			if (email === "test.customer@example.com" && password === "Password123!") {
-				localStorage.setItem("token", "mock-jwt-token-customer");
-				localStorage.setItem("role", "CUSTOMER");
-				navigate("/"); // Redirect to home/customer dashboard
+				MOCK_USER = {
+					id: '1',
+					email: 'test.customer@example.com',
+					name: 'Test',
+					role: 'customer',
+					status: 'active'
+				}
+
 			}
 			// 2. Test Admin Credentials
 			else if (email === "admin@cinema.com" && password === "Password123!") {
-				localStorage.setItem("token", "mock-jwt-token-admin");
-				localStorage.setItem("role", "ADMIN");
-				navigate("/admin/dashboard"); // Redirect to admin dashboard
+				MOCK_USER = {
+					id: '2',
+					email: 'admin@cinema.com',
+					name: 'Admin',
+					role: 'admin',
+					status: 'active'
+				}
 			}
 			// 3. Invalid Credentials
 			else {
 				setErrorMessage("Invalid credentials. Try test.customer@example.com / Password123!");
+				return
 			}
+
+			login(MOCK_USER, MOCK_TOKEN);
+			navigate(MOCK_USER.role === "admin" ? "/admin/dashboard" : "/", { replace: true });
 		}, 500); // 500ms fake network delay
 	};
 
@@ -51,17 +71,11 @@ export const Login = () => {
 
 		const data = await res.json();
 
-		// Store token for Header session check
-		if (data.token) {
-			localStorage.setItem("token", data.token);
-		}
+		// Store token and user data for Header session check 
+		login(data.user, data.token);
 
 		// Role-based redirect (Admin vs Customer)
-		if (data.role && data.role.toUpperCase() === "ADMIN") {
-			navigate("/admin/dashboard");
-		} else {
-			navigate("/");
-		}
+		navigate(data.user.role === "admin" ? "/admin/dashboard" : "/",{ replace: true });
 	} catch (err: any) {
 		console.error("Error logging in.", err);
 		setErrorMessage("Invalid credentials or server error.");
