@@ -19,7 +19,7 @@ export const Login = () => {
 		const email = formData.get("email");
 		const password = formData.get("password");
 
-		// Mock Account Login
+		/* Mock Account Login
 		setTimeout(() => {
 			let MOCK_USER: User;
 			const MOCK_TOKEN = "mock-jwt-token-customer"
@@ -56,7 +56,7 @@ export const Login = () => {
 		}, 500); // 500ms fake network delay
 	};
 
-	/*
+	*/
 	try {
 		const res = await fetch("http://localhost:3000/users/login", {
 			method: "POST",
@@ -75,13 +75,12 @@ export const Login = () => {
 		login(data.user, data.token);
 
 		// Role-based redirect (Admin vs Customer)
-		navigate(data.user.role === "admin" ? "/admin/dashboard" : "/",{ replace: true });
+		navigate(data.user?.role?.toLowerCase() === "admin" ? "/admin/dashboard" : "/",{ replace: true });
 	} catch (err: any) {
 		console.error("Error logging in.", err);
 		setErrorMessage("Invalid credentials or server error.");
 	}
 };
-*/
 
 	return (
 		<div className="login-container">
