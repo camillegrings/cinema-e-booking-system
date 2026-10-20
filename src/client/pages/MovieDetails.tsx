@@ -27,23 +27,36 @@ export const MovieDetails: React.FC = () => {
             });
     }, []);
 
-    return (
-        <div className="movie-details-container">
-            <div style={{ padding: '1rem 2rem' }}>
-                <Header />
+    if (loading) {
+        return (
+            <div className="movie-details-container">
+                <div style={{ padding: '2rem' }}>
+                    <Header />
+                </div>
+                <div style={{ textAlign: 'center', padding: '3rem' }}>Loading movie...</div>
             </div>
-            {loading && <div style={{ textAlign: 'center', padding: '3rem' }}>Loading movie...</div>}
-            {movie ? <>
+
+        )
+    }
+
+    if (movie) {
+        return (
+            <div className="movie-details-container">
                 <div className="movie-details-banner" style={{ backgroundImage: `url(${movie.trailer_image_url})` }}>
-                    <h1 className="movie-details-title">{movie.title}</h1>
-                    <p className="movie-details-rating">Rating: {movie.mpaa_rating}</p>
-                    <div>
-                        <h3 className="movie-details-subtitle" id='showtimes'>Showtimes</h3>
-                        <div className="movie-details-showtime-wrapper">
-                            <Link className="movie-details-showtime" to={`/booking/1`}>2:00 PM</Link>
-                            <Link className="movie-details-showtime" to={`/booking/2`}>5:00 PM</Link>
-                            <Link className="movie-details-showtime" to={`/booking/3`}>8:00 PM</Link>
-                        </div>
+                    <Header />
+                    <div className="movie-details-banner-content">
+                        <h1 className="movie-details-title">{movie.title}</h1>
+                        <p className="movie-details-rating">Rating: {movie.mpaa_rating}</p>
+                        {movie.status === "Currently Running" && (
+                            <div>
+                                <h3 className="movie-details-subtitle">Showtimes</h3>
+                                <div className="movie-details-showtime-wrapper">
+                                    <Link className="movie-details-showtime" to={`/booking/1`}>2:00 PM</Link>
+                                    <Link className="movie-details-showtime" to={`/booking/2`}>5:00 PM</Link>
+                                    <Link className="movie-details-showtime" to={`/booking/3`}>8:00 PM</Link>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="movie-details-content">
@@ -66,7 +79,17 @@ export const MovieDetails: React.FC = () => {
                         src={movie.trailer_video_url} style={{ width: '100%' }}>
                     </iframe>
                 </div>
-            </> : <div className="movie-details-not-found"><p>Movie not found!</p></div>}
+            </div>
+        );
+
+    }
+
+    return (
+        <div className="movie-details-container">
+            <div style={{ padding: '2rem' }}>
+                <Header />
+            </div>
+            <div className="movie-details-not-found"><p>Movie not found!</p></div>
         </div>
     );
 };

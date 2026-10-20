@@ -10,6 +10,7 @@ import { Register } from './components/Register.js';
 import { ForgotPassword } from './components/ForgotPassword.js';
 import { AdminDashboard } from "./pages/AdminDashboard.js"
 import { ProfilePage } from './pages/ProfilePage.js'
+import { FavoritePage } from './pages/FavoritePage.js'
 
 export default function App() {
   return (
@@ -26,7 +27,7 @@ export default function App() {
         {/* Any authenticated user */}
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<ProfilePage />} />
-          {/* <Route path="/favorites" element={<Favorites />} /> */}
+          <Route path="/favorites" element={<FavoritePage />} />
         </Route>
 
         {/* Admin only */}

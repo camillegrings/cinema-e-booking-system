@@ -29,8 +29,8 @@
 .movie-info {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 1.25rem;
+  justify-content: space-evenly;
+  padding: 1.25rem 1rem;
   flex: 1;
 }
 
@@ -64,6 +64,7 @@
   font-size: 0.85rem;
   text-decoration: none;
   transition: background-color 0.2s ease, transform 0.1s ease;
+  text-align: center;
 }
 
 .btn-details:hover {
