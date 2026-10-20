@@ -34,23 +34,28 @@ export type ProfileFormData = {
     favoriteMovies: FavoriteMovie[];
 }
 
-const ProfilePage: React.FC = () => {
+export const ProfilePage: React.FC = () => {
     const [formData, setFormData] = useState<ProfileFormData>({
-        name:"",
-        email:"",
-        password:"",
-        phone:"",
-        subscribedToPromos:false,
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        subscribedToPromos: false,
         address: {
-            street:"",
-            city:"",
-            state:"",
-            zipCode:"",
+            street: "",
+            city: "",
+            state: "",
+            zipCode: "",
         },
         cards: [],
         favoriteMovies: []
     });
 
     const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
-    
+
+    return (
+        <div>
+            <h1>Profile</h1>
+        </div>
+    )
 }

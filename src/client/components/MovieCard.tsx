@@ -1,5 +1,5 @@
 import React from "react";
-import { Movie } from "../services/movie.js";
+import { Movie } from "../types/movie.js";
 import { Link } from "react-router-dom";
 import "./MovieCard.css";
 
