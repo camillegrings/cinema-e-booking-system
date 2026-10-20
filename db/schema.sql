@@ -42,12 +42,12 @@ CREATE TABLE admins (
 
 CREATE TABLE verification_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
+    user_id INT NOT NULL,
     token VARCHAR(64) NOT NULL UNIQUE,
     purpose ENUM('REGISTRATION', 'PASSWORD_RESET') NOT NULL,
     expires_at DATETIME NOT NULL,
     used BOOLEAN NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (customer_id) REFERENCES customers(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE
 );
 

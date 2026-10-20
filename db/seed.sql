@@ -6,7 +6,7 @@ INSERT INTO ticket_prices (ticket_type, price) VALUES
     ('ADULT', 12.00),
     ('CHILD', 8.00),
     ('SENIOR', 10.00);
-INSERT INTO promotions (promo_code, discount_percentage, expiration_date) VALUES ('SAVE10', 10.00, '2026-10-31');
+INSERT INTO promotions (promo_code, discount_percentage, expiration_date) VALUES ('SAVE10', 10.00, '2026-12-31');
 
 -- HALLS
 
@@ -278,4 +278,16 @@ VALUES
 (8, 2, '2026-09-16 18:00:00'),
 (8, 1, '2026-09-17 21:00:00');
 
-UPDATE showtimes SET show_time = show_time + INTERVAL 30 DAY;
+UPDATE showtimes SET show_time = show_time + INTERVAL 35 DAY;
+
+INSERT INTO users (role, email, password_hash)
+VALUES ('CUSTOMER', 'customer@test.com', '$2b$10$FQwyLZmawX.dCtl7V0v0GuqUeLEn9/TGxNfRZdqr.Jm/Kf7G.H7YC');
+SET @c = LAST_INSERT_ID();
+INSERT INTO customers (user_id, first_name, last_name, phone_number, status)
+VALUES (@c, 'Test', 'Customer', '555-0101', 'ACTIVE');
+
+INSERT INTO users (role, email, password_hash)
+VALUES ('ADMIN', 'admin@test.com', '$2b$10$CoOZRQQwqhQkY9p1c8SN6eretwS9YZM7nnaB/ndezDkI8a7vl4Ime');
+SET @a = LAST_INSERT_ID();
+INSERT INTO admins (user_id, name)
+VALUES (@a, 'Test Admin');
