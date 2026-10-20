@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
     // useState variables for if the user is logged in or not
     // default is false
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    const navigate = useNavigate();
     // Login tokens
     useEffect(() => {
         const checkAuth = () => {
@@ -30,28 +30,27 @@ export const Header: React.FC = () => {
     };
 
     return (
-        <header className="navbar-header">
+        <div className="header">
+            <header className="navbar-header">
+                <div className="navbar-container">
+                    <div className="title">
+                        Cinema Booking
+                    </div>
+                    <nav className="nav-links">
+                        <Link to="/" className="nav-item"> Home </Link>
 
-            <div className="navbar-container" >
-                <div className="title">
-                    Cinema Booking
+                        {isLoggedIn ? (
+                            <>
+                                <Link to="/favorites" className="nav-item"> Favorites </Link>
+                                <Link to="/profile" className="nav-item"> Profile </Link>
+                                <button onClick={handleLogout} className="logout-btn"> Logout </button>
+                            </>
+                        ) : (
+                            <Link to="/login" className="nav-item"> Login </Link>
+                        )}
+                    </nav>
                 </div>
-                <nav className="nav-links">
-                    <Link to="/" className="nav-item"> Home </Link>
-
-                    {isLoggedIn ? (
-                        <div>
-                            <Link to="/favorites" className="nav-item"> Favorites </Link>
-                            <Link to="/profile" className="nav-item"> Profile </Link>
-                            <button onClick={handleLogout} className="nav-button logout-btn"> Logout </button>
-                        </div>
-
-                    ) : (
-                        <Link to="/login" className="nav-item"> Login </Link>
-                    )}
-                </nav>
-            </div>
-        </header>
-
+            </header>
+        </div>
     );
 };
