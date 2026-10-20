@@ -8,8 +8,20 @@ interface Props {
 }
 
 export const MovieCard: React.FC<Props> = ({ movie }) => {
+    const isUserLoggedIn = localStorage.getItem("token");
+
+    function favoriteMovie() {
+        // request backend
+    }
+
     return (
         <div className='movie-card'>
+            {isUserLoggedIn && (
+                <label className='movie-favorite'>
+                    <input type="checkbox" onChange={favoriteMovie} /*checked={movie.isFavorite}*/ />
+                    <span className="favorite-icon"></span>
+                </label>
+            )}
             <img
                 src={movie.trailer_image_url}
                 alt={movie.title}
