@@ -1,5 +1,13 @@
 USE cinema_booking;
 
+INSERT INTO theaters (name, location) VALUES ('Cineplex 1', '123 Main St, Cityville');
+INSERT INTO pricing_settings (id, online_booking_fee, tax_rate) VALUES (1, 1.50, 0.0700);
+INSERT INTO ticket_prices (ticket_type, price) VALUES
+    ('ADULT', 12.00),
+    ('CHILD', 8.00),
+    ('SENIOR', 10.00);
+INSERT INTO promotions (promo_code, discount_percentage, expiration_date) VALUES ('SAVE10', 10.00, '2026-10-31');
+
 -- HALLS
 
 INSERT INTO halls (name, seat_count)
@@ -270,3 +278,4 @@ VALUES
 (8, 2, '2026-09-16 18:00:00'),
 (8, 1, '2026-09-17 21:00:00');
 
+UPDATE showtimes SET show_time = show_time + INTERVAL 30 DAY;
