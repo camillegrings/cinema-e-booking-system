@@ -281,13 +281,13 @@ VALUES
 UPDATE showtimes SET show_time = show_time + INTERVAL 35 DAY;
 
 INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'customer@test.com', '$2b$10$FQwyLZmawX.dCtl7V0v0GuqUeLEn9/TGxNfRZdqr.Jm/Kf7G.H7YC');
+VALUES ('CUSTOMER', 'customer@test.com', '$2b$10$aG5iZqGbVoWTn5vr7PmvvOmeD3Ynr2uPO1w8PPu8jt2YvWgddrVtu');
 SET @c = LAST_INSERT_ID();
 INSERT INTO customers (user_id, first_name, last_name, phone_number, status)
 VALUES (@c, 'Test', 'Customer', '555-0101', 'ACTIVE');
 
 INSERT INTO users (role, email, password_hash)
-VALUES ('ADMIN', 'admin@test.com', '$2b$10$CoOZRQQwqhQkY9p1c8SN6eretwS9YZM7nnaB/ndezDkI8a7vl4Ime');
+VALUES ('ADMIN', 'admin@test.com', '$2b$10$/K53ZlyScq8QX0JtAGSaaeMANsTJwLMEi6v5VkPEr/rKe0AQ/3uB6');
 SET @a = LAST_INSERT_ID();
 INSERT INTO admins (user_id, name)
 VALUES (@a, 'Test Admin');

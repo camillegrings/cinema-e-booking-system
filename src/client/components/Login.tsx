@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Form.css";
 import { Header } from "../components/Header.js";
 import { useAuth } from "../context/AuthContext.js";
-
 import type { User } from "../types/auth.js";
 
 export const Login = () => {
@@ -19,7 +18,7 @@ export const Login = () => {
 		const email = formData.get("email");
 		const password = formData.get("password");
 
-		// Mock Account Login
+		/* Mock Account Login
 		setTimeout(() => {
 			let MOCK_USER: User;
 			const MOCK_TOKEN = "mock-jwt-token-customer"
@@ -56,7 +55,7 @@ export const Login = () => {
 		}, 500); // 500ms fake network delay
 	};
 
-	/*
+	*/
 	try {
 		const res = await fetch("http://localhost:3000/users/login", {
 			method: "POST",
@@ -64,24 +63,22 @@ export const Login = () => {
 			body: JSON.stringify({ email, password }),
 		});
 
-		if (!res.ok) {
-			const errorData = await res.json().catch(() => ({}));
-			throw new Error(errorData.error || `HTTP Error: ${res.status}`);
-		}
-
 		const data = await res.json();
+
+		if (!res.ok) {
+			throw new Error(data.error || `HTTP Error: ${res.status}`);
+		}
 
 		// Store token and user data for Header session check 
 		login(data.user, data.token);
 
 		// Role-based redirect (Admin vs Customer)
-		navigate(data.user.role === "admin" ? "/admin/dashboard" : "/",{ replace: true });
+		navigate(data.user?.role?.toLowerCase() === "admin" ? "/admin/dashboard" : "/",{ replace: true });
 	} catch (err: any) {
 		console.error("Error logging in.", err);
-		setErrorMessage("Invalid credentials or server error.");
+		setErrorMessage(err.message || "Invalid credentials or server error.");
 	}
 };
-*/
 
 	return (
 		<div className="login-container">
