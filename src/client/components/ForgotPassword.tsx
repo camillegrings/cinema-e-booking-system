@@ -19,7 +19,7 @@ export const ForgotPassword = () => {
             setErrorMessage("Email addresses do not match.");
             return;
         }
-        
+
         try {
             const res = await fetch("http://localhost:3000/users/login", {
                 method: "POST",
@@ -38,35 +38,37 @@ export const ForgotPassword = () => {
     };
 
     return (
-        <div className="container">
+        <div className="login-container">
             <Header />
-            <div className="login-card">
-                <h2 className="form-title"> Forgot Password? </h2>
-                <p className="form-subtitle"> Continue to access your account. </p>
+            <div className="container">
+                <div className="login-card">
+                    <h2 className="form-title"> Forgot Password? </h2>
+                    <p className="form-subtitle"> Continue to access your account. </p>
 
-                <form onSubmit={handleSubmit} method='post' className="login-form">
-                    <div className="input-group">
-                        <label htmlFor='email'>Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder="you@example.com"
-                            required />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor='confirmEmail'> Confirm Email *</label>
-                        <input
-                            type="email"
-                            name="confirmEmail"
-                            id="confirmEmail"
-                            placeholder="you@example.com"
-                            required />
-                    </div>
-                    <button type="submit" className="btn-submit">
-                        Submit
-                    </button>
-                </form>
+                    <form onSubmit={handleSubmit} method='post' className="login-form">
+                        <div className="input-group">
+                            <label htmlFor='email'>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                placeholder="you@example.com"
+                                required />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor='confirmEmail'> Confirm Email *</label>
+                            <input
+                                type="email"
+                                name="confirmEmail"
+                                id="confirmEmail"
+                                placeholder="you@example.com"
+                                required />
+                        </div>
+                        <button type="submit" className="btn-submit">
+                            Submit
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 

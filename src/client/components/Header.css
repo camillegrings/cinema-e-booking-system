@@ -1,6 +1,8 @@
 .header {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
     color: white;
     font-size: 2rem;
     font-weight: 700;
@@ -72,4 +74,16 @@
 
 .header-logo:hover {
     opacity: 1;
+}
+
+.logout-btn {
+    margin-top: 0;
+    padding: 0.5rem 1rem;
+    color: white;
+    background: linear-gradient(145deg, #12121a, #630909);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
 }
