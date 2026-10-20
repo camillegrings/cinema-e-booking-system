@@ -1,0 +1,60 @@
+.favorite-page-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.favorite-page-content {
+    padding-top: 30px;
+}
+
+.favorite-page-content>h2 {
+    border-bottom: 2px solid white;
+    padding-bottom: 0.5rem;
+}
+
+.favorite-page-movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.favorite-page-btn {
+    align-self: flex-start;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.6rem 1.2rem;
+    background: #e50914;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.favorite-page-btn:hover {
+    background: #f6121d;
+    transform: scale(1.02);
+}
+
+.favorite-page-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.favorite-page-empty-title {
+    margin-bottom: 20px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.favorite-page-empty>p {
+    margin-bottom: 10px;
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Movie } from "../types/movie.js";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.js";
 import "./MovieCard.css";
 
 interface Props {
@@ -8,8 +9,20 @@ interface Props {
 }
 
 export const MovieCard: React.FC<Props> = ({ movie }) => {
+    const { isAuthenticated } = useAuth();
+
+    function favoriteMovie() {
+        // request backend
+    }
+
     return (
         <div className='movie-card'>
+            {isAuthenticated && (
+                <label className='movie-favorite'>
+                    <input type="checkbox" onChange={favoriteMovie} /*checked={movie.isFavorite}*/ />
+                    <span className="favorite-icon"></span>
+                </label>
+            )}
             <img
                 src={movie.trailer_image_url}
                 alt={movie.title}
@@ -32,7 +45,7 @@ export const MovieCard: React.FC<Props> = ({ movie }) => {
                 </div>
 
                 <Link className="btn-details" to={`/movie/${movie.id}`}>
-                    View Details & Showtimes
+                    {movie.status === "Coming Soon" ? 'View Details' : 'View Details & Showtimes'}
                 </Link>
             </div>
         </div>

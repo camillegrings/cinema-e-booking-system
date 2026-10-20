@@ -29,8 +29,8 @@
 .movie-info {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 1.25rem;
+  justify-content: space-evenly;
+  padding: 1.25rem 1rem;
   flex: 1;
 }
 
@@ -64,9 +64,47 @@
   font-size: 0.85rem;
   text-decoration: none;
   transition: background-color 0.2s ease, transform 0.1s ease;
+  text-align: center;
 }
 
 .btn-details:hover {
   background: #f6121d;
   transform: scale(1.02);
+}
+
+.movie-favorite {
+  display: block;
+  position: relative;
+  align-self: end;
+  margin: 10px 13px 0 0;
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+}
+
+/* Hide the browser's default checkbox */
+.movie-favorite input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.favorite-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '';
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../public/heart-icon.svg');
+}
+
+.movie-favorite input:checked~.favorite-icon {
+  background-image: url('../public/heart-icon-fill.svg');
 }

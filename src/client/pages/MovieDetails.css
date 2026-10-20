@@ -4,10 +4,17 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    padding: 2rem;
+    padding-bottom: 0;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 70%, transparent 100%);
+}
+
+.movie-details-banner-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 0 60px;
+    height: calc(400px - 71.5px - 32px - 50px);
 }
 
 .movie-details-get-ticket-btn {
@@ -50,7 +57,7 @@
 
 .movie-details-content {
     display: flex;
-    padding: 30px 30px;
+    padding: 10px 30px 30px;
 }
 
 .movie-details-content>div {
