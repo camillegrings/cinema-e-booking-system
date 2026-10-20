@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Form.css";
 import { Header } from "../components/Header.js";
 import { useAuth } from "../context/AuthContext.js";
-
 import type { User } from "../types/auth.js";
 
 export const Login = () => {
@@ -64,12 +63,11 @@ export const Login = () => {
 			body: JSON.stringify({ email, password }),
 		});
 
-		if (!res.ok) {
-			const errorData = await res.json().catch(() => ({}));
-			throw new Error(errorData.error || `HTTP Error: ${res.status}`);
-		}
-
 		const data = await res.json();
+
+		if (!res.ok) {
+			throw new Error(data.error || `HTTP Error: ${res.status}`);
+		}
 
 		// Store token and user data for Header session check 
 		login(data.user, data.token);
@@ -78,7 +76,7 @@ export const Login = () => {
 		navigate(data.user?.role?.toLowerCase() === "admin" ? "/admin/dashboard" : "/",{ replace: true });
 	} catch (err: any) {
 		console.error("Error logging in.", err);
-		setErrorMessage("Invalid credentials or server error.");
+		setErrorMessage(err.message || "Invalid credentials or server error.");
 	}
 };
 
