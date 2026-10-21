@@ -64,9 +64,9 @@ const register = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const login = (req: Request, res: Response, next: NextFunction) => {
-	let { username, password } = req.body;
+	let { email, password } = req.body;
 
-	let query = `SELECT * FROM users WHERE username = '${username}'`;
+	let query = `SELECT * FROM users WHERE email = '${email}'`;
 
 	Connect()
 		.then((connection) => {
@@ -76,7 +76,7 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 					// 	return res.status(401).json({
 					// 		message: "No users..?",
 					// 	});
-					bcryptjs.compare(password, users[0].password, (error, result) => {
+					bcryptjs.compare(password, users[0].password_hash, (error, result) => {
 						if (error) {
 							return res.status(401).json({
 								message: "Password Mismatch",

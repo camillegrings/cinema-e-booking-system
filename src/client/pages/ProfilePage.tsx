@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./ProfilePage.css";
 import { Header } from "../components/Header.js";
+import "./ProfilePage.css";
+import { PaymentCardForm } from '../components/PaymentCardForm.js'
 
 export type Address = {
     street: string;
@@ -36,6 +36,8 @@ export type ProfileFormData = {
     favoriteMovies: FavoriteMovie[];
 }
 
+export type Message = { text: string; type: "success" | "error" } | null
+
 export const ProfilePage: React.FC = () => {
     const [formData, setFormData] = useState<ProfileFormData>({
         name: "",
@@ -54,14 +56,7 @@ export const ProfilePage: React.FC = () => {
         favoriteMovies: []
     });
 
-    const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
-    const [newCard, setNewCard] = useState<PaymentCard>({
-        cardHolderName: "",
-        cardNumber: "",
-        expirationDate: "",
-        cardType: "Visa"
-    });
-    const [showAddCard, setAddCard] = useState(false);
+    const [message, setMessage] = useState<Message>(null);
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -100,17 +95,33 @@ export const ProfilePage: React.FC = () => {
             } catch (err) {
                 console.error("Failed to load profile: ", err);
             }
-            fetchProfileData();
         };
         fetchProfileData();
     }, []);
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
+
+        setMessage(null);
         setFormData((prev) => ({
             ...prev,
             [name]: type === "checkbox" ? checked : value
         }));
     };
+
+    const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        setMessage(null);
+        setFormData((prev) => ({
+            ...prev,
+            address: {
+                ...prev.address,
+                [name]: value,
+            },
+        }));
+    };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setMessage(null);
@@ -131,7 +142,6 @@ export const ProfilePage: React.FC = () => {
                 body: JSON.stringify(formData)
             });
 
-<<<<<<< Updated upstream
             if (res.ok) {
                 setMessage({ text: "Profile updated successfully!", type: "success" });
             } else {
@@ -141,19 +151,17 @@ export const ProfilePage: React.FC = () => {
             setMessage({ text: "Profile updated successfully (Local).", type: "success" });
         }
     };
-    // Handle payment card change (add & delete)
-    // Handle address change
+
     return (
         <div className="profile-page">
             <Header />
             <div className="profile-container">
                 <h2> Edit Profile</h2>
                 {message && (
-                    <div className={`status-banner ${message.type}`}>
+                    <div className={`toast ${message.type}`}>
                         {message.text}
                     </div>
                 )}
-
                 <form onSubmit={handleSubmit} className="profile-form">
                     <div className="form-section">
                         <h3> Personal Information </h3>
@@ -165,177 +173,100 @@ export const ProfilePage: React.FC = () => {
                                 disabled
                                 className="disabled"
                             />
-=======
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.error || "Failed to update profile.");
-            }
-
-            setMessage({ text: "Profile updated successfully!", type: "success" });
-
-            setFormData((prev) => ({ ...prev, currentPassword: "", newPassword: "" }));
-        } catch (err: any) {
-            setMessage({ text: err.message || "Failed to update profile.", type: "error" });
-        };
-    }
-
-        return (
-            <div className="profile-page">
-                <Header />
-                <div className="profile-container">
-                    <h2> Edit Profile</h2>
-                    {message && (
-                        <div className={`toast ${message.type}`}>
-                            {message.text}
->>>>>>> Stashed changes
                         </div>
-                    )}
-                    <form onSubmit={handleSubmit} className="profile-form">
-                        <div className="form-section">
-                            <h3> Personal Information </h3>
-                            <div className="input-group">
-                                <label> Email Address (Cannot be modified) </label>
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    disabled
-                                    className="disabled"
-                                />
+                                <div className="input-group">
+                                    <label>Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label>Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
                             </div>
-                            <div className="input-group">
-                                <label>Name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>Phone Number</label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-                        </div>
-<<<<<<< Updated upstream
-                        <div className="input-group">
-                            <label>Phone Number</label>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                required
-                                />
-                            </div>
-                        <div className="input-group">
-                            <label> New Password </label>
-                            <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            placeholder="••••••••"
-                            />
-                        </div>
-                    </div>
                     <div className="form-section">
                         <h3> Address </h3>
                         <div className="input-group">
-                            <label>Street Address * Add address Change</label>
+                            <label> Street </label>
+                            <input
+                                type="text"
+                                name="street"
+                                value={formData.address.street}
+                                onChange={handleAddressChange}
+                            />
                         </div>
-                    </div>
-                    <div className="form-section">
-                        <h3> Payment Cards </h3>
                         <div className="input-group">
-                            <label> Add address Change</label>
+                            <label> City </label>
+                            <input
+                                type="text"
+                                name="city"
+                                value={formData.address.city}
+                                onChange={handleAddressChange}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label> State </label>
+                            <input
+                                type="text"
+                                name="state"
+                                value={formData.address.state}
+                                onChange={handleAddressChange}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label> Zipcode </label>
+                            <input
+                                type="text"
+                                name="zipCode"
+                                value={formData.address.zipCode}
+                                onChange={handleAddressChange}
+                            />
                         </div>
                     </div>
+                    <PaymentCardForm formData={formData} setFormData={setFormData} setMessage={setMessage} />
+                    <div className="form-section">
+                        <h3>Security & Confirm Changes</h3>
+                        <div className="input-group">
+                            <label>Current Password * (Required to save changes)</label>
+                            <input
+                                type="password"
+                                id="currentPassword"
+                                name="currentPassword"
+                                value={formData.currentPassword}
+                                onChange={handleInputChange}
+                                placeholder="Enter current password to confirm"
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>New Password (Leave blank to keep unchanged)</label>
+                            <input
+                                type="password"
+                                id="newPassword"
+                                name="newPassword"
+                                value={formData.newPassword}
+                                onChange={handleInputChange}
+                                placeholder="••••••••"
+                            />
+                        </div>
+                    </div>
+                    <button type="submit" className="btn-submit">
+                        Save Profile Changes
+                    </button>
                 </form>
             </div>
         </div>
-    )
+    );
 }
-=======
-                        <div className="form-section">
-                            <h3> Address </h3>
-                            <div className="input-group">
-                                <label> Street </label>
-                                <input
-                                    type="text"
-                                    name="street"
-                                    value={formData.address.street}
-                                    onChange={handleAddressChange}
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label> City </label>
-                                <input
-                                    type="text"
-                                    name="city"
-                                    value={formData.address.city}
-                                    onChange={handleAddressChange}
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label> State </label>
-                                <input
-                                    type="text"
-                                    name="state"
-                                    value={formData.address.state}
-                                    onChange={handleAddressChange}
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label> Zipcode </label>
-                                <input
-                                    type="number"
-                                    name="zipCode"
-                                    value={formData.address.zipCode}
-                                    onChange={handleAddressChange}
-                                />
-                            </div>
-                        </div>
-                        <PaymentCardForm formData={formData} setFormData={setFormData} setMessage={setMessage} />
-                        <div className="form-section">
-                            <h3>Security & Confirm Changes</h3>
-                            <div className="input-group">
-                                <label>Current Password * (Required to save changes)</label>
-                                <input
-                                    type="password"
-                                    id="currentPassword"
-                                    name="currentPassword"
-                                    value={formData.currentPassword}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter current password to confirm"
-                                    required
-                                />
-                            </div>
-                            <div className="input-group">
-                                <label>New Password (Leave blank to keep unchanged)</label>
-                                <input
-                                    type="password"
-                                    id="newPassword"
-                                    name="newPassword"
-                                    value={formData.newPassword}
-                                    onChange={handleInputChange}
-                                    placeholder="••••••••"
-                                />
-                            </div>
-                        </div>
-                        <button type="submit" className="btn-submit">
-                            Save Profile Changes
-                        </button>
-                    </form>
-                </div>
-            </div>
-        );
-    }
->>>>>>> Stashed changes
+

@@ -17,8 +17,8 @@ export const Header: React.FC = () => {
                         <Link to="/" className="nav-item"> Home </Link>
                         {isAuthenticated ? (
                             <>
-                                {user?.role === "admin" && (<Link to="/admin/dashboard" className="nav-item"> Dashboard </Link>)}
-                                {user?.role === "customer" && (
+                                {user?.role === "ADMIN" && (<Link to="/admin/dashboard" className="nav-item"> Dashboard </Link>)}
+                                {user?.role === "CUSTOMER" && (
                                     <>
                                         <Link to="/favorites" className="nav-item"> Favorites </Link>
                                         <Link to="/profile" className="nav-item"> Profile </Link>

@@ -91,6 +91,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
             return { ...current, cards };
         });
         setMessage({ text: "Card updated successfully.", type: "success" });
+
         cancelCardForm();
     }
 

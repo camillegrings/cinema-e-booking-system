@@ -41,9 +41,9 @@ export default function ProtectedRoute({
         return <Navigate to="/" replace />;
     }
 
-    if (user!.status !== "active") {
-        return <Navigate to="/" replace />;
-    }
+    // if (user!.status !== "active") {
+    //     return <Navigate to="/" replace />;
+    // }
 
     return <Outlet />;
 }
