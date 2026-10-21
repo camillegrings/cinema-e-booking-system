@@ -1,5 +1,4 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header.js";
 import "./ProfilePage.css";
 import { PaymentCardForm } from '../components/PaymentCardForm.js'
@@ -101,6 +100,8 @@ export const ProfilePage: React.FC = () => {
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
+
+        setMessage(null);
         setFormData((prev) => ({
             ...prev,
             [name]: type === "checkbox" ? checked : value
@@ -110,6 +111,7 @@ export const ProfilePage: React.FC = () => {
     const handleAddressChange = (e) => {
         const { name, value } = e.target;
 
+        setMessage(null);
         setFormData((prev) => ({
             ...prev,
             address: {
@@ -150,7 +152,7 @@ export const ProfilePage: React.FC = () => {
             <div className="profile-container">
                 <h2> Edit Profile</h2>
                 {message && (
-                    <div className={`status-banner ${message.type}`}>
+                    <div className={`toast ${message.type}`}>
                         {message.text}
                     </div>
                 )}
@@ -237,6 +239,9 @@ export const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <PaymentCardForm formData={formData} setFormData={setFormData} setMessage={setMessage} />
+                    <button type="submit" className="btn-submit">
+                        Submit
+                    </button>
                 </form>
             </div>
         </div>
