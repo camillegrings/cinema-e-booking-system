@@ -19,7 +19,12 @@ const SERVER_PORT = process.env.SERVER_PORT || 3000;
 
 const SERVER = {
     hostname: SERVER_HOSTNAME,
-    port: SERVER_PORT
+    port: SERVER_PORT,
+    token: {
+        expireTime: '10000000',
+        secret: 'secret',
+        issuer: ''
+    }
 };
 
 const config = {

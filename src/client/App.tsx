@@ -31,7 +31,7 @@ export default function App() {
         </Route>
 
         {/* Admin only */}
-        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+        <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
         </Route>
       </Routes>
