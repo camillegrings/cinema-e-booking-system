@@ -103,3 +103,8 @@
     font-size: 18px;
     font-weight: 500;
 }
+
+.select-card {
+    color: black;
+    background:white;
+}

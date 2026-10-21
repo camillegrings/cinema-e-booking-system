@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, changeEvent } from "react";
 import type { ProfileFormData, PaymentCard, Message } from '../pages/ProfilePage.js'
 
 import "./PaymentCardForm.css";
@@ -16,12 +16,17 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
     const [editingCardId, setEditingCardId] = useState(null);
     const [isAddingCard, setIsAddingCard] = useState(false);
 
-    function handleCardChange(event) {
+    function handleCardChange(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const { name, value } = event.target;
+
+        let formattedValue = value;
+        if (name === "cardNumber") {
+            formattedValue = value.replace(/\D/g, "").substring(0, 16);
+        }
 
         setCardForm((current) => ({
             ...current,
-            [name]: value,
+            [name]: formattedValue,
         }));
     }
 
@@ -63,6 +68,11 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
             return;
         }
 
+        if (cardNumber.length < 13) {
+            setMessage({ text: "Please enter a valid card number.", type: "error" });
+            return;
+        }
+
         const newCard = {
             id: editingCardId ?? crypto.randomUUID(),
             cardHolderName: cardHolderName.trim(),
@@ -80,6 +90,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
 
             return { ...current, cards };
         });
+        setMessage({ text: "Card updated successfully.", type: "success" });
 
         cancelCardForm();
     }
@@ -95,6 +106,11 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
         }
     }
 
+    const formatCardMask = (num: string) => {
+        if (num.length <= 4) return num;
+        return `**** **** **** ${num.slice(-4)}`;
+    };
+
     return (
         <section className="payment-form-container">
             <h3>Payment Cards ({formData.cards.length}/3)</h3>
@@ -106,7 +122,8 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
             {formData.cards.map((card) => (
                 <article key={card.id} className="payment-form-card">
                     <div>
-                        <p className="payment-form-card-number">{card.cardType} {card.cardNumber} </p>
+                        <p className="payment-form-card-number">
+                            {card.cardType} {formatCardMask(card.cardNumber)} </p>
                         <p>Holder Name: {card.cardHolderName} </p>
                         <p>Expiration Date: {card.expirationDate}</p>
                     </div>
@@ -161,10 +178,10 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
                                     value={cardForm.cardType}
                                     onChange={handleCardChange}
                                 >
-                                    <option value="Visa">Visa</option>
-                                    <option value="Mastercard">Mastercard</option>
-                                    <option value="American Express">American Express</option>
-                                    <option value="Discover">Discover</option>
+                                    <option className="select-card" value="Visa">Visa</option>
+                                    <option className="select-card" value="Mastercard">Mastercard</option>
+                                    <option className="select-card" value="American Express">American Express</option>
+                                    <option className="select-card" value="Discover">Discover</option>
                                 </select>
                             </div>
 
