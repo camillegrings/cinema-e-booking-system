@@ -36,6 +36,8 @@ export type ProfileFormData = {
     favoriteMovies: FavoriteMovie[];
 }
 
+export type Message = { text: string; type: "success" | "error" } | null
+
 export const ProfilePage: React.FC = () => {
     const [formData, setFormData] = useState<ProfileFormData>({
         name: "",
@@ -53,48 +55,47 @@ export const ProfilePage: React.FC = () => {
         favoriteMovies: []
     });
 
-    const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
+    const [message, setMessage] = useState<Message>(null);
 
     useEffect(() => {
         const fetchProfileData = async () => {
-            // try {
-            // const token = localStorage.getItem("token");
-            // const res = await fetch("http://localhost:3000/users/profile", {
-            //     headers: {
-            //         "Authorization": `Bearer ${token}`
-            //     }
-            // });
-            // if (res.ok) {
-            //     const data = await res.json();
-            //     setFormData(data);
-            // } else {
-            setFormData({
-                name: "User Cards",
-                email: "user.cards@example.com",
-                password: "",
-                phone: "123-456-7890",
-                subscribedToPromos: true,
-                address: {
-                    street: "123 Fake Address",
-                    city: "Athens",
-                    state: "GA",
-                    zipCode: "30601"
-                },
-                cards: [
-                    { id: 1, cardHolderName: "User Cards", cardNumber: "**** **** **** 4242", expirationDate: "12/28", cardType: "Visa" },
-                    // { id: 2, cardHolderName: "User Cards", cardNumber: "**** **** **** 4444", expirationDate: "10/27", cardType: "MasterCard" },
-                    // { id: 3, cardHolderName: "User Cards", cardNumber: "**** **** **** 1000", expirationDate: "08/29", cardType: "Amex" }
-                ],
-                favoriteMovies: [
-                    { id: 1, title: "Spider-Man: Brand New Day", posterUrl: "https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg" }
-                ]
-            });
-        }
-        // } catch (err) {
-        //     console.error("Failed to load profile: ", err);
-        // }
-        // fetchProfileData();
-        // };
+            try {
+                const token = localStorage.getItem("token");
+                const res = await fetch("http://localhost:3000/users/profile", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setFormData(data);
+                } else {
+                    setFormData({
+                        name: "User Cards",
+                        email: "user.cards@example.com",
+                        password: "",
+                        phone: "123-456-7890",
+                        subscribedToPromos: true,
+                        address: {
+                            street: "123 Fake Address",
+                            city: "Athens",
+                            state: "GA",
+                            zipCode: "30601"
+                        },
+                        cards: [
+                            { id: 1, cardHolderName: "User Cards", cardNumber: "**** **** **** 4242", expirationDate: "12/28", cardType: "Visa" },
+                            { id: 2, cardHolderName: "User Cards", cardNumber: "**** **** **** 4444", expirationDate: "10/27", cardType: "MasterCard" },
+                            { id: 3, cardHolderName: "User Cards", cardNumber: "**** **** **** 1000", expirationDate: "08/29", cardType: "Amex" }
+                        ],
+                        favoriteMovies: [
+                            { id: 1, title: "Spider-Man: Brand New Day", posterUrl: "https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg" }
+                        ]
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to load profile: ", err);
+            }
+        };
         fetchProfileData();
     }, []);
 
@@ -235,7 +236,7 @@ export const ProfilePage: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <PaymentCardForm formData={formData} setFormData={setFormData} />
+                    <PaymentCardForm formData={formData} setFormData={setFormData} setMessage={setMessage} />
                 </form>
             </div>
         </div>

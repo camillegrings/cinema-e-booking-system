@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import type { ProfileFormData, PaymentCard } from '../pages/ProfilePage.js'
+import type { ProfileFormData, PaymentCard, Message } from '../pages/ProfilePage.js'
 
 interface Props {
     formData: ProfileFormData;
-    setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>
+    setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
+    setMessage: React.Dispatch<React.SetStateAction<Message>>
 }
 
 const emptyCard = { cardHolderName: "", cardNumber: "", expirationDate: "", cardType: "" };
 
-export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData }) => {
+export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMessage }) => {
     const [cardForm, setCardForm] = useState(emptyCard);
     const [editingCardId, setEditingCardId] = useState(null);
     const [isAddingCard, setIsAddingCard] = useState(false);
@@ -26,7 +27,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData }) => {
         setEditingCardId(null);
         setCardForm(emptyCard);
         setIsAddingCard(true);
-        // setError("");
+        setMessage(null);
     }
 
     function openEditCardForm(card: PaymentCard) {
@@ -38,7 +39,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData }) => {
             expirationDate: card.expirationDate ?? "",
         });
         setIsAddingCard(true);
-        // setError("");
+        setMessage(null);
     }
 
     function cancelCardForm() {
@@ -57,7 +58,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData }) => {
             !cardNumber ||
             !expirationDate
         ) {
-            // setError("Confira os dados do cartão.");
+            setMessage({ text: "Verify the card fields and fix any errors", type: "error" });
             return;
         }
 
