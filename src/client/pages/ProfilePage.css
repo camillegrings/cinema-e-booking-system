@@ -1,0 +1,87 @@
+<<<<<<< Updated upstream
+=======
+.profile-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.profile-container {
+    padding: 0.8rem 1.5rem;
+}
+
+.profile-container h2 {
+    margin-bottom: 20px;
+}
+
+.profile-container h3 {
+    border-bottom: 1px solid white;
+    padding-bottom: 0.5rem;
+    margin: 15px 0;
+}
+
+.profile-form .input-group {
+    margin: 15px 0;
+}
+
+.profile-form .input-group label {
+    font-size: 1.1rem;
+}
+
+.profile-form .input-group input {
+    font-size: 1.1rem;
+}
+
+.input-group input:disabled {
+    color: gray;
+    cursor: not-allowed;
+}
+
+.profile-form .btn-submit {
+    width: 100%;
+}
+
+.profile-page .toast {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 1.2rem;
+    backdrop-filter: blur(8px);
+    animation: toast-enter 0.3s ease-out;
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    width: max-content;
+    max-width: calc(100vw - 48px);
+    padding: 16px 20px;
+}
+
+.profile-page .toast.error {
+    background: rgba(255, 77, 77, 0.12);
+    border: 1px solid rgba(255, 77, 77, 0.35);
+    color: #ff6b6b;
+}
+
+.profile-page .toast.success {
+    background: rgba(77, 255, 154, 0.12);
+    border: 1px solid rgba(77, 255, 142, 0.35);
+    color: #6bff93;
+}
+
+
+@keyframes toast-enter {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+>>>>>>> Stashed changes

@@ -27,7 +27,8 @@ export type FavoriteMovie = {
 export type ProfileFormData = {
     name: string;
     email: string;
-    password?: string;
+    currentPassword: string;
+    newPassword?: string;
     phone: string;
     subscribedToPromos: boolean;
     address: Address;
@@ -39,7 +40,8 @@ export const ProfilePage: React.FC = () => {
     const [formData, setFormData] = useState<ProfileFormData>({
         name: "",
         email: "",
-        password: "",
+        currentPassword: "",
+        newPassword: "",
         phone: "",
         subscribedToPromos: false,
         address: {
@@ -77,7 +79,8 @@ export const ProfilePage: React.FC = () => {
                     setFormData({
                         name: "User Cards",
                         email: "user.cards@example.com",
-                        password: "",
+                        currentPassword: "",
+                        newPassword: "",
                         phone: "123-456-7890",
                         subscribedToPromos: true,
                         address: {
@@ -87,12 +90,10 @@ export const ProfilePage: React.FC = () => {
                             zipCode: "30601"
                         },
                         cards: [
-                            { id: 1, cardHolderName: "User Cards", cardNumber: "**** **** **** 4242", expirationDate: "12/28", cardType: "Visa" },
-                            { id: 2, cardHolderName: "User Cards", cardNumber: "**** **** **** 4444", expirationDate: "10/27", cardType: "MasterCard" },
-                            { id: 3, cardHolderName: "User Cards", cardNumber: "**** **** **** 1000", expirationDate: "08/29", cardType: "Amex" }
+
                         ],
                         favoriteMovies: [
-                            { id: 1, title: "Spider-Man: Brand New Day", posterUrl: "https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg" }
+
                         ]
                     });
                 }
@@ -114,6 +115,11 @@ export const ProfilePage: React.FC = () => {
         e.preventDefault();
         setMessage(null);
 
+        if (!formData.currentPassword) {
+            setMessage({ text: "Please enter your current password to save profile changes.", type: "error" });
+            return;
+        }
+
         try {
             const token = localStorage.getItem("token");
             const res = await fetch("http://localhost:3000/users/profile", {
@@ -125,6 +131,7 @@ export const ProfilePage: React.FC = () => {
                 body: JSON.stringify(formData)
             });
 
+<<<<<<< Updated upstream
             if (res.ok) {
                 setMessage({ text: "Profile updated successfully!", type: "success" });
             } else {
@@ -158,17 +165,66 @@ export const ProfilePage: React.FC = () => {
                                 disabled
                                 className="disabled"
                             />
+=======
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to update profile.");
+            }
+
+            setMessage({ text: "Profile updated successfully!", type: "success" });
+
+            setFormData((prev) => ({ ...prev, currentPassword: "", newPassword: "" }));
+        } catch (err: any) {
+            setMessage({ text: err.message || "Failed to update profile.", type: "error" });
+        };
+    }
+
+        return (
+            <div className="profile-page">
+                <Header />
+                <div className="profile-container">
+                    <h2> Edit Profile</h2>
+                    {message && (
+                        <div className={`toast ${message.type}`}>
+                            {message.text}
+>>>>>>> Stashed changes
                         </div>
-                        <div className="input-group">
-                            <label>Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                required
-                            />
+                    )}
+                    <form onSubmit={handleSubmit} className="profile-form">
+                        <div className="form-section">
+                            <h3> Personal Information </h3>
+                            <div className="input-group">
+                                <label> Email Address (Cannot be modified) </label>
+                                <input
+                                    type="email"
+                                    value={formData.email}
+                                    disabled
+                                    className="disabled"
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Phone Number</label>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
                         </div>
+<<<<<<< Updated upstream
                         <div className="input-group">
                             <label>Phone Number</label>
                             <input
@@ -207,3 +263,79 @@ export const ProfilePage: React.FC = () => {
         </div>
     )
 }
+=======
+                        <div className="form-section">
+                            <h3> Address </h3>
+                            <div className="input-group">
+                                <label> Street </label>
+                                <input
+                                    type="text"
+                                    name="street"
+                                    value={formData.address.street}
+                                    onChange={handleAddressChange}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label> City </label>
+                                <input
+                                    type="text"
+                                    name="city"
+                                    value={formData.address.city}
+                                    onChange={handleAddressChange}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label> State </label>
+                                <input
+                                    type="text"
+                                    name="state"
+                                    value={formData.address.state}
+                                    onChange={handleAddressChange}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label> Zipcode </label>
+                                <input
+                                    type="number"
+                                    name="zipCode"
+                                    value={formData.address.zipCode}
+                                    onChange={handleAddressChange}
+                                />
+                            </div>
+                        </div>
+                        <PaymentCardForm formData={formData} setFormData={setFormData} setMessage={setMessage} />
+                        <div className="form-section">
+                            <h3>Security & Confirm Changes</h3>
+                            <div className="input-group">
+                                <label>Current Password * (Required to save changes)</label>
+                                <input
+                                    type="password"
+                                    id="currentPassword"
+                                    name="currentPassword"
+                                    value={formData.currentPassword}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter current password to confirm"
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>New Password (Leave blank to keep unchanged)</label>
+                                <input
+                                    type="password"
+                                    id="newPassword"
+                                    name="newPassword"
+                                    value={formData.newPassword}
+                                    onChange={handleInputChange}
+                                    placeholder="••••••••"
+                                />
+                            </div>
+                        </div>
+                        <button type="submit" className="btn-submit">
+                            Save Profile Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+>>>>>>> Stashed changes
