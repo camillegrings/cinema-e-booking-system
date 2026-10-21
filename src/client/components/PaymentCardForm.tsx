@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import type { ProfileFormData, PaymentCard, Message } from '../pages/ProfilePage.js'
 
+import "./PaymentCardForm.css";
+
 interface Props {
     formData: ProfileFormData;
     setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
     setMessage: React.Dispatch<React.SetStateAction<Message>>
 }
 
-const emptyCard = { cardHolderName: "", cardNumber: "", expirationDate: "", cardType: "" };
+const emptyCard = { cardHolderName: "", cardNumber: "", expirationDate: "", cardType: "Visa" };
 
 export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMessage }) => {
     const [cardForm, setCardForm] = useState(emptyCard);
@@ -49,8 +51,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
     }
 
     function handleCardSubmit() {
-        const { cardHolderName, cardNumber, expirationDate, cardType } =
-            cardForm;
+        const { cardHolderName, cardNumber, expirationDate, cardType } = cardForm;
 
         if (
             !cardHolderName.trim() ||
@@ -95,102 +96,102 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
     }
 
     return (
-        <section>
+        <section className="payment-form-container">
             <h3>Payment Cards ({formData.cards.length}/3)</h3>
 
             {formData.cards.length === 0 && (
-                <p>No payment cards saved!</p>
+                <p className="payment-form-no-cards-message">No payment cards saved!</p>
             )}
 
             {formData.cards.map((card) => (
-                <article key={card.id}>
-                    <p>
-                        {card.cardType} {card.cardNumber}
-                    </p>
-                    <p>
-                        Holder Name: {card.cardHolderName}
-                    </p>
-                    <p>
-                        Expiration Date: {card.expirationDate}
-                    </p>
-
-                    <button
-                        type="button"
-                        onClick={() => openEditCardForm(card)}
-                    >
-                        Edit
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => removeCard(card.id)}
-                    >
-                        Remove
-                    </button>
+                <article key={card.id} className="payment-form-card">
+                    <div>
+                        <p className="payment-form-card-number">{card.cardType} {card.cardNumber} </p>
+                        <p>Holder Name: {card.cardHolderName} </p>
+                        <p>Expiration Date: {card.expirationDate}</p>
+                    </div>
+                    <div>
+                        <button className="payment-form-card-btn-primary" type="button" onClick={() => openEditCardForm(card)}>Edit</button>
+                        <button className="payment-form-card-btn-secondary" type="button" onClick={() => removeCard(card.id)}>Remove</button>
+                    </div>
                 </article>
             ))}
 
             {formData.cards.length < 3 && !isAddingCard && (
-                <button type="button" onClick={openAddCardForm}>
+                <button className="payment-form-btn-secondary" type="button" onClick={openAddCardForm}>
                     Add New Card
                 </button>
             )}
 
             {isAddingCard && (
-                <fieldset>
+                <fieldset className="payment-form-add-card-wrapper">
                     <legend>
                         {editingCardId ? "Edit Card" : "New Card"}
                     </legend>
+                    <div className="payment-form-add-card-fields">
+                        <div className="payment-form-add-card-inline-fields">
+                            <div className="input-group">
+                                <label htmlFor="cardHolderName">Holder Name</label>
+                                <input
+                                    id="cardHolderName"
+                                    name="cardHolderName"
+                                    value={cardForm.cardHolderName}
+                                    onChange={handleCardChange}
+                                    required
+                                /> </div>
 
-                    <label htmlFor="cardHolderName">Holder Name</label>
-                    <input
-                        id="cardHolderName"
-                        name="cardHolderName"
-                        value={cardForm.cardHolderName}
-                        onChange={handleCardChange}
-                        required
-                    />
+                            <div className="input-group">
+                                <label htmlFor="cardNumber">Card Number</label>
+                                <input
+                                    id="cardNumber"
+                                    name="cardNumber"
+                                    inputMode="numeric"
+                                    value={cardForm.cardNumber}
+                                    onChange={handleCardChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="payment-form-add-card-inline-fields">
+                            <div className="input-group">
+                                <label htmlFor="cardType">Type</label>
+                                <select
+                                    id="cardType"
+                                    name="cardType"
+                                    value={cardForm.cardType}
+                                    onChange={handleCardChange}
+                                >
+                                    <option value="Visa">Visa</option>
+                                    <option value="Mastercard">Mastercard</option>
+                                    <option value="American Express">American Express</option>
+                                    <option value="Discover">Discover</option>
+                                </select>
+                            </div>
 
-                    <label htmlFor="cardType">Type</label>
-                    <select
-                        id="cardType"
-                        name="cardType"
-                        value={cardForm.cardType}
-                        onChange={handleCardChange}
-                    >
-                        <option value="Visa">Visa</option>
-                        <option value="Mastercard">Mastercard</option>
-                        <option value="American Express">American Express</option>
-                        <option value="Discover">Discover</option>
-                    </select>
+                            <div className="input-group">
+                                <label htmlFor="expirationDate">Expiration Date</label>
+                                <input
+                                    id="expirationDate"
+                                    name="expirationDate"
+                                    type="text"
+                                    placeholder="01/30"
+                                    value={cardForm.expirationDate}
+                                    onChange={handleCardChange}
+                                    required
+                                />
+                            </div>
 
-                    <label htmlFor="cardNumber">Card Number</label>
-                    <input
-                        id="cardNumber"
-                        name="cardNumber"
-                        inputMode="numeric"
-                        value={cardForm.cardNumber}
-                        onChange={handleCardChange}
-                        required
-                    />
-                    <label htmlFor="expirationDate">Expiration Date</label>
-                    <input
-                        id="expirationDate"
-                        name="expirationDate"
-                        type="text"
-                        placeholder="01/30"
-                        value={cardForm.expirationDate}
-                        onChange={handleCardChange}
-                        required
-                    />
+                        </div>
+                    </div>
+                    <div>
+                        <button type="button" onClick={handleCardSubmit} className="payment-form-card-btn-primary">
+                            {editingCardId ? "Update card" : "Add card"}
+                        </button>
 
-                    <button type="button" onClick={handleCardSubmit}>
-                        {editingCardId ? "Update card" : "Add card"}
-                    </button>
-
-                    <button type="button" onClick={cancelCardForm}>
-                        Cancel
-                    </button>
+                        <button type="button" onClick={cancelCardForm} className="payment-form-card-btn-secondary">
+                            Cancel
+                        </button>
+                    </div>
                 </fieldset>
             )}
         </section>

@@ -1,0 +1,105 @@
+.payment-form-container {
+    margin: 20px 0;
+}
+
+.payment-form-card {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 10px 40px 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    font-size: 13px;
+}
+
+.payment-form-card-number {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.payment-form-card-btn-primary {
+    margin: 0 5px;
+    padding: 0.5rem 1rem;
+    color: white;
+    background: #12121a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.payment-form-card-btn-secondary,
+.payment-form-btn-secondary {
+    margin: 0 5px;
+    padding: 0.5rem 1rem;
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.payment-form-btn-secondary {
+    width: 100%;
+}
+
+.payment-form-add-card-wrapper {
+    border: 1px solid rgb(255 255 255 / 71%);
+    border-radius: 24px;
+    padding: 20px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.payment-form-add-card-wrapper .input-group {
+    margin: 0 5px;
+    width: 100%;
+    max-width: 250px;
+}
+
+.input-group select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    color: white;
+    padding: 0.4rem 1rem;
+}
+
+.payment-form-add-card-wrapper legend {
+    font-weight: 700;
+    padding: 0 10px;
+}
+
+.payment-form-add-card-wrapper .input-group>label {
+    font-size: 16px;
+}
+
+.payment-form-add-card-wrapper .input-group>input {
+    padding: 0.4rem 1rem;
+    font-size: 16px;
+}
+
+.payment-form-add-card-inline-fields {
+    display: flex;
+}
+
+.payment-form-add-card-inline-fields:first-child {
+    margin-bottom: 20px;
+}
+
+.payment-form-add-card-fields {
+    flex: 1;
+}
+
+.payment-form-no-cards-message {
+    margin: 20px 0;
+    color: #b0b3c6;
+    font-size: 18px;
+    font-weight: 500;
+}
