@@ -291,3 +291,19 @@ VALUES ('ADMIN', 'admin@test.com', '$2b$10$bm3PrQlhLmPWw6vbNFXEUOYnFttwEnYyPLX3w
 SET @a = LAST_INSERT_ID();
 INSERT INTO admins (user_id, name)
 VALUES (@a, 'Test Admin');
+
+-- Demo Sprint 2
+-- Admin
+INSERT INTO users (role, email, password_hash) 
+VALUES ('ADMIN', 'admin@test.com', '$2b$10$DRDLIwvqN/WZWC3TRnN7vemE3kudGgYuNl260rdRZ1Pqym4epa0LC');
+SET @adm = LAST_INSERT_ID();
+INSERT INTO admins (user_id, name) VALUES (@adm, 'Test Admin');
+
+-- Verified User with favorites
+INSERT INTO users (role, email, password_hash)
+VALUES ('CUSTOMER', 'fav@test.com', '$2b$10$ejnzEuIdlviIgPA4PPNsOubv.k464RpWaR3I35V2azbSuS4lmDSru');
+SET @fav = LAST_INSERT_ID();
+INSERT INTO customers (user_id, first_name, last_name, phone_number, status, subscribed_to_promos)
+VALUES (@fav, 'Fay', 'Favorite', '123-4567', 'ACTIVE', TRUE);
+
+-- Verified User with 3 payment cards
