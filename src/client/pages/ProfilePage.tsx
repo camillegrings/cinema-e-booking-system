@@ -1,7 +1,8 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./ProfilePage.css";
 import { Header } from "../components/Header.js";
+import "./ProfilePage.css";
+import { PaymentCardForm } from '../components/PaymentCardForm.js'
 
 export type Address = {
     street: string;
@@ -53,56 +54,50 @@ export const ProfilePage: React.FC = () => {
     });
 
     const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
-    const [newCard, setNewCard] = useState<PaymentCard>({
-        cardHolderName: "",
-        cardNumber: "",
-        expirationDate: "",
-        cardType: "Visa"
-    });
-    const [showAddCard, setAddCard] = useState(false);
 
     useEffect(() => {
         const fetchProfileData = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const res = await fetch("http://localhost:3000/users/profile", {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setFormData(data);
-                } else {
-                    setFormData({
-                        name: "User Cards",
-                        email: "user.cards@example.com",
-                        password: "",
-                        phone: "123-456-7890",
-                        subscribedToPromos: true,
-                        address: {
-                            street: "123 Fake Address",
-                            city: "Athens",
-                            state: "GA",
-                            zipCode: "30601"
-                        },
-                        cards: [
-                            { id: 1, cardHolderName: "User Cards", cardNumber: "**** **** **** 4242", expirationDate: "12/28", cardType: "Visa" },
-                            { id: 2, cardHolderName: "User Cards", cardNumber: "**** **** **** 4444", expirationDate: "10/27", cardType: "MasterCard" },
-                            { id: 3, cardHolderName: "User Cards", cardNumber: "**** **** **** 1000", expirationDate: "08/29", cardType: "Amex" }
-                        ],
-                        favoriteMovies: [
-                            { id: 1, title: "Spider-Man: Brand New Day", posterUrl: "https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg" }
-                        ]
-                    });
-                }
-            } catch (err) {
-                console.error("Failed to load profile: ", err);
-            }
-            fetchProfileData();
-        };
+            // try {
+            // const token = localStorage.getItem("token");
+            // const res = await fetch("http://localhost:3000/users/profile", {
+            //     headers: {
+            //         "Authorization": `Bearer ${token}`
+            //     }
+            // });
+            // if (res.ok) {
+            //     const data = await res.json();
+            //     setFormData(data);
+            // } else {
+            setFormData({
+                name: "User Cards",
+                email: "user.cards@example.com",
+                password: "",
+                phone: "123-456-7890",
+                subscribedToPromos: true,
+                address: {
+                    street: "123 Fake Address",
+                    city: "Athens",
+                    state: "GA",
+                    zipCode: "30601"
+                },
+                cards: [
+                    { id: 1, cardHolderName: "User Cards", cardNumber: "**** **** **** 4242", expirationDate: "12/28", cardType: "Visa" },
+                    // { id: 2, cardHolderName: "User Cards", cardNumber: "**** **** **** 4444", expirationDate: "10/27", cardType: "MasterCard" },
+                    // { id: 3, cardHolderName: "User Cards", cardNumber: "**** **** **** 1000", expirationDate: "08/29", cardType: "Amex" }
+                ],
+                favoriteMovies: [
+                    { id: 1, title: "Spider-Man: Brand New Day", posterUrl: "https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg" }
+                ]
+            });
+        }
+        // } catch (err) {
+        //     console.error("Failed to load profile: ", err);
+        // }
+        // fetchProfileData();
+        // };
         fetchProfileData();
     }, []);
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
         setFormData((prev) => ({
@@ -110,6 +105,19 @@ export const ProfilePage: React.FC = () => {
             [name]: type === "checkbox" ? checked : value
         }));
     };
+
+    const handleAddressChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            address: {
+                ...prev.address,
+                [name]: value,
+            },
+        }));
+    };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setMessage(null);
@@ -134,8 +142,7 @@ export const ProfilePage: React.FC = () => {
             setMessage({ text: "Profile updated successfully (Local).", type: "success" });
         }
     };
-    // Handle payment card change (add & delete)
-    // Handle address change
+
     return (
         <div className="profile-page">
             <Header />
@@ -146,7 +153,6 @@ export const ProfilePage: React.FC = () => {
                         {message.text}
                     </div>
                 )}
-
                 <form onSubmit={handleSubmit} className="profile-form">
                     <div className="form-section">
                         <h3> Personal Information </h3>
@@ -177,33 +183,61 @@ export const ProfilePage: React.FC = () => {
                                 value={formData.phone}
                                 onChange={handleInputChange}
                                 required
-                                />
-                            </div>
+                            />
+                        </div>
                         <div className="input-group">
                             <label> New Password </label>
                             <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            placeholder="••••••••"
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleInputChange}
+                                placeholder="••••••••"
                             />
                         </div>
                     </div>
                     <div className="form-section">
                         <h3> Address </h3>
                         <div className="input-group">
-                            <label>Street Address * Add address Change</label>
+                            <label> Street </label>
+                            <input
+                                type="text"
+                                name="street"
+                                value={formData.address.street}
+                                onChange={handleAddressChange}
+                            />
                         </div>
-                    </div>
-                    <div className="form-section">
-                        <h3> Payment Cards </h3>
                         <div className="input-group">
-                            <label> Add address Change</label>
+                            <label> City </label>
+                            <input
+                                type="text"
+                                name="city"
+                                value={formData.address.city}
+                                onChange={handleAddressChange}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label> State </label>
+                            <input
+                                type="text"
+                                name="state"
+                                value={formData.address.state}
+                                onChange={handleAddressChange}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label> ZipCode </label>
+                            <input
+                                type="number"
+                                name="zipCode"
+                                value={formData.address.zipCode}
+                                onChange={handleAddressChange}
+                            />
                         </div>
                     </div>
+                    <PaymentCardForm formData={formData} setFormData={setFormData} />
                 </form>
             </div>
         </div>
-    )
+    );
 }
