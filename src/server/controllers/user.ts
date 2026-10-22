@@ -107,7 +107,7 @@ const validateEmail = (req: Request, res: Response, next: NextFunction) => {
 	let query = `SELECT * FROM tokens WHERE verification_code = ${token} LIMIT 1")`;
 
 	Connect().then((connection) => {
-		connection.beginTransaction(function (err) {
+		connection.beginTransaction((err) => {
 			if (err) {
 				throw err;
 			}
@@ -124,7 +124,7 @@ const validateEmail = (req: Request, res: Response, next: NextFunction) => {
 									return res.status(201).json(result);
 								})
 								.catch((error) => {
-									connection.rollback(function () {
+									connection.rollback(() => {
 										logging.error(NAMESPACE, error.message, error);
 										return res.status(401).json({
 											message: "Deleting verification token failed.",
@@ -133,7 +133,7 @@ const validateEmail = (req: Request, res: Response, next: NextFunction) => {
 								});
 						})
 						.catch((error) => {
-							connection.rollback(function () {
+							connection.rollback(() => {
 								logging.error(NAMESPACE, error.message, error);
 
 								return res.status(401).json({
@@ -143,7 +143,7 @@ const validateEmail = (req: Request, res: Response, next: NextFunction) => {
 						});
 				})
 				.catch((error) => {
-					connection.rollback(function () {
+					connection.rollback(() => {
 						logging.error(NAMESPACE, error.message, error);
 
 						return res.status(401).json({
@@ -160,7 +160,7 @@ const resetPass = (req: Request, res: Response, next: NextFunction) => {
 	let query = `SELECT * FROM tokens WHERE verification_code = ${token} LIMIT 1")`;
 
 	Connect().then((connection) => {
-		connection.beginTransaction(function (err) {
+		connection.beginTransaction((err) => {
 			if (err) {
 				throw err;
 			}
@@ -185,7 +185,7 @@ const resetPass = (req: Request, res: Response, next: NextFunction) => {
 										return res.status(201).json(result);
 									})
 									.catch((error) => {
-										connection.rollback(function () {
+										connection.rollback(() => {
 											logging.error(NAMESPACE, error.message, error);
 											return res.status(401).json({
 												message: "Deleting verification token failed.",
@@ -195,7 +195,7 @@ const resetPass = (req: Request, res: Response, next: NextFunction) => {
 							})
 
 							.catch((error) => {
-								connection.rollback(function () {
+								connection.rollback(() => {
 									logging.error(NAMESPACE, error.message, error);
 
 									return res.status(401).json({
@@ -206,7 +206,7 @@ const resetPass = (req: Request, res: Response, next: NextFunction) => {
 					});
 				})
 				.catch((error) => {
-					connection.rollback(function () {
+					connection.rollback(() => {
 						logging.error(NAMESPACE, error.message, error);
 
 						return res.status(401).json({
@@ -225,6 +225,7 @@ const register = (req: Request, res: Response, next: NextFunction) => {
 
 	bcryptjs.hash(password, 10, (hashError, hash) => {
 		if (hashError) {
+			logging.error(NAMESPACE, hashError.message, "error");
 			return res.status(401).json({
 				message: hashError.message,
 				error: hashError,
@@ -234,36 +235,32 @@ const register = (req: Request, res: Response, next: NextFunction) => {
 		let query = `INSERT INTO users (role, email, password_hash) VALUES ("CUSTOMER", "${email}", "${hash}")`;
 
 		Connect().then((connection) => {
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction((err) => {
 				if (err) {
 					throw err;
 				}
-				Query<QueryResult>(connection, query)
-					.then((result) => {
-						let query = `INSERT INTO customers (user_id, first_name, last_name, phone_number, status) VALUES (${result[0].user_id}, "${first_name}", "${last_name}", "${phone_number}", "ACTIVE")`;
+				Query<IMySQLResult>(connection, query, false)
+					.then((users) => {
+						let query = `INSERT INTO customers (user_id, first_name, last_name, phone_number, status) VALUES (${users?.insertId}, "${first_name}", "${last_name}", "${phone_number}", "ACTIVE")`;
 
-						Query<IMySQLResult>(connection, query)
-							.then((result) => {
-								logging.info(
-									NAMESPACE,
-									`User with id ${result.insertId} inserted.`,
-								);
-
-								return res.status(201).json(result);
-							})
-							.catch((error) => {
-								connection.rollback(function () {
-									logging.error(NAMESPACE, error.message, error);
-
-									return res.status(401).json({
-										message: "Register failed.",
+						Query<IMySQLResult>(connection, query, false).then((result) => {
+							logging.info(NAMESPACE, `User ${result?.insertId} inserted.`);
+							connection.commit((err) => {
+								if (err) {
+									connection.rollback(() => {
+										throw err;
 									});
-								});
+								}
 							});
+							connection.end();
+							return res.status(200).json({
+								message: "Registration successful.",
+							});
+						});
 					})
 					.catch((error) => {
-						connection.rollback(function () {
-							logging.error(NAMESPACE, error.message, error);
+						connection.rollback(() => {
+							logging.error(NAMESPACE, "Register failed.", error);
 
 							return res.status(401).json({
 								message: "Register failed.",
@@ -284,13 +281,18 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 		.then((connection) => {
 			Query<IUser[]>(connection, query)
 				.then((users) => {
+					if (!users.length) {
+						return res.status(401).json({
+							message: "Email or password is incorrect.",
+						});
+					}
 					bcryptjs.compare(
 						password,
 						users[0].password_hash,
 						(error, result) => {
 							if (error) {
 								return res.status(401).json({
-									message: "Password Mismatch",
+									message: "Email or password is incorrect.",
 								});
 							} else if (result) {
 								signJWT(users[0], (_error, token) => {
@@ -331,7 +333,7 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
-	let query = `SELECT id, username FROM users`;
+	let query = `SELECT id FROM users`;
 
 	Connect()
 		.then((connection) => {

@@ -10,20 +10,19 @@ const NAMESPACE = "Movie";
 const toId = (value: unknown): number | null => {
 	const n = Number(value);
 	return Number.isInteger(n) && n > 0 ? n : null;
-}
+};
 
 // change the id if JWT stores user's id under a different key
 const getUserId = (res: Response): number | null => toId(res.locals.jwt?.id);
 
-
 const getAllMovies = (req: Request, res: Response, next: NextFunction) => {
-	const userId = getUserId(res)
+	const userId = getUserId(res);
 	let query = format(
 		`SELECT m.*, (f.movie_id IS NOT NULL) AS is_favorite
 		FROM movies m
 		LEFT JOIN favorite_movies f
 			ON f.movie_id = m.id AND f.customer_id = ?`,
-			[userId],
+		[userId],
 	);
 
 	Connect().then((connection) => {
@@ -33,7 +32,7 @@ const getAllMovies = (req: Request, res: Response, next: NextFunction) => {
 					(movies as RowDataPacket[]).map((m) => ({
 						...m,
 						is_favorite: Boolean(m.is_favorite),
-					})) /*, count: movies.length */
+					})) /*, count: movies.length */,
 				);
 			})
 			.catch((error) => {
@@ -51,10 +50,10 @@ const getMovie = (req: Request, res: Response, next: NextFunction) => {
 	const id = toId(req.params.id);
 
 	if (id === null) {
-		return res.status(400).json({ message : "Invalid movie id" });
+		return res.status(400).json({ message: "Invalid movie id" });
 	}
 
-	const userId = getUserId(res)
+	const userId = getUserId(res);
 
 	let query = format(
 		`SELECT m.*, (f.movie_id IS NOT NULL) AS is_favorite
@@ -89,7 +88,7 @@ const getMovie = (req: Request, res: Response, next: NextFunction) => {
 const getAllFavorites = (req: Request, res: Response, next: NextFunction) => {
 	const userId = getUserId(res);
 
-	if(userId === null) {
+	if (userId === null) {
 		return res.status(401).json({ message: "Please log in" });
 	}
 
@@ -187,7 +186,9 @@ const deleteFavorite = (req: Request, res: Response, next: NextFunction) => {
 		Query<QueryResult>(connection, query)
 			.then((result) => {
 				if ((result as ResultSetHeader).affectedRows === 0) {
-					return res.status(404).json({ message: "Movie was not in favorites" });
+					return res
+						.status(404)
+						.json({ message: "Movie was not in favorites" });
 				}
 
 				return res.status(200).json({ message: "Removed from favorites" });
@@ -203,4 +204,10 @@ const deleteFavorite = (req: Request, res: Response, next: NextFunction) => {
 	});
 };
 
-export default { getAllMovies, getMovie, getAllFavorites, addFavorite, deleteFavorite, };
+export default {
+	getAllMovies,
+	getMovie,
+	getAllFavorites,
+	addFavorite,
+	deleteFavorite,
+};
