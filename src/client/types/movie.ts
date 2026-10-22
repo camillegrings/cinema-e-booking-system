@@ -12,4 +12,5 @@ export interface Movie {
   trailer_video_url: string;
   release_date: string;
   status: string;
+  is_favorite: boolean
 }

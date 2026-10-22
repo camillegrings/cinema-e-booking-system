@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Movie } from "../types/movie.js";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.js";
@@ -6,20 +6,46 @@ import "./MovieCard.css";
 
 interface Props {
     movie: Movie;
+    toggleFavoriteCallback?: Function
 }
 
-export const MovieCard: React.FC<Props> = ({ movie }) => {
-    const { isAuthenticated } = useAuth();
+export const MovieCard: React.FC<Props> = ({ movie, toggleFavoriteCallback }) => {
+    const { isAuthenticated, token } = useAuth();
+    const [isFavorite, setIsFavorite] = useState(movie.is_favorite);
 
-    function favoriteMovie() {
-        // request backend
+    function requestFavoriteMovie(method: 'POST' | 'DELETE') {
+        fetch(`http://localhost:3000/movies/favorites/${movie.id}`, {
+            headers: { "Authorization": `Bearer ${token}` }, method
+        })
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+
+                if (toggleFavoriteCallback) {
+                    toggleFavoriteCallback()
+                }
+            })
+            .catch((err) => {
+                console.error('Error fetching movies:', err);
+            });
+    }
+
+    function toggleFavoriteMovie(e: React.ChangeEvent<HTMLInputElement>) {
+        const isChecked = e.target.checked
+
+        setIsFavorite(isChecked)
+
+        if (isChecked) {
+            requestFavoriteMovie('POST')
+        } else {
+            requestFavoriteMovie('DELETE')
+        }
     }
 
     return (
         <div className='movie-card'>
             {isAuthenticated && (
                 <label className='movie-favorite'>
-                    <input type="checkbox" onChange={favoriteMovie} /*checked={movie.isFavorite}*/ />
+                    <input type="checkbox" onChange={toggleFavoriteMovie} checked={isFavorite} />
                     <span className="favorite-icon"></span>
                 </label>
             )}
