@@ -29,4 +29,24 @@ const extractJWT = (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
-export default extractJWT;
+const optionalAuth = (req: Request, res: Response, next: NextFunction) => {
+	let token = req.headers.authorization?.split(" ")[1];
+
+	if (!token) {
+		return next(); // Continue as a guest
+	}
+
+	jwt.verify(token, config.server.token.secret, (error, decoded) => {
+		if (error) {
+			return res.status(404).json({
+				message: error,
+				error,
+			});
+		} else {
+			res.locals.jwt = decoded;
+			next();
+		}
+	});
+}
+
+export { extractJWT, optionalAuth };

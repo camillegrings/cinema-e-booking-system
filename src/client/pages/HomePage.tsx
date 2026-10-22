@@ -7,14 +7,18 @@ import { useAuth } from "../context/AuthContext.js";
 import "./HomePage.css";
 
 const HomePage: React.FC = () => {
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated, user, token } = useAuth();
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("ALL");
 
     useEffect(() => {
-        fetch("http://localhost:3000/movies/get/all")
+        const headers = isAuthenticated ? { "Authorization": `Bearer ${token}` } : undefined
+
+        fetch("http://localhost:3000/movies/get/all", {
+            headers: headers,
+        })
             .then((res) => {
                 if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
                 return res.json();

@@ -18,7 +18,7 @@ const signJWT = (
 
 	try {
 		jwt.sign(
-			{ username: user.email },
+			{ username: user.email, id: user.id, },
 			config.server.token.secret,
 			{
 				issuer: config.server.token.issuer,
@@ -30,7 +30,7 @@ const signJWT = (
 				else if (token) callback(null, token);
 			},
 		);
-	} catch (error) {
+	} catch (error: any) {
 		logging.error(NAMESPACE, error.message, error);
 		callback(error, null);
 	}
