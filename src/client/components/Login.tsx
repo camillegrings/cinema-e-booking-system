@@ -18,18 +18,18 @@ export const Login = () => {
 		const email = formData.get("email");
 		const password = formData.get("password");
 
-		/* Mock Account Login
+		/*
 		setTimeout(() => {
 			let MOCK_USER: User;
 			const MOCK_TOKEN = "mock-jwt-token-customer"
 
-			// 1. Test Customer Credentials
+			 1. Test Customer Credentials
 			if (email === "test.customer@example.com" && password === "Password123!") {
 				MOCK_USER = {
 					id: '1',
 					email: 'test.customer@example.com',
 					name: 'Test',
-					role: 'customer',
+					role: 'CUSTOMER',
 					status: 'active'
 				}
 
@@ -40,7 +40,7 @@ export const Login = () => {
 					id: '2',
 					email: 'admin@cinema.com',
 					name: 'Admin',
-					role: 'admin',
+					role: 'ADMIN',
 					status: 'active'
 				}
 			}
@@ -51,7 +51,7 @@ export const Login = () => {
 			}
 
 			login(MOCK_USER, MOCK_TOKEN);
-			navigate(MOCK_USER.role === "admin" ? "/admin/dashboard" : "/", { replace: true });
+			navigate(MOCK_USER.role === "ADMIN" ? "/admin/dashboard" : "/", { replace: true });
 		}, 500); // 500ms fake network delay
 	};
 
@@ -79,7 +79,6 @@ export const Login = () => {
 		setErrorMessage(err.message || "Invalid credentials or server error.");
 	}
 };
-
 	return (
 		<div className="login-container">
 			<Header />

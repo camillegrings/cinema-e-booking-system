@@ -1,5 +1,4 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header.js";
 import "./ProfilePage.css";
 import { PaymentCardForm } from '../components/PaymentCardForm.js'
@@ -28,7 +27,8 @@ export type FavoriteMovie = {
 export type ProfileFormData = {
     name: string;
     email: string;
-    password?: string;
+    currentPassword: string;
+    newPassword?: string;
     phone: string;
     subscribedToPromos: boolean;
     address: Address;
@@ -42,7 +42,8 @@ export const ProfilePage: React.FC = () => {
     const [formData, setFormData] = useState<ProfileFormData>({
         name: "",
         email: "",
-        password: "",
+        currentPassword: "",
+        newPassword: "",
         phone: "",
         subscribedToPromos: false,
         address: {
@@ -73,7 +74,8 @@ export const ProfilePage: React.FC = () => {
                     setFormData({
                         name: "User Cards",
                         email: "user.cards@example.com",
-                        password: "",
+                        currentPassword: "",
+                        newPassword: "",
                         phone: "123-456-7890",
                         subscribedToPromos: true,
                         address: {
@@ -83,12 +85,10 @@ export const ProfilePage: React.FC = () => {
                             zipCode: "30601"
                         },
                         cards: [
-                            { id: 1, cardHolderName: "User Cards", cardNumber: "**** **** **** 4242", expirationDate: "12/28", cardType: "Visa" },
-                            { id: 2, cardHolderName: "User Cards", cardNumber: "**** **** **** 4444", expirationDate: "10/27", cardType: "MasterCard" },
-                            { id: 3, cardHolderName: "User Cards", cardNumber: "**** **** **** 1000", expirationDate: "08/29", cardType: "Amex" }
+
                         ],
                         favoriteMovies: [
-                            { id: 1, title: "Spider-Man: Brand New Day", posterUrl: "https://img.youtube.com/vi/8TZMtslA3UY/maxresdefault.jpg" }
+
                         ]
                     });
                 }
@@ -101,15 +101,18 @@ export const ProfilePage: React.FC = () => {
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
+
+        setMessage(null);
         setFormData((prev) => ({
             ...prev,
             [name]: type === "checkbox" ? checked : value
         }));
     };
 
-    const handleAddressChange = (e) => {
+    const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
 
+        setMessage(null);
         setFormData((prev) => ({
             ...prev,
             address: {
@@ -122,6 +125,11 @@ export const ProfilePage: React.FC = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setMessage(null);
+
+        if (!formData.currentPassword) {
+            setMessage({ text: "Please enter your current password to save profile changes.", type: "error" });
+            return;
+        }
 
         try {
             const token = localStorage.getItem("token");
@@ -150,7 +158,7 @@ export const ProfilePage: React.FC = () => {
             <div className="profile-container">
                 <h2> Edit Profile</h2>
                 {message && (
-                    <div className={`status-banner ${message.type}`}>
+                    <div className={`toast ${message.type}`}>
                         {message.text}
                     </div>
                 )}
@@ -166,37 +174,27 @@ export const ProfilePage: React.FC = () => {
                                 className="disabled"
                             />
                         </div>
-                        <div className="input-group">
-                            <label>Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-                        <div className="input-group">
-                            <label>Phone Number</label>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-                        <div className="input-group">
-                            <label> New Password </label>
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleInputChange}
-                                placeholder="••••••••"
-                            />
-                        </div>
-                    </div>
+                                <div className="input-group">
+                                    <label>Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label>Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                            </div>
                     <div className="form-section">
                         <h3> Address </h3>
                         <div className="input-group">
@@ -227,9 +225,9 @@ export const ProfilePage: React.FC = () => {
                             />
                         </div>
                         <div className="input-group">
-                            <label> ZipCode </label>
+                            <label> Zipcode </label>
                             <input
-                                type="number"
+                                type="text"
                                 name="zipCode"
                                 value={formData.address.zipCode}
                                 onChange={handleAddressChange}
@@ -237,8 +235,38 @@ export const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <PaymentCardForm formData={formData} setFormData={setFormData} setMessage={setMessage} />
+                    <div className="form-section">
+                        <h3>Security & Confirm Changes</h3>
+                        <div className="input-group">
+                            <label>Current Password * (Required to save changes)</label>
+                            <input
+                                type="password"
+                                id="currentPassword"
+                                name="currentPassword"
+                                value={formData.currentPassword}
+                                onChange={handleInputChange}
+                                placeholder="Enter current password to confirm"
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>New Password (Leave blank to keep unchanged)</label>
+                            <input
+                                type="password"
+                                id="newPassword"
+                                name="newPassword"
+                                value={formData.newPassword}
+                                onChange={handleInputChange}
+                                placeholder="••••••••"
+                            />
+                        </div>
+                    </div>
+                    <button type="submit" className="btn-submit">
+                        Save Profile Changes
+                    </button>
                 </form>
             </div>
         </div>
     );
 }
+

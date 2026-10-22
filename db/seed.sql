@@ -281,13 +281,29 @@ VALUES
 UPDATE showtimes SET show_time = show_time + INTERVAL 35 DAY;
 
 INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'customer@test.com', '$2b$10$aG5iZqGbVoWTn5vr7PmvvOmeD3Ynr2uPO1w8PPu8jt2YvWgddrVtu');
+VALUES ('CUSTOMER', 'customer@test.com', '$2b$10$xX72zjuYNfIMKAFEt0dzJeTJO2.KATEyr/kQq354SyMCsUyv4OIrC');
 SET @c = LAST_INSERT_ID();
 INSERT INTO customers (user_id, first_name, last_name, phone_number, status)
 VALUES (@c, 'Test', 'Customer', '555-0101', 'ACTIVE');
 
 INSERT INTO users (role, email, password_hash)
-VALUES ('ADMIN', 'admin@test.com', '$2b$10$/K53ZlyScq8QX0JtAGSaaeMANsTJwLMEi6v5VkPEr/rKe0AQ/3uB6');
+VALUES ('ADMIN', 'admin@test.com', '$2b$10$bm3PrQlhLmPWw6vbNFXEUOYnFttwEnYyPLX3wZqea1PcAPWdvcWAe');
 SET @a = LAST_INSERT_ID();
 INSERT INTO admins (user_id, name)
 VALUES (@a, 'Test Admin');
+
+-- Demo Sprint 2
+-- Admin
+INSERT INTO users (role, email, password_hash) 
+VALUES ('ADMIN', 'admin@test.com', '$2b$10$DRDLIwvqN/WZWC3TRnN7vemE3kudGgYuNl260rdRZ1Pqym4epa0LC');
+SET @adm = LAST_INSERT_ID();
+INSERT INTO admins (user_id, name) VALUES (@adm, 'Test Admin');
+
+-- Verified User with favorites
+INSERT INTO users (role, email, password_hash)
+VALUES ('CUSTOMER', 'fav@test.com', '$2b$10$ejnzEuIdlviIgPA4PPNsOubv.k464RpWaR3I35V2azbSuS4lmDSru');
+SET @fav = LAST_INSERT_ID();
+INSERT INTO customers (user_id, first_name, last_name, phone_number, status, subscribed_to_promos)
+VALUES (@fav, 'Fay', 'Favorite', '123-4567', 'ACTIVE', TRUE);
+
+-- Verified User with 3 payment cards
