@@ -5,7 +5,7 @@ const transporter = createTransport({
 	port: 587,
 	auth: {
 		user: "bec717001@smtp-brevo.com",
-		pass: "xsmtpsib-d265429c35a5123807832cad57bc7adeabc76269bba44e7b5a1b49645c7c3622-9I8rYoMfprWvgNMq",
+		pass: "",
 	},
 });
 
