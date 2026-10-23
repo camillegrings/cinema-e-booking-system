@@ -20,8 +20,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE customers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    user_id INT PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
@@ -36,29 +35,20 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE tokens (
-    -- user_id INT PRIMARY KEY,.
-    email VARCHAR(255) NOT NULL UNIQUE,
-    verification_code INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    verification_code INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX (verification_code),
     FOREIGN KEY (user_id) REFERENCES users(id) 
         ON DELETE CASCADE
-)
+);
 
 CREATE TABLE admins (
     user_id INT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) 
-        ON DELETE CASCADE
-);
-
-CREATE TABLE verification_tokens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    token VARCHAR(64) NOT NULL UNIQUE,
-    purpose ENUM('REGISTRATION', 'PASSWORD_RESET') NOT NULL,
-    expires_at DATETIME NOT NULL,
-    used BOOLEAN NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE CASCADE
 );
 
