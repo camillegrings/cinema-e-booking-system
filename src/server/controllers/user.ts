@@ -8,6 +8,7 @@ import * as Email from "../middleware/email.js";
 import IUser from "../interfaces/user.js";
 import IToken from "../interfaces/token.js";
 import IMySQLResult from "../interfaces/result.js";
+import crypto from "crypto";
 
 const NAMESPACE = "User";
 
@@ -113,7 +114,11 @@ const validateEmail = (req: Request, res: Response, next: NextFunction) => {
 			}
 			Query<IToken[]>(connection, query)
 				.then((result) => {
-					let query = `UPDATE customers SET is_verified = true WHERE user_id = ${result[0].user_id}`;
+					const row = result[0];
+					if (!row) {
+						throw new Error("Verification token incorrect or expired.");
+					}
+					let query = `UPDATE customers SET is_verified = true WHERE user_id = ${row.user_id}`;
 					Query<QueryResult>(connection, query)
 						.then((result) => {
 							let query = `DELETE FROM tokens WHERE verification_code = ${token}")`;
@@ -286,32 +291,36 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 							message: "Email or password is incorrect.",
 						});
 					}
-					bcryptjs.compare(
-						password,
-						users[0].password_hash,
-						(error, result) => {
-							if (error) {
+					const user = users[0];
+
+					if (!user) {
+						return res.status(401).json({
+							message: "Email or password is incorrect.",
+						});
+					}
+
+					bcryptjs.compare(password, user.password_hash, (error, result) => {
+							if (error || !result) {
 								return res.status(401).json({
 									message: "Email or password is incorrect.",
 								});
-							} else if (result) {
-								signJWT(users[0], (_error, token) => {
-									if (_error) {
-										return res.status(401).json({
-											message: "Unable to Sign JWT",
-											error: _error,
-										});
-									} else if (token) {
-										return res.status(200).json({
-											message: "Auth Successful",
-											token,
-											user: users[0],
-										});
-									}
-								});
 							}
-						},
-					);
+
+							signJWT(user, (_error, token) => {
+								if (_error) {
+									return res.status(401).json({
+										message: "Unable to Sign JWT",
+										error: _error,
+									});
+								} else if (token) {
+									return res.status(200).json({
+										message: "Auth Successful",
+										token,
+										user: { id: user.id, email: user.email, role: user.role },
+									});
+								}
+							});
+						});
 				})
 				.catch((error) => {
 					logging.error(NAMESPACE, error.message, error);
