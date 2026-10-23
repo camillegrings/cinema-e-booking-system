@@ -1,6 +1,7 @@
 export default interface IUser {
 	id: number;
-	username: string;
-	password: string;
+	role: string;
 	email: string;
+	password_hash: string;
+	created_at: Date;
 }

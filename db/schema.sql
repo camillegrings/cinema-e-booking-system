@@ -20,11 +20,13 @@ CREATE TABLE users (
 );
 
 CREATE TABLE customers (
-    user_id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
     status ENUM('ACTIVE', 'INACTIVE', 'SUSPENDED') NOT NULL DEFAULT 'INACTIVE',
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
     subscribed_to_promos BOOLEAN NOT NULL DEFAULT FALSE,
     home_address_id INT NULL,
     FOREIGN KEY (home_address_id) REFERENCES addresses(id)
@@ -32,6 +34,15 @@ CREATE TABLE customers (
     FOREIGN KEY (user_id) REFERENCES users(id) 
         ON DELETE CASCADE
 );
+
+CREATE TABLE tokens (
+    -- user_id INT PRIMARY KEY,.
+    email VARCHAR(255) NOT NULL UNIQUE,
+    verification_code INT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) 
+        ON DELETE CASCADE
+)
 
 CREATE TABLE admins (
     user_id INT PRIMARY KEY,
