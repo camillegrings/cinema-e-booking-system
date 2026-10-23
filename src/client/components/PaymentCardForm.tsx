@@ -1,5 +1,6 @@
-import React, { useState, changeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import type { ProfileFormData, PaymentCard, Message } from '../pages/ProfilePage.js'
+import { useAuth } from "../context/AuthContext.js";
 
 import "./PaymentCardForm.css";
 
@@ -9,9 +10,17 @@ interface Props {
     setMessage: React.Dispatch<React.SetStateAction<Message>>
 }
 
-const emptyCard = { cardHolderName: "", cardNumber: "", expirationDate: "", cardType: "Visa" };
+const emptyCard = {
+    cardHolderName: "", cardNumber: "", expirationDate: "", billingAddress: {
+        street: "",
+        city: "",
+        state: "",
+        zipCode: "",
+    }
+};
 
 export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMessage }) => {
+    const { token } = useAuth();
     const [cardForm, setCardForm] = useState(emptyCard);
     const [editingCardId, setEditingCardId] = useState(null);
     const [isAddingCard, setIsAddingCard] = useState(false);
@@ -30,6 +39,18 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
         }));
     }
 
+    const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        setCardForm((current) => ({
+            ...current,
+            billingAddress: {
+                ...current.billingAddress,
+                [name]: value,
+            },
+        }));
+    };
+
     function openAddCardForm() {
         setEditingCardId(null);
         setCardForm(emptyCard);
@@ -41,9 +62,9 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
         setEditingCardId(card.id);
         setCardForm({
             cardHolderName: card.cardHolderName ?? "",
-            cardType: card.cardType ?? "Visa",
             cardNumber: card.cardNumber ?? "",
             expirationDate: card.expirationDate ?? "",
+            billingAddress: card.billingAddress ?? emptyCard.billingAddress
         });
         setIsAddingCard(true);
         setMessage(null);
@@ -55,12 +76,70 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
         setCardForm(emptyCard);
     }
 
+    async function handleAddCardSubmit(card: PaymentCard) {
+        const newCard = { ...card, cardholderName: card.cardHolderName };
+        const res = await fetch("http://localhost:3000/users/profile/cards", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(newCard)
+        });
+
+        if (res.ok) {
+            const body = await res.json();
+            setFormData((current) => {
+                const cards = editingCardId
+                    ? current.cards.map((card) =>
+                        card.id === editingCardId ? newCard : card
+                    )
+                    : [...current.cards, { ...newCard, id: body.cardId }];
+
+                return { ...current, cards };
+            });
+            setMessage({ text: "Card updated successfully.", type: "success" });
+
+            cancelCardForm();
+        } else {
+            setMessage({ text: "Failed to update card.", type: "error" });
+        }
+    }
+
+    async function handleUpdateCardSubmit(card: PaymentCard) {
+        const newCard = { ...card, cardholderName: card.cardHolderName };
+        const res = await fetch(`http://localhost:3000/users/profile/cards/${editingCardId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(newCard)
+        });
+
+        if (res.ok) {
+            setFormData((current) => {
+                const cards = editingCardId
+                    ? current.cards.map((card) =>
+                        card.id === editingCardId ? newCard : card
+                    )
+                    : [...current.cards, newCard];
+
+                return { ...current, cards };
+            });
+            setMessage({ text: "Card updated successfully.", type: "success" });
+
+            cancelCardForm();
+        } else {
+            setMessage({ text: "Failed to update card.", type: "error" });
+        }
+    }
+
     function handleCardSubmit() {
-        const { cardHolderName, cardNumber, expirationDate, cardType } = cardForm;
+        const { cardHolderName, cardNumber, expirationDate } = cardForm;
 
         if (
             !cardHolderName.trim() ||
-            !cardType ||
             !cardNumber ||
             !expirationDate
         ) {
@@ -73,36 +152,32 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
             return;
         }
 
-        const newCard = {
-            id: editingCardId ?? crypto.randomUUID(),
-            cardHolderName: cardHolderName.trim(),
-            cardNumber,
-            expirationDate,
-            cardType,
-        };
-
-        setFormData((current) => {
-            const cards = editingCardId
-                ? current.cards.map((card) =>
-                    card.id === editingCardId ? newCard : card
-                )
-                : [...current.cards, newCard];
-
-            return { ...current, cards };
-        });
-        setMessage({ text: "Card updated successfully.", type: "success" });
-
-        cancelCardForm();
+        if (editingCardId) {
+            handleUpdateCardSubmit(cardForm)
+        } else {
+            handleAddCardSubmit(cardForm)
+        }
     }
 
-    function removeCard(cardId: number) {
-        setFormData((current) => ({
-            ...current,
-            cards: current.cards.filter((card) => card.id !== cardId),
-        }));
+    async function removeCard(cardId: number) {
+        const res = await fetch(`http://localhost:3000/users/profile/cards/${cardId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
 
-        if (editingCardId === cardId) {
-            cancelCardForm();
+        if (res.ok) {
+            setFormData((current) => ({
+                ...current,
+                cards: current.cards.filter((card) => card.id !== cardId),
+            }));
+
+            if (editingCardId === cardId) {
+                cancelCardForm();
+            }
+        } else {
+            setMessage({ text: "Failed to remove card.", type: "error" });
         }
     }
 
@@ -123,7 +198,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
                 <article key={card.id} className="payment-form-card">
                     <div>
                         <p className="payment-form-card-number">
-                            {card.cardType} {formatCardMask(card.cardNumber)} </p>
+                            Number: {formatCardMask(card.cardNumber)} </p>
                         <p>Holder Name: {card.cardHolderName} </p>
                         <p>Expiration Date: {card.expirationDate}</p>
                     </div>
@@ -171,33 +246,63 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
                         </div>
                         <div className="payment-form-add-card-inline-fields">
                             <div className="input-group">
-                                <label htmlFor="cardType">Type</label>
-                                <select
-                                    id="cardType"
-                                    name="cardType"
-                                    value={cardForm.cardType}
-                                    onChange={handleCardChange}
-                                >
-                                    <option className="select-card" value="Visa">Visa</option>
-                                    <option className="select-card" value="Mastercard">Mastercard</option>
-                                    <option className="select-card" value="American Express">American Express</option>
-                                    <option className="select-card" value="Discover">Discover</option>
-                                </select>
-                            </div>
-
-                            <div className="input-group">
                                 <label htmlFor="expirationDate">Expiration Date</label>
                                 <input
                                     id="expirationDate"
                                     name="expirationDate"
                                     type="text"
-                                    placeholder="01/30"
+                                    placeholder="2030-10"
                                     value={cardForm.expirationDate}
                                     onChange={handleCardChange}
                                     required
                                 />
                             </div>
+                        </div>
+                        <div className="payment-form-add-card-inline-fields">
+                            <div className="input-group">
+                                <label htmlFor="street">Billing Address - Street</label>
+                                <input
+                                    id="street"
+                                    name="street"
+                                    value={cardForm.billingAddress.street}
+                                    onChange={handleAddressChange}
+                                    required
+                                />
+                            </div>
 
+                            <div className="input-group">
+                                <label htmlFor="city">Billing Address - City</label>
+                                <input
+                                    id="city"
+                                    name="city"
+                                    value={cardForm.billingAddress.city}
+                                    onChange={handleAddressChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="payment-form-add-card-inline-fields">
+                            <div className="input-group">
+                                <label htmlFor="state">Billing Address - State</label>
+                                <input
+                                    id="state"
+                                    name="state"
+                                    value={cardForm.billingAddress.state}
+                                    onChange={handleAddressChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label htmlFor="zipCode">Billing Address - ZipCode</label>
+                                <input
+                                    id="zipCode"
+                                    name="zipCode"
+                                    value={cardForm.billingAddress.zipCode}
+                                    onChange={handleAddressChange}
+                                    required
+                                />
+                            </div>
                         </div>
                     </div>
                     <div>

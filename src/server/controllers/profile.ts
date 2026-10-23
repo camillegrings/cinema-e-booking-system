@@ -35,9 +35,9 @@ const encryptCard = (cardNumber: string): Buffer => {
 };
 
 const sendProfileChangedEmail = (email: string, what: string) => {
-    Email.sendProfileChangedEmail(email, what).catch((error) => 
+	Email.sendProfileChangedEmail(email, what).catch((error) =>
 		logging.error(NAMESPACE, `Profile change email failed: ${error.message}`, error),
-    );  
+	);
 };
 
 const isNonEmpty = (v: unknown) => typeof v === "string" && v.trim().length > 0;
@@ -205,7 +205,7 @@ const updateProfile = (req: Request, res: Response, next: NextFunction) => {
 		} catch (error: any) {
 			try {
 				await run(connection, "ROLLBACK");
-			} catch {}
+			} catch { }
 			return fail(res, error);
 		} finally {
 			connection.end();
@@ -263,7 +263,7 @@ const addCard = (req: Request, res: Response, next: NextFunction) => {
 				[billingAddress.street, billingAddress.city, billingAddress.state, billingAddress.zipCode],
 			);
 
-			await run(
+			const card = await run(
 				connection,
 				`INSERT INTO payment_cards
 				 (customer_id, slot, card_number_enc, last_four, cardholder_name, expiration_date, billing_address_id)
@@ -276,11 +276,11 @@ const addCard = (req: Request, res: Response, next: NextFunction) => {
 			const owner = await run(connection, "SELECT email FROM users WHERE id = ?", [userId]);
 			sendProfileChangedEmail(owner[0].email, "payment cards");
 
-			return res.status(201).json({ message: "Card added" });
+			return res.status(201).json({ message: "Card added", cardId: card.insertId });
 		} catch (error: any) {
 			try {
 				await run(connection, "ROLLBACK");
-			} catch {}
+			} catch { }
 			return fail(res, error);
 		} finally {
 			connection.end();
@@ -363,7 +363,7 @@ const updateCard = (req: Request, res: Response, next: NextFunction) => {
 		} catch (error: any) {
 			try {
 				await run(connection, "ROLLBACK");
-			} catch {}
+			} catch { }
 			return fail(res, error);
 		} finally {
 			connection.end();
@@ -411,10 +411,10 @@ const deleteCard = (req: Request, res: Response, next: NextFunction) => {
 	});
 };
 
-export default { 
-    getProfile, 
-    updateProfile, 
-    addCard, 
-    updateCard, 
-    deleteCard 
+export default {
+	getProfile,
+	updateProfile,
+	addCard,
+	updateCard,
+	deleteCard
 };
