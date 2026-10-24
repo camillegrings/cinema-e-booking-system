@@ -54,7 +54,7 @@ export const Register = () => {
 			.then((res) => {
 				if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
 
-				navigate("/login");
+				navigate("/verify-code");
 			})
 			.catch((err) => {
 				console.error("Error registering.", err);
