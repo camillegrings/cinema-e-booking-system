@@ -2,6 +2,7 @@ import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { Header } from "../components/Header.js";
 import "./ProfilePage.css";
 import { PaymentCardForm } from '../components/PaymentCardForm.js'
+import { useAuth } from "../context/AuthContext.js";
 
 export type Address = {
     street: string;
@@ -15,14 +16,8 @@ export type PaymentCard = {
     cardHolderName: string;
     cardNumber: string;
     expirationDate: string;
-    cardType: string;
+    billingAddress: Address;
 };
-
-export type FavoriteMovie = {
-    id: number;
-    title: string;
-    posterUrl: string;
-}
 
 export type ProfileFormData = {
     name: string;
@@ -33,12 +28,12 @@ export type ProfileFormData = {
     subscribedToPromos: boolean;
     address: Address;
     cards: PaymentCard[];
-    favoriteMovies: FavoriteMovie[];
 }
 
 export type Message = { text: string; type: "success" | "error" } | null
 
 export const ProfilePage: React.FC = () => {
+    const { token } = useAuth();
     const [formData, setFormData] = useState<ProfileFormData>({
         name: "",
         email: "",
@@ -53,7 +48,6 @@ export const ProfilePage: React.FC = () => {
             zipCode: "",
         },
         cards: [],
-        favoriteMovies: []
     });
 
     const [message, setMessage] = useState<Message>(null);
@@ -61,36 +55,19 @@ export const ProfilePage: React.FC = () => {
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const token = localStorage.getItem("token");
                 const res = await fetch("http://localhost:3000/users/profile", {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
                 });
+
                 if (res.ok) {
                     const data = await res.json();
-                    setFormData(data);
+                    const name = data.firstName + ' ' + data.lastName
+                    const cards = data.cards.map(card => ({ ...card, cardNumber: `**** **** **** ${card.lastFour}`, cardHolderName: card.cardholderName, expirationDate: card.expirationDate.slice(0, 7) }))
+                    setFormData((prev) => ({ ...prev, ...data, name, address: { ...prev.address, ...data.address }, cards }));
                 } else {
-                    setFormData({
-                        name: "User Cards",
-                        email: "user.cards@example.com",
-                        currentPassword: "",
-                        newPassword: "",
-                        phone: "123-456-7890",
-                        subscribedToPromos: true,
-                        address: {
-                            street: "123 Fake Address",
-                            city: "Athens",
-                            state: "GA",
-                            zipCode: "30601"
-                        },
-                        cards: [
-
-                        ],
-                        favoriteMovies: [
-
-                        ]
-                    });
+                    console.error("Failed to load profile",);
                 }
             } catch (err) {
                 console.error("Failed to load profile: ", err);
@@ -132,14 +109,16 @@ export const ProfilePage: React.FC = () => {
         }
 
         try {
-            const token = localStorage.getItem("token");
+            const firstName = formData.name?.toString().split(' ')[0] || ''
+            const lastName = formData.name?.toString().split(' ')[1] || ''
+
             const res = await fetch("http://localhost:3000/users/profile", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({ ...formData, firstName, lastName })
             });
 
             if (res.ok) {
@@ -174,27 +153,27 @@ export const ProfilePage: React.FC = () => {
                                 className="disabled"
                             />
                         </div>
-                                <div className="input-group">
-                                    <label>Name</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="input-group">
-                                    <label>Phone Number</label>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </div>
-                            </div>
+                        <div className="input-group">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>Phone Number</label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                    </div>
                     <div className="form-section">
                         <h3> Address </h3>
                         <div className="input-group">

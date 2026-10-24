@@ -53,3 +53,16 @@ export async function sendPasswordResetCode(
 		},
 	);
 }
+
+export async function sendProfileChangedEmail(
+        toEmail: string,
+        what: string,
+): Promise<void> {
+        await transporter.sendMail({
+                from: "noreply@cinemaebooking.com",
+                to: toEmail,
+                subject: "Your profile was updated",
+                html: `<p>Your ${what} on Cinema E-Booking was changed on ${new Date().toLocaleString()}.</p>
+        <p>If you did not make this change, please reset your password right away.</p>`,
+        });
+}

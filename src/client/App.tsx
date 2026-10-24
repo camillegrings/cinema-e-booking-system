@@ -11,6 +11,7 @@ import { ForgotPassword } from './components/ForgotPassword.js';
 import { AdminDashboard } from "./pages/AdminDashboard.js"
 import { ProfilePage } from './pages/ProfilePage.js'
 import { FavoritePage } from './pages/FavoritePage.js'
+import { VerifyCode } from './components/VerifyCode.js'
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/verify-code' element={<VerifyCode />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/register' element={<Register />} />
         <Route path="/movie/:id" element={<MovieDetails />} />

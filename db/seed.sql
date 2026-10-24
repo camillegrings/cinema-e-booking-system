@@ -278,32 +278,43 @@ VALUES
 (8, 2, '2026-09-16 18:00:00'),
 (8, 1, '2026-09-17 21:00:00');
 
-UPDATE showtimes SET show_time = show_time + INTERVAL 35 DAY;
-
+UPDATE showtimes
+SET show_time = DATE_ADD(show_time, INTERVAL DATEDIFF(DATE_ADD(CURDATE(), INTERVAL 1 DAY), '2026-09-15') DAY);
+--  demo
+-- Admin (Admin123!)
 INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'customer@test.com', '$2b$10$xX72zjuYNfIMKAFEt0dzJeTJO2.KATEyr/kQq354SyMCsUyv4OIrC');
-SET @c = LAST_INSERT_ID();
-INSERT INTO customers (user_id, first_name, last_name, phone_number, status)
-VALUES (@c, 'Test', 'Customer', '555-0101', 'ACTIVE');
-
-INSERT INTO users (role, email, password_hash)
-VALUES ('ADMIN', 'admin@test.com', '$2b$10$bm3PrQlhLmPWw6vbNFXEUOYnFttwEnYyPLX3wZqea1PcAPWdvcWAe');
-SET @a = LAST_INSERT_ID();
-INSERT INTO admins (user_id, name)
-VALUES (@a, 'Test Admin');
-
--- Demo Sprint 2
--- Admin
-INSERT INTO users (role, email, password_hash) 
-VALUES ('ADMIN', 'admin@test.com', '$2b$10$DRDLIwvqN/WZWC3TRnN7vemE3kudGgYuNl260rdRZ1Pqym4epa0LC');
+VALUES ('ADMIN', 'admin@test.com', '$2b$10$JS/LKSOepZlG0uS.yx46HeHzRTvLKM3nW21A8EpsH0K/k0sOWDEmu');
 SET @adm = LAST_INSERT_ID();
 INSERT INTO admins (user_id, name) VALUES (@adm, 'Test Admin');
 
--- Verified User with favorites
+-- Verified user with favorites (Fav123!)
 INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'fav@test.com', '$2b$10$ejnzEuIdlviIgPA4PPNsOubv.k464RpWaR3I35V2azbSuS4lmDSru');
+VALUES ('CUSTOMER', 'fav@test.com', '$2b$10$EpIxzmEudNgZ3aazH8TfiOBdogYhE02n3k/PJ0h3qyBqRA2PKRPmK');
 SET @fav = LAST_INSERT_ID();
-INSERT INTO customers (user_id, first_name, last_name, phone_number, status, subscribed_to_promos)
-VALUES (@fav, 'Fay', 'Favorite', '123-4567', 'ACTIVE', TRUE);
+INSERT INTO customers (user_id, first_name, last_name, phone_number, status, is_verified, subscribed_to_promos)
+VALUES (@fav, 'Fay', 'Favorite', '123-4567', 'ACTIVE', TRUE, TRUE);
+INSERT INTO favorite_movies (customer_id, movie_id) VALUES (@fav, 1), (@fav, 2);
 
--- Verified User with 3 payment cards
+-- Verified user with 3 payment cards (Cards123!)
+INSERT INTO users (role, email, password_hash)
+VALUES ('CUSTOMER', 'cards@test.com', '$2b$10$A2R9VKvw58KN7X3xdNFnV.8Pgh6krTjiRZv9bVEsg9/wuxyyLV0y6');
+SET @cards = LAST_INSERT_ID();
+
+INSERT INTO addresses (street, city, state, zip_code) VALUES ('1 Main St', 'Athens', 'GA', '30601');
+SET @home = LAST_INSERT_ID();
+INSERT INTO customers (user_id, first_name, last_name, phone_number, status, is_verified, subscribed_to_promos, home_address_id)
+VALUES (@cards, 'Carl', 'Cards', '123-4568', 'ACTIVE', TRUE, FALSE, @home);
+
+-- every card gets its own billing address row
+INSERT INTO addresses (street, city, state, zip_code) VALUES ('10 Oak St', 'Athens', 'GA', '30601');
+SET @b1 = LAST_INSERT_ID();
+INSERT INTO addresses (street, city, state, zip_code) VALUES ('20 Elm St', 'Athens', 'GA', '30601');
+SET @b2 = LAST_INSERT_ID();
+INSERT INTO addresses (street, city, state, zip_code) VALUES ('30 Pine St', 'Athens', 'GA', '30601');
+SET @b3 = LAST_INSERT_ID();
+
+INSERT INTO payment_cards (customer_id, slot, card_number_enc, last_four, cardholder_name, expiration_date, billing_address_id)
+VALUES
+(@cards, 1, AES_ENCRYPT('4111111111111111', 'demo-key'), '1111', 'Carl Cards', '2029-12-01', @b1),
+(@cards, 2, AES_ENCRYPT('4242424242424242', 'demo-key'), '4242', 'Carl Cards', '2029-12-01', @b2),
+(@cards, 3, AES_ENCRYPT('5555555555554444', 'demo-key'), '4444', 'Carl Cards', '2029-12-01', @b3);

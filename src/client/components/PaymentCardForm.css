@@ -89,7 +89,7 @@
     display: flex;
 }
 
-.payment-form-add-card-inline-fields:first-child {
+.payment-form-add-card-inline-fields:not(:last-child) {
     margin-bottom: 20px;
 }
 
@@ -106,5 +106,5 @@
 
 .select-card {
     color: black;
-    background:white;
+    background: white;
 }
