@@ -344,9 +344,13 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 					bcryptjs.compare(password, user[0].password_hash, (error, result) => {
 						if (error) {
 							return res.status(401).json({
+								message: "Unable to Sign In",
+							});
+						} else if (!result) {
+							return res.status(401).json({
 								message: "Email or password is incorrect.",
 							});
-						} else if (result) {
+						} if (result) {
 							signJWT(user[0], (_error, token) => {
 								if (_error) {
 									return res.status(401).json({
