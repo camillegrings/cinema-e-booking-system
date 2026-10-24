@@ -21,7 +21,11 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 	});
 };
 
-const requestVerCode = (req: Request, res: Response, next: NextFunction) => {
+const requestVerificationCode = (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	let { email } = req.body;
 
 	let query = `SELECT * FROM users WHERE email = "${email}" LIMIT 1`;
@@ -68,7 +72,11 @@ const requestVerCode = (req: Request, res: Response, next: NextFunction) => {
 	});
 };
 
-const requestRPCode = (req: Request, res: Response, next: NextFunction) => {
+const requestResetPasswordCode = (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	let { email } = req.body;
 
 	let query = `SELECT * FROM users WHERE email = "${email}" LIMIT 1`;
@@ -115,7 +123,7 @@ const requestRPCode = (req: Request, res: Response, next: NextFunction) => {
 	});
 };
 
-const validateEmail = (req: Request, res: Response, next: NextFunction) => {
+const verifyEmail = (req: Request, res: Response, next: NextFunction) => {
 	let { verification_code } = req.body;
 
 	let query = `SELECT * FROM tokens WHERE verification_code = "${verification_code}" LIMIT 1`;
@@ -417,8 +425,8 @@ export default {
 	register,
 	login,
 	getAllUsers,
-	validateEmail,
-	requestVerCode,
-	requestRPCode,
+	verifyEmail,
+	requestVerificationCode,
+	requestResetPasswordCode,
 	resetPassword,
 };
