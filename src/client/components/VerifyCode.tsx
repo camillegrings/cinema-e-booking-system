@@ -15,8 +15,10 @@ export const VerifyCode = () => {
 		const code = formData.get("code");
 
 		try {
-			const res = await fetch(`http://localhost:3000/users/validate?token=${code}`, {
+			const res = await fetch(`http://localhost:3000/users/verify`, {
 				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ verification_code: code }),
 			});
 
 			const data = await res.json();

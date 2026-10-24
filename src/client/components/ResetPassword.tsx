@@ -12,7 +12,6 @@ export const ResetPassword = () => {
         setErrorMessage("");
 
         const formData = new FormData(e.currentTarget);
-        const email = formData.get("email");
         const newPassword = formData.get("newPassword");
         const confirmPassword = formData.get("confirmPassword");
         const code = formData.get("code");
@@ -23,10 +22,10 @@ export const ResetPassword = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:3000/users/reset-password", {
+            const res = await fetch("http://localhost:3000/users/resetPassword", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, new_password: newPassword, token: code }),
+                body: JSON.stringify({ new_password: newPassword, verification_code: code }),
             });
 
             if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
@@ -54,15 +53,6 @@ export const ResetPassword = () => {
                     )}
 
                     <form onSubmit={handleSubmit} method='post' className="login-form">
-                        <div className="input-group">
-                            <label htmlFor='newPassword'>Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                placeholder="Enter your Email"
-                                required />
-                        </div>
                         <div className="input-group">
                             <label htmlFor='newPassword'>New Password</label>
                             <input

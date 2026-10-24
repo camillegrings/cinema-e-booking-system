@@ -21,7 +21,7 @@ export const ForgotPassword = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:3000/users/forgot-password", {
+            const res = await fetch("http://localhost:3000/users/requestReset", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),

@@ -46,7 +46,7 @@ export const Register = () => {
 	};
 
 	async function requestVerificationEmail(email) {
-		fetch("http://localhost:3000/users/verify", {
+		fetch("http://localhost:3000/users/requestCode", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ email }),
