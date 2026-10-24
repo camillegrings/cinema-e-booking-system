@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Form.css";
 import { Header } from "../components/Header.js";
 import { useAuth } from "../context/AuthContext.js";
-import type { User } from "../types/auth.js";
 
 export const Login = () => {
 	const { login } = useAuth();
@@ -18,67 +17,29 @@ export const Login = () => {
 		const email = formData.get("email");
 		const password = formData.get("password");
 
-		/*
-		setTimeout(() => {
-			let MOCK_USER: User;
-			const MOCK_TOKEN = "mock-jwt-token-customer"
+		try {
+			const res = await fetch("http://localhost:3000/users/login", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email, password }),
+			});
 
-			 1. Test Customer Credentials
-			if (email === "test.customer@example.com" && password === "Password123!") {
-				MOCK_USER = {
-					id: '1',
-					email: 'test.customer@example.com',
-					name: 'Test',
-					role: 'CUSTOMER',
-					status: 'active'
-				}
+			const data = await res.json();
 
-			}
-			// 2. Test Admin Credentials
-			else if (email === "admin@cinema.com" && password === "Password123!") {
-				MOCK_USER = {
-					id: '2',
-					email: 'admin@cinema.com',
-					name: 'Admin',
-					role: 'ADMIN',
-					status: 'active'
-				}
-			}
-			// 3. Invalid Credentials
-			else {
-				setErrorMessage("Invalid credentials. Try test.customer@example.com / Password123!");
-				return
+			if (!res.ok) {
+				throw new Error(data.message || `HTTP Error: ${res.status}`);
 			}
 
-			login(MOCK_USER, MOCK_TOKEN);
-			navigate(MOCK_USER.role === "ADMIN" ? "/admin/dashboard" : "/", { replace: true });
-		}, 500); // 500ms fake network delay
-	};
+			// Store token and user data for Header session check 
+			login(data.user, data.token);
 
-	*/
-	try {
-		const res = await fetch("http://localhost:3000/users/login", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ email, password }),
-		});
-
-		const data = await res.json();
-
-		if (!res.ok) {
-			throw new Error(data.error || `HTTP Error: ${res.status}`);
+			// Role-based redirect (Admin vs Customer)
+			navigate(data.user?.role?.toLowerCase() === "admin" ? "/admin/dashboard" : "/", { replace: true });
+		} catch (err: any) {
+			console.error("Error logging in.", err);
+			setErrorMessage(err.message || "Invalid credentials or server error.");
 		}
-
-		// Store token and user data for Header session check 
-		login(data.user, data.token);
-
-		// Role-based redirect (Admin vs Customer)
-		navigate(data.user?.role?.toLowerCase() === "admin" ? "/admin/dashboard" : "/",{ replace: true });
-	} catch (err: any) {
-		console.error("Error logging in.", err);
-		setErrorMessage(err.message || "Invalid credentials or server error.");
-	}
-};
+	};
 	return (
 		<div className="login-container">
 			<Header />
