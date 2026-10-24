@@ -37,15 +37,30 @@ export const Register = () => {
 			body: JSON.stringify({ email, first_name, last_name, phone_number: phone, password }),
 		})
 			.then((res) => {
-				if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-
-				navigate("/login");
+				requestVerificationEmail(email)
 			})
 			.catch((err) => {
 				console.error("Error registering.", err);
 				setErrorMessage("Invalid credentials, please check your details and try again.");
 			});
 	};
+
+	async function requestVerificationEmail(email) {
+		fetch("http://localhost:3000/users/verify", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email }),
+		})
+			.then((res) => {
+				if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+
+				navigate("/login");
+			})
+			.catch((err) => {
+				console.error("Error registering.", err);
+				setErrorMessage("Error registering, please try again.");
+			});
+	}
 
 	return (
 		<div className="login-container">
@@ -54,6 +69,12 @@ export const Register = () => {
 				<div className="register-card">
 					<h2 className="form-title"> Welcome </h2>
 					<p className="form-subtitle"> Continue to create your account. </p>
+					{errorMessage && (
+						<div className="error-banner"
+							style={{ color: "#ff4d4d", marginBottom: "1rem", textAlign: "center", fontSize: "0.88rem" }}>
+							{errorMessage}
+						</div>
+					)}
 					<form onSubmit={handleSubmit} method='post' className="register-form">
 						<div className="input-group">
 							<label htmlFor='email'>Email *</label>
