@@ -9,6 +9,7 @@ import IUser from "../interfaces/user.js";
 import IToken from "../interfaces/token.js";
 import IMySQLResult from "../interfaces/result.js";
 import { randomInt } from "crypto";
+import ICustomer from "../interfaces/customer.js";
 
 const NAMESPACE = "User";
 
@@ -303,13 +304,33 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 
 	let query = `SELECT * FROM users WHERE email = '${email}' LIMIT 1`;
 
-	Connect()
-		.then((connection) => {
-			Query<IUser[]>(connection, query)
+	Connect().then((connection) => {
+		connection.beginTransaction((err) => {
+			if (err) {
+				throw err;
+			}
+			Query<IUser[]>(connection, query, false)
 				.then((user) => {
 					if (!user.length) {
 						return res.status(401).json({
 							message: "Email or password is incorrect.",
+						});
+					}
+					if (user[0].role == "CUSTOMER") {
+						let query = `SELECT status, is_verified FROM customers WHERE user_id = ${user[0]?.id}`;
+
+						Query<ICustomer[]>(connection, query, false).then((customer) => {
+							if (!customer.length) {
+								return res.status(401).json({
+									message: "Something went wrong.",
+								});
+							}
+
+							if (customer[0].is_verified == false) {
+								return res.status(401).json({
+									message: "User is either not verified or suspended.",
+								});
+							}
 						});
 					}
 					bcryptjs.compare(password, user[0].password_hash, (error, result) => {
@@ -325,33 +346,39 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 										error: _error,
 									});
 								} else if (token) {
+									connection.commit((err) => {
+										if (err) {
+											connection.rollback(() => {
+												throw err;
+											});
+										}
+									});
+									connection.end();
+
 									return res.status(200).json({
 										message: "Auth Successful",
 										token,
 										user: user[0],
 									});
+								} else {
+									return res.status(500);
 								}
 							});
 						}
 					});
 				})
 				.catch((error) => {
-					logging.error(NAMESPACE, error.message, error);
+					connection.rollback(() => {
+						logging.error(NAMESPACE, "Login failed.", error);
 
-					return res.status(500).json({
-						message: error.message,
-						error,
+						return res.status(401).json({
+							message: "Login failed.",
+							error,
+						});
 					});
 				});
-		})
-		.catch((error) => {
-			logging.error(NAMESPACE, error.message, error);
-
-			return res.status(500).json({
-				message: error.message,
-				error,
-			});
 		});
+	});
 };
 
 const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
