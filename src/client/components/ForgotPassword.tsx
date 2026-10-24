@@ -21,16 +21,16 @@ export const ForgotPassword = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:3000/users/login", {
+            const res = await fetch("http://localhost:3000/users/forgot-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, confirmEmail }),
+                body: JSON.stringify({ email }),
             });
 
             if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
 
             const data = await res.json();
-            navigate("/login");
+            navigate("/reset-password");
         } catch (err) {
             console.error("Error logging in.", err);
             setErrorMessage("Invalid credentials or server error.");
@@ -44,6 +44,12 @@ export const ForgotPassword = () => {
                 <div className="login-card">
                     <h2 className="form-title"> Forgot Password? </h2>
                     <p className="form-subtitle"> Continue to access your account. </p>
+                    {errorMessage && (
+                        <div className="error-banner"
+                            style={{ color: "#ff4d4d", marginBottom: "1rem", textAlign: "center", fontSize: "0.88rem" }}>
+                            {errorMessage}
+                        </div>
+                    )}
 
                     <form onSubmit={handleSubmit} method='post' className="login-form">
                         <div className="input-group">

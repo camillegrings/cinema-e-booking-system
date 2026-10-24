@@ -12,6 +12,7 @@ import { AdminDashboard } from "./pages/AdminDashboard.js"
 import { ProfilePage } from './pages/ProfilePage.js'
 import { FavoritePage } from './pages/FavoritePage.js'
 import { VerifyCode } from './components/VerifyCode.js'
+import { ResetPassword } from './components/ResetPassword.js'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/verify-code' element={<VerifyCode />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/register' element={<Register />} />
         <Route path="/movie/:id" element={<MovieDetails />} />
         <Route path="/booking/:id" element={<BookingPage />} />

@@ -11,6 +11,8 @@ router.post("/login", controller.login);
 router.get("/get/all", controller.getAllUsers);
 router.post("/validate", controller.validateEmail);
 router.post("/verify", controller.requestVerCode);
+router.post("/forgot-password", controller.requestRPCode);
+router.post("/reset-password", controller.resetPass);
 router.get("/profile", extractJWT, profile.getProfile);
 router.put("/profile", extractJWT, profile.updateProfile);
 router.post("/profile/cards", extractJWT, profile.addCard);
