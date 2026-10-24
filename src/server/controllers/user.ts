@@ -36,9 +36,9 @@ const requestVerificationCode = (
 				throw err;
 			}
 			Query<IMySQLResult>(connection, query, false)
-				.then(() => {
+				.then((users) => {
 					const verificationCode = randomInt(100000, 999999).toString();
-					let query = `INSERT INTO tokens (email, verification_code) VALUES ("${email}", "${verificationCode}")`;
+					let query = `INSERT INTO tokens (user_id, email, verification_code) VALUES ("${users[0].id}", "${email}", "${verificationCode}")`;
 
 					Query<IMySQLResult>(connection, query, false).then(() => {
 						Email.sendVerificationCode(email, verificationCode);
@@ -87,9 +87,9 @@ const requestResetPasswordCode = (
 				throw err;
 			}
 			Query<IMySQLResult>(connection, query, false)
-				.then(() => {
+				.then((users) => {
 					const verificationCode = randomInt(100000, 999999).toString();
-					let query = `INSERT INTO tokens (email, verification_code) VALUES ("${email}", "${verificationCode}")`;
+					let query = `INSERT INTO tokens (user_id, email, verification_code) VALUES ("${users[0].id}", "${email}", "${verificationCode}")`;
 
 					Query<IMySQLResult>(connection, query, false).then(() => {
 						Email.sendPasswordResetCode(email, verificationCode);
