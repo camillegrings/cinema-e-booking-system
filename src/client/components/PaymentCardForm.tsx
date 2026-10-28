@@ -190,10 +190,6 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
         <section className="payment-form-container">
             <h3>Payment Cards ({formData.cards.length}/3)</h3>
 
-            {formData.cards.length === 0 && (
-                <p className="payment-form-no-cards-message">No payment cards saved!</p>
-            )}
-
             {formData.cards.map((card) => (
                 <article key={card.id} className="payment-form-card">
                     <div>
@@ -305,7 +301,7 @@ export const PaymentCardForm: React.FC<Props> = ({ formData, setFormData, setMes
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div className="payment-form-add-card-btns">
                         <button type="button" onClick={handleCardSubmit} className="payment-form-card-btn-primary">
                             {editingCardId ? "Update card" : "Add card"}
                         </button>

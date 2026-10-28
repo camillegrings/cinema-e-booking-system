@@ -108,3 +108,12 @@
     color: black;
     background: white;
 }
+
+.register-form .payment-form-add-card-btns {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-form .payment-form-add-card-btns button {
+    margin: 5px;
+}

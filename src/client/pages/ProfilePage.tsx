@@ -20,7 +20,8 @@ export type PaymentCard = {
 };
 
 export type ProfileFormData = {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     currentPassword: string;
     newPassword?: string;
@@ -35,7 +36,8 @@ export type Message = { text: string; type: "success" | "error" } | null
 export const ProfilePage: React.FC = () => {
     const { token } = useAuth();
     const [formData, setFormData] = useState<ProfileFormData>({
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         currentPassword: "",
         newPassword: "",
@@ -63,7 +65,6 @@ export const ProfilePage: React.FC = () => {
 
                 if (res.ok) {
                     const data = await res.json();
-                    const name = data.firstName + ' ' + data.lastName
                     const cards = data.cards.map(card => ({ ...card, cardNumber: `**** **** **** ${card.lastFour}`, cardHolderName: card.cardholderName, expirationDate: card.expirationDate.slice(0, 7) }))
                     setFormData((prev) => ({ ...prev, ...data, name, address: { ...prev.address, ...data.address }, cards }));
                 } else {
@@ -109,25 +110,24 @@ export const ProfilePage: React.FC = () => {
         }
 
         try {
-            const firstName = formData.name?.toString().split(' ')[0] || ''
-            const lastName = formData.name?.toString().split(' ')[1] || ''
-
             const res = await fetch("http://localhost:3000/users/profile", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ ...formData, firstName, lastName })
+                body: JSON.stringify(formData)
             });
+
+            const data = await res.json()
 
             if (res.ok) {
                 setMessage({ text: "Profile updated successfully!", type: "success" });
             } else {
-                setMessage({ text: "Failed to update profile.", type: "error" });
+                setMessage({ text: data.message || "Failed to update profile.", type: "error" });
             }
         } catch (err) {
-            setMessage({ text: "Profile updated successfully (Local).", type: "success" });
+            setMessage({ text: "Failed to update profile.", type: "error" });
         }
     };
 
@@ -154,11 +154,21 @@ export const ProfilePage: React.FC = () => {
                             />
                         </div>
                         <div className="input-group">
-                            <label>Name</label>
+                            <label>First name</label>
                             <input
                                 type="text"
-                                name="name"
-                                value={formData.name}
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>Last name</label>
+                            <input
+                                type="text"
+                                name="lastName"
+                                value={formData.lastName}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -214,6 +224,19 @@ export const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <PaymentCardForm formData={formData} setFormData={setFormData} setMessage={setMessage} />
+                    <div className="form-section">
+                        <h3>Promotions</h3>
+                        <div className="checkbox">
+                            <input
+                                type="checkbox"
+                                id="subscribedToPromos"
+                                name="subscribedToPromos"
+                                checked={formData.subscribedToPromos}
+                                onChange={handleInputChange}
+                            />
+                            <label>I would like to subscribe for promotions.</label>
+                        </div>
+                    </div>
                     <div className="form-section">
                         <h3>Security & Confirm Changes</h3>
                         <div className="input-group">

@@ -6,7 +6,7 @@
 
 .container {
   margin-top: 20px;
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -172,8 +172,13 @@
     opacity: 0;
     transform: translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.register-form .payment-form-container h3 {
+  margin-bottom: 20px;
 }

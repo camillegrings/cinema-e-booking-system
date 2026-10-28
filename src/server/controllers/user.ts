@@ -253,7 +253,7 @@ const resetPassword = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const register = (req: Request, res: Response, next: NextFunction) => {
-	let { email, first_name, last_name, phone_number, password } = req.body;
+	let { email, firstName, lastName, phone, password, subscribedToPromos } = req.body;
 
 	// const salt = await bcryptjs.genSalt(10);
 
@@ -275,7 +275,7 @@ const register = (req: Request, res: Response, next: NextFunction) => {
 				}
 				Query<IMySQLResult>(connection, query, false)
 					.then((user) => {
-						let query = `INSERT INTO customers (user_id, first_name, last_name, phone_number) VALUES (${user?.insertId}, "${first_name}", "${last_name}", "${phone_number}")`;
+						let query = `INSERT INTO customers (user_id, first_name, last_name, phone_number, subscribed_to_promos) VALUES (${user?.insertId}, "${firstName}", "${lastName}", "${phone}", "${subscribedToPromos ? 1 : 0}")`;
 
 						Query<IMySQLResult>(connection, query, false).then((result) => {
 							logging.info(NAMESPACE, `User ${result?.insertId} inserted.`);
