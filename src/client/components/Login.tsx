@@ -17,6 +17,23 @@ export const Login = () => {
 		const email = formData.get("email");
 		const password = formData.get("password");
 
+		// --- TEMPORARY LOCAL BYPASS FOR TESTING ---
+    if (email === "test@test.com" && password === "123") {
+        const dummyUser = {
+            id: 999,
+            email: "test@test.com",
+            name: "Test User",
+            role: "CUSTOMER",
+            status: "ACTIVE"
+        };
+        const dummyToken = "mock-dev-token";
+        
+        login(dummyUser, dummyToken);
+        navigate("/", { replace: true });
+        return;
+    }
+    // ------------------------------------------
+
 		try {
 			const res = await fetch("http://localhost:3000/users/login", {
 				method: "POST",

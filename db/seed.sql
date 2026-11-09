@@ -283,13 +283,13 @@ SET show_time = DATE_ADD(show_time, INTERVAL DATEDIFF(DATE_ADD(CURDATE(), INTERV
 --  demo
 -- Admin (Admin123!)
 INSERT INTO users (role, email, password_hash)
-VALUES ('ADMIN', 'admin@test.com', '$2b$10$JS/LKSOepZlG0uS.yx46HeHzRTvLKM3nW21A8EpsH0K/k0sOWDEmu');
+VALUES ('ADMIN', 'admin@test.com', '$2b$10$sQnSm1m.W2Qxp2dTZcIl9uUCmdzIc8gP1TjxtKHX5SFpL83Qhdrq6');
 SET @adm = LAST_INSERT_ID();
 INSERT INTO admins (user_id, name) VALUES (@adm, 'Test Admin');
 
 -- Verified user with favorites (Fav123!)
 INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'fav@test.com', '$2b$10$EpIxzmEudNgZ3aazH8TfiOBdogYhE02n3k/PJ0h3qyBqRA2PKRPmK');
+VALUES ('CUSTOMER', 'fav@test.com', '$2b$10$DTqkSVFo4FckW8qlAlgA0umFT420hnLVw.99vFMUgD1Dd01PVw0Em');
 SET @fav = LAST_INSERT_ID();
 INSERT INTO customers (user_id, first_name, last_name, phone_number, status, is_verified, subscribed_to_promos)
 VALUES (@fav, 'Fay', 'Favorite', '123-4567', 'ACTIVE', TRUE, TRUE);
@@ -297,7 +297,7 @@ INSERT INTO favorite_movies (customer_id, movie_id) VALUES (@fav, 1), (@fav, 2);
 
 -- Verified user with 3 payment cards (Cards123!)
 INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'cards@test.com', '$2b$10$A2R9VKvw58KN7X3xdNFnV.8Pgh6krTjiRZv9bVEsg9/wuxyyLV0y6');
+VALUES ('CUSTOMER', 'cards@test.com', '$2b$10$9V4LyVCDIUx2FIxk.MMtHuY4u88LxNKhfoAAzvjoshVz1l0j24I.u');
 SET @cards = LAST_INSERT_ID();
 
 INSERT INTO addresses (street, city, state, zip_code) VALUES ('1 Main St', 'Athens', 'GA', '30601');
