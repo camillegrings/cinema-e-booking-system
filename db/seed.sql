@@ -8,29 +8,35 @@ INSERT INTO ticket_prices (ticket_type, price) VALUES
     ('SENIOR', 10.00);
 INSERT INTO promotions (promo_code, discount_percentage, expiration_date) VALUES ('SAVE10', 10.00, '2026-12-31');
 
--- HALLS
+-- SHOWROOMS
 
-INSERT INTO halls (name, seat_count)
+INSERT INTO showrooms (theater_id, name, seat_count)
 VALUES
-    ('Hall 1', 20),
-    ('Hall 2', 20);
-
+    (1, 'Showroom 1', 20),
+    (1, 'Showroom 2', 20),
+    (1, 'Showroom 3', 20);
 
 -- SEATS
 
-INSERT INTO seats (hall_id, row_label, seat_number)
+INSERT INTO seats (showroom_id, row_label, seat_number)
 VALUES
-    -- Hall 1
+    -- Showroom 1
     (1, 'A', 1), (1, 'A', 2), (1, 'A', 3), (1, 'A', 4), (1, 'A', 5),
     (1, 'B', 1), (1, 'B', 2), (1, 'B', 3), (1, 'B', 4), (1, 'B', 5),
     (1, 'C', 1), (1, 'C', 2), (1, 'C', 3), (1, 'C', 4), (1, 'C', 5),
     (1, 'D', 1), (1, 'D', 2), (1, 'D', 3), (1, 'D', 4), (1, 'D', 5),
 
-    -- Hall 2
+    -- Showroom 2
     (2, 'A', 1), (2, 'A', 2), (2, 'A', 3), (2, 'A', 4), (2, 'A', 5),
     (2, 'B', 1), (2, 'B', 2), (2, 'B', 3), (2, 'B', 4), (2, 'B', 5),
     (2, 'C', 1), (2, 'C', 2), (2, 'C', 3), (2, 'C', 4), (2, 'C', 5),
-    (2, 'D', 1), (2, 'D', 2), (2, 'D', 3), (2, 'D', 4), (2, 'D', 5);
+    (2, 'D', 1), (2, 'D', 2), (2, 'D', 3), (2, 'D', 4), (2, 'D', 5),
+
+    -- Showroom 3
+    (3, 'A', 1), (3, 'A', 2), (3, 'A', 3), (3, 'A', 4), (3, 'A', 5),
+    (3, 'B', 1), (3, 'B', 2), (3, 'B', 3), (3, 'B', 4), (3, 'B', 5),
+    (3, 'C', 1), (3, 'C', 2), (3, 'C', 3), (3, 'C', 4), (3, 'C', 5),
+    (3, 'D', 1), (3, 'D', 2), (3, 'D', 3), (3, 'D', 4), (3, 'D', 5);
 
 
 -- MOVIES
@@ -237,83 +243,116 @@ VALUES
 
 -- SHOWTIMES
 
-INSERT INTO showtimes (movie_id, hall_id, show_time)
+INSERT INTO showtimes (movie_id, showroom_id, show_time)
 VALUES
+    -- NOVEMBER 15
 
--- Practical Magic 2
-(1, 1, '2026-09-15 18:00:00'),
-(1, 1, '2026-09-15 21:00:00'),
-(1, 2, '2026-09-16 19:00:00'),
+    -- Showroom 1
+    (6, 1, '2026-11-15 15:00:00'), -- Toy Story 5
+    (1, 1, '2026-11-15 17:00:00'), -- Practical Magic 2
+    (3, 1, '2026-11-15 19:00:00'), -- The Odyssey
 
--- Spider-Man: Brand New Day
-(2, 2, '2026-09-15 17:00:00'),
-(2, 2, '2026-09-15 20:30:00'),
-(2, 1, '2026-09-16 18:30:00'),
+    -- Showroom 2
+    (7, 2, '2026-11-15 15:00:00'), -- Supergirl
+    (2, 2, '2026-11-15 17:00:00'), -- Spider-Man: Brand New Day
+    (4, 2, '2026-11-15 19:00:00'), -- Hope
 
--- The Odyssey
-(3, 1, '2026-09-15 16:00:00'),
-(3, 1, '2026-09-16 20:00:00'),
-(3, 2, '2026-09-17 18:00:00'),
+    -- Showroom 3
+    (5, 3, '2026-11-15 15:00:00'), -- Runner
+    (8, 3, '2026-11-15 17:00:00'), -- The Dog Stars
+    (9, 3, '2026-11-15 19:00:00'), -- PAW Patrol: The Dino Movie
 
--- Hope
-(4, 2, '2026-09-15 19:30:00'),
-(4, 1, '2026-09-16 21:00:00'),
+    -- NOVEMBER 16
 
--- Runner
-(5, 2, '2026-09-15 18:00:00'),
-(5, 2, '2026-09-16 20:30:00'),
+    -- Showroom 1
+    (10, 1, '2026-11-16 15:00:00'), -- The End of Oak Street
+    (11, 1, '2026-11-16 17:00:00'), -- Heart of the Beast
+    (12, 1, '2026-11-16 19:00:00'), -- Digger
+    (13, 1, '2026-11-16 21:00:00'), -- Verity
 
--- Toy Story 5
-(6, 1, '2026-09-15 15:00:00'),
-(6, 1, '2026-09-16 17:00:00'),
-(6, 2, '2026-09-17 15:00:00'),
+    -- Showroom 2
+    (1, 2, '2026-11-16 15:00:00'), -- Practical Magic 2
+    (2, 2, '2026-11-16 17:00:00'), -- Spider-Man: Brand New Day
+    (3, 2, '2026-11-16 19:00:00'), -- The Odyssey
 
--- Supergirl
-(7, 2, '2026-09-15 16:00:00'),
-(7, 1, '2026-09-16 19:30:00'),
-(7, 2, '2026-09-17 20:00:00'),
+    -- Showroom 3
+    (4, 3, '2026-11-16 15:00:00'), -- Hope
+    (5, 3, '2026-11-16 17:00:00'), -- Runner
+    (6, 3, '2026-11-16 19:00:00'), -- Toy Story 5
 
--- The Dog Stars
-(8, 1, '2026-09-15 20:00:00'),
-(8, 2, '2026-09-16 18:00:00'),
-(8, 1, '2026-09-17 21:00:00');
+    -- NOVEMBER 17
 
-UPDATE showtimes
-SET show_time = DATE_ADD(show_time, INTERVAL DATEDIFF(DATE_ADD(CURDATE(), INTERVAL 1 DAY), '2026-09-15') DAY);
---  demo
--- Admin (Admin123!)
-INSERT INTO users (role, email, password_hash)
-VALUES ('ADMIN', 'admin@test.com', '$2b$10$sQnSm1m.W2Qxp2dTZcIl9uUCmdzIc8gP1TjxtKHX5SFpL83Qhdrq6');
-SET @adm = LAST_INSERT_ID();
-INSERT INTO admins (user_id, name) VALUES (@adm, 'Test Admin');
+    -- Showroom 1
+    (7, 1, '2026-11-17 15:00:00'), -- Supergirl
+    (8, 1, '2026-11-17 17:00:00'), -- The Dog Stars
 
--- Verified user with favorites (Fav123!)
-INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'fav@test.com', '$2b$10$DTqkSVFo4FckW8qlAlgA0umFT420hnLVw.99vFMUgD1Dd01PVw0Em');
+    -- Showroom 2
+    (9, 2, '2026-11-17 15:00:00'), -- PAW Patrol: The Dino Movie
+    (10, 2, '2026-11-17 17:00:00'), -- The End of Oak Street
+
+    -- Showroom 3
+    (11, 3, '2026-11-17 15:00:00'), -- Heart of the Beast
+    (12, 3, '2026-11-17 17:00:00'), -- Digger
+    (13, 3, '2026-11-17 19:00:00'); -- Verity
+
+INSERT INTO users (email, password_hash)
+VALUES ('customer@test.com', '$2b$10$FQwyLZmawX.dCtl7V0v0GuqUeLEn9/TGxNfRZdqr.Jm/Kf7G.H7YC');
+SET @c = LAST_INSERT_ID();
+INSERT INTO customers (user_id, first_name, last_name, phone_number, status, is_verified)
+VALUES (@c, 'Test', 'Customer', '555-0101', 'ACTIVE', TRUE);
+
+INSERT INTO users (email, password_hash)
+VALUES ('admin@test.com', '$2b$10$CoOZRQQwqhQkY9p1c8SN6eretwS9YZM7nnaB/ndezDkI8a7vl4Ime');
+SET @a = LAST_INSERT_ID();
+INSERT INTO admins (user_id, name)
+VALUES (@a, 'Test Admin');
+
+INSERT INTO users (email, password_hash)
+VALUES ('fav@test.com', '$2b$10$ejnzEuIdlviIgPA4PPNsOubv.k464RpWaR3I35V2azbSuS4lmDSru');
 SET @fav = LAST_INSERT_ID();
-INSERT INTO customers (user_id, first_name, last_name, phone_number, status, is_verified, subscribed_to_promos)
+INSERT INTO customers (user_id, first_name, last_name, phone_number, status, subscribed_to_promos, is_verified)
 VALUES (@fav, 'Fay', 'Favorite', '123-4567', 'ACTIVE', TRUE, TRUE);
-INSERT INTO favorite_movies (customer_id, movie_id) VALUES (@fav, 1), (@fav, 2);
+
+-- Favorite movies for the demo customer
+INSERT INTO favorite_movies (customer_id, movie_id)
+VALUES (@fav, 1), (@fav, 2);
 
 -- Verified user with 3 payment cards (Cards123!)
-INSERT INTO users (role, email, password_hash)
-VALUES ('CUSTOMER', 'cards@test.com', '$2b$10$9V4LyVCDIUx2FIxk.MMtHuY4u88LxNKhfoAAzvjoshVz1l0j24I.u');
+INSERT INTO users (email, password_hash)
+VALUES ('cards@test.com', '$2b$10$A2R9VKvw58KN7X3xdNFnV.8Pgh6krTjiRZv9bVEsg9/wuxyyLV0y6');
 SET @cards = LAST_INSERT_ID();
 
-INSERT INTO addresses (street, city, state, zip_code) VALUES ('1 Main St', 'Athens', 'GA', '30601');
+-- Home address
+INSERT INTO addresses (street, city, state, zip_code)
+VALUES ('1 Main St', 'Athens', 'GA', '30601');
 SET @home = LAST_INSERT_ID();
-INSERT INTO customers (user_id, first_name, last_name, phone_number, status, is_verified, subscribed_to_promos, home_address_id)
-VALUES (@cards, 'Carl', 'Cards', '123-4568', 'ACTIVE', TRUE, FALSE, @home);
 
--- every card gets its own billing address row
-INSERT INTO addresses (street, city, state, zip_code) VALUES ('10 Oak St', 'Athens', 'GA', '30601');
+INSERT INTO customers (
+    user_id, first_name, last_name, phone_number,
+    status, is_verified, subscribed_to_promos, home_address_id
+)
+VALUES (
+    @cards, 'Carl', 'Cards', '123-4568',
+    'ACTIVE', TRUE, FALSE, @home
+);
+
+-- Billing addresses for each payment card
+INSERT INTO addresses (street, city, state, zip_code)
+VALUES ('10 Oak St', 'Athens', 'GA', '30601');
 SET @b1 = LAST_INSERT_ID();
-INSERT INTO addresses (street, city, state, zip_code) VALUES ('20 Elm St', 'Athens', 'GA', '30601');
+
+INSERT INTO addresses (street, city, state, zip_code)
+VALUES ('20 Elm St', 'Athens', 'GA', '30601');
 SET @b2 = LAST_INSERT_ID();
-INSERT INTO addresses (street, city, state, zip_code) VALUES ('30 Pine St', 'Athens', 'GA', '30601');
+
+INSERT INTO addresses (street, city, state, zip_code)
+VALUES ('30 Pine St', 'Athens', 'GA', '30601');
 SET @b3 = LAST_INSERT_ID();
 
-INSERT INTO payment_cards (customer_id, slot, card_number_enc, last_four, cardholder_name, expiration_date, billing_address_id)
+INSERT INTO payment_cards (
+    customer_id, slot, card_number_enc, last_four,
+    cardholder_name, expiration_date, billing_address_id
+)
 VALUES
 (@cards, 1, AES_ENCRYPT('4111111111111111', 'demo-key'), '1111', 'Carl Cards', '2029-12-01', @b1),
 (@cards, 2, AES_ENCRYPT('4242424242424242', 'demo-key'), '4242', 'Carl Cards', '2029-12-01', @b2),
