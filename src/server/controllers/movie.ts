@@ -85,6 +85,7 @@ const getMovie = (req: Request, res: Response, next: NextFunction) => {
 	});
 };
 
+/*
 const getAllFavorites = (req: Request, res: Response, next: NextFunction) => {
 	const userId = getUserId(res);
 
@@ -100,6 +101,29 @@ const getAllFavorites = (req: Request, res: Response, next: NextFunction) => {
 		ORDER BY f.date_added DESC`,
 		[userId],
 	);
+	*/
+
+	const getShowtimes = (req: Request, res: Response, next: NextFunction) => {
+    const movieId = toId(req.params.id);
+
+    if (movieId === null) {
+        return res.status(400).json({ message: "Invalid movie id" });
+    }
+
+    let query = format(
+        `SELECT 
+            s.id,
+            s.movie_id,
+            s.showroom_id,
+            s.show_time,
+            s.duration,
+            sr.name AS showroom_name
+        FROM showtimes s
+        LEFT JOIN showrooms sr ON s.showroom_id = sr.id
+        WHERE s.movie_id = ?
+        ORDER BY s.show_time ASC`,
+        [movieId],
+    );
 
 	Connect().then((connection) => {
 		Query<QueryResult>(connection, query)
@@ -120,6 +144,43 @@ const getAllFavorites = (req: Request, res: Response, next: NextFunction) => {
 				});
 			});
 	});
+};
+
+const getAllFavorites = (req: Request, res: Response, next: NextFunction) => {
+    const userId = getUserId(res);
+
+    if (userId === null) {
+        return res.status(401).json({ message: "Please log in" });
+    }
+
+    let query = format(
+        `SELECT m.*, f.date_added
+        FROM favorite_movies f
+        JOIN movies m ON m.id = f.movie_id
+        WHERE f.customer_id = ?
+        ORDER BY f.date_added DESC`,
+        [userId],
+    );
+
+	Connect().then((connection) => {
+        Query<QueryResult>(connection, query)
+            .then((movies) => {
+                return res.status(200).json(
+                    (movies as RowDataPacket[]).map((m) => ({
+                        ...m,
+                        is_favorite: true,
+                    })),
+                );
+            })
+            .catch((error) => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    message: error.message,
+                    error,
+                });
+            });
+    });
 };
 
 const addFavorite = (req: Request, res: Response, next: NextFunction) => {
@@ -207,6 +268,7 @@ const deleteFavorite = (req: Request, res: Response, next: NextFunction) => {
 export default {
 	getAllMovies,
 	getMovie,
+	getShowtimes,
 	getAllFavorites,
 	addFavorite,
 	deleteFavorite,

@@ -5,6 +5,7 @@ import { extractJWT, optionalAuth } from '../middleware/extractJWT.js'
 const router = express.Router();
 
 router.get("/get/all", optionalAuth, controller.getAllMovies);
+router.get("/get/showtimes/:id", optionalAuth, controller.getShowtimes);
 router.get("/get/:id", optionalAuth, controller.getMovie);
 router.get("/favorites", extractJWT, controller.getAllFavorites);
 router.post("/favorites/:movieId", extractJWT, controller.addFavorite);
