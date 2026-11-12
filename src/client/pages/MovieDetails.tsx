@@ -29,45 +29,45 @@ export const MovieDetails: React.FC = () => {
         setLoading(true);
         Promise.all([
             fetch(`http://localhost:3000/movies/get/${id}`)
-            .then(async (res) => {
-                const data = await res.json();
-                if (!res.ok) {
-                    console.error("Movie fetch returned status:", res.status, data);
-                    throw new Error(data.message || `Movie fetch failed with ${res.status}`);
-                }
-                return data;
-            }),
-        fetch(`http://localhost:3000/movies/get/showtimes/${id}`)
-            .then(async (res) => {
-                if (!res.ok) {
-                    console.error(`Showtimes API error: received HTTP status ${res.status}`);
+                .then(async (res) => {
+                    const data = await res.json();
+                    if (!res.ok) {
+                        console.error("Movie fetch returned status:", res.status, data);
+                        throw new Error(data.message || `Movie fetch failed with ${res.status}`);
+                    }
+                    return data;
+                }),
+            fetch(`http://localhost:3000/movies/get/showtimes/${id}`)
+                .then(async (res) => {
+                    if (!res.ok) {
+                        console.error(`Showtimes API error: received HTTP status ${res.status}`);
+                        return [];
+                    }
+                    const data = await res.json();
+                    return Array.isArray(data) ? data : [];
+                })
+                .catch((err) => {
+                    console.warn("Could not load dynamic showtimes:", err);
                     return [];
-                }
-                const data = await res.json();
-                return Array.isArray(data) ? data : [];
+                })
+        ])
+            .then(([movieRes, showtimeRes]) => {
+                console.log("Raw movie response:", movieRes);
+                console.log("Raw showtimes response:", showtimeRes);
+
+                // Handle both array response [{...}] and single object response {...}
+                const foundMovie = Array.isArray(movieRes) ? movieRes[0] : movieRes;
+
+                setMovie(foundMovie);
+                setShowtimes(Array.isArray(showtimeRes) ? showtimeRes : []);
+                setLoading(false);
             })
             .catch((err) => {
-                console.warn("Could not load dynamic showtimes:", err);
-                return [];
-            })
-    ])
-        .then(([movieRes, showtimeRes]) => {
-            console.log("Raw movie response:", movieRes);
-            console.log("Raw showtimes response:", showtimeRes);
-
-            // Handle both array response [{...}] and single object response {...}
-            const foundMovie = Array.isArray(movieRes) ? movieRes[0] : movieRes;
-
-            setMovie(foundMovie);
-            setShowtimes(Array.isArray(showtimeRes) ? showtimeRes : []);
-            setLoading(false);
-        })
-        .catch((err) => {
-            console.error("Error fetching movie details:", err);
-            setMovie(undefined);
-            setLoading(false);
-        });
-}, [id]);
+                console.error("Error fetching movie details:", err);
+                setMovie(undefined);
+                setLoading(false);
+            });
+    }, [id]);
 
     const parseSafeDate = (timeStr: string) => {
         if (!timeStr) return new Date();
@@ -129,6 +129,13 @@ export const MovieDetails: React.FC = () => {
                                                         key={st.id}
                                                         className="movie-details-showtime-badge"
                                                         to={`/booking/${st.id}`}
+                                                        state={{
+                                                            movieTitle: movie.title,
+                                                            mpaaRating: movie.mpaa_rating,
+                                                            trailerImageUrl: movie.trailer_image_url,
+                                                            showroomName: st.showroom_name || st.name || st.hall_name || `Showroom ${st.showroom_id}`,
+                                                            showTime: st.show_time
+                                                        }}
                                                     >
                                                         <span className="badge-time">{formatTime(st.show_time)}</span>
                                                         <span className="badge-hall">
