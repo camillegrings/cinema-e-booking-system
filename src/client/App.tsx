@@ -8,11 +8,12 @@ import { BookingPage } from './pages/BookingPage.js'
 import { Login } from './components/Login.js';
 import { Register } from './components/Register.js';
 import { ForgotPassword } from './components/ForgotPassword.js';
-import { AdminDashboard } from "./pages/AdminDashboard.js"
-import { ProfilePage } from './pages/ProfilePage.js'
-import { FavoritePage } from './pages/FavoritePage.js'
-import { VerifyCode } from './components/VerifyCode.js'
-import { ResetPassword } from './components/ResetPassword.js'
+import { AdminDashboard } from "./pages/AdminDashboard.js";
+import { ProfilePage } from './pages/ProfilePage.js';
+import { FavoritePage } from './pages/FavoritePage.js';
+import { VerifyCode } from './components/VerifyCode.js';
+import { ResetPassword } from './components/ResetPassword.js';
+import { PaymentPage } from './pages/PaymentPage.js';
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/favorites" element={<FavoritePage />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Route>
 
         {/* Admin only */}

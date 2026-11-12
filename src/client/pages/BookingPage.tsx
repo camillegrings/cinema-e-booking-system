@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
-import './BookingPage.css'
-import { Header } from '../components/Header.js'
+import React, { useState, useMemo, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import './BookingPage.css';
+import { Header } from '../components/Header.js';
 
 const ReclinerSeatSVG = () => (
     <svg className="seat-svg" viewBox="0 0 32 34">
@@ -18,74 +19,244 @@ type ITickets = {
     child: number;
 }
 
+interface ShowtimeSeatData {
+    seat_id: number;
+    show_seat_id?: number;
+    row_label: string;
+    seat_number: number;
+    status: 'AVAILABLE' | 'HELD' | 'BOOKED' | 'UNAVAILABLE';
+}
+
+interface ShowtimeDetails {
+    showtime_id: number;
+    movie_title: string;
+    mpaa_rating: string;
+    trailer_image_url: string;
+    showroom_name: string;
+    show_time: string;
+}
+
 export const BookingPage: React.FC = () => {
-    // Ticket Prices setup
-    const TICKET_PRICES = {
-        adult: 16.50,
-        senior: 13.50,
-        child: 11.50
+    const { showtimeId } = useParams<{ showtimeId: string }>();
+    const navigate = useNavigate();
+    const navState = useLocation().state as {
+        movieTitle?: string;
+        mpaaRating?: string;
+        trailerImageUrl?: string;
+        showroomName?: string;
+        showTime?: string;
+    } | null;
+
+    const handleProceedToPayment = () => {
+        const orderSummary = {
+            showtimeId: meta.showtime_id,
+            movieTitle: meta.movie_title,
+            showroom: meta.showroom_name,
+            showTime: meta.show_time,
+            tickets,
+            selectedSeats,
+            subtotal: (tickets.adult * prices.adult) + (tickets.senior * prices.senior) + (tickets.child * prices.child)
+        };
+
+        // Store order data so PaymentPage can read it
+        sessionStorage.setItem('current_checkout_order', JSON.stringify(orderSummary));
+
+        navigate('/payment');
     };
 
-    // State for ticket quantities (Default 1 adult ticket)
-    const [tickets, setTickets] = useState<ITickets>({
-        adult: 1,
-        senior: 0,
-        child: 0
+    // Showtime & movie information
+    const [meta, setMeta] = useState<ShowtimeDetails>({
+        showtime_id: Number(showtimeId) || 0,
+        movie_title: navState?.movieTitle || 'Loading Movie...',
+        mpaa_rating: navState?.mpaaRating || '',
+        trailer_image_url: navState?.trailerImageUrl || '',
+        showroom_name: navState?.showroomName || '',
+        show_time: navState?.showTime || ''
     });
 
-    // Calculate total tickets needed
+    // Ticket Prices setup
+    const [prices, setPrices] = useState({
+        adult: 12.00,
+        senior: 10.00,
+        child: 8.00
+    });
+
+    // State for ticket quantities (Default 1 adult ticket)
+    const [tickets, setTickets] = useState<ITickets>(() => {
+        const saved = sessionStorage.getItem(`booking_tickets_${showtimeId}`);
+        return saved ? JSON.parse(saved) : { adult: 1, senior: 0, child: 0 };
+    });
+
     const totalTicketsNeeded = tickets.adult + tickets.senior + tickets.child;
 
-    // Pre-occupied seats matching typical cinema state
-    const occupiedSeats = useMemo(() => new Set(['D5', 'C3', 'C4', 'A1', 'A2']), []);
+    // Grid state
+    const [seats, setSeats] = useState<ShowtimeSeatData[]>([]);
+    const [occupiedSeatLabels, setOccupiedSeatLabels] = useState<Set<string>>(new Set(['A1', 'B3', 'C4']));
+    const [selectedSeats, setSelectedSeats] = useState<string[]>(() => {
+        const saved = sessionStorage.getItem(`booking_seats_${showtimeId}`);
+        return saved ? JSON.parse(saved) : [];
+    });
 
-    // Selected seat IDs
-    const [selectedSeats, setSelectedSeats] = useState(['E3']);
+    // Toast message setup
+
     const [toastMsg, setToastMsg] = useState('');
 
     const showToast = (msg: string) => {
         setToastMsg(msg);
-        setTimeout(() => setToastMsg(''), 3200);
+        setTimeout(() => setToastMsg(''), 3500);
     };
 
+    // Load showtime details, seats, and ticket prices
+    useEffect(() => {
+        if (!showtimeId) return;
+
+        // Fetch showtime & movie details (handles direct URL navigation or browser refresh)
+        // Adjust endpoint URL if your teammate mounted showtimes under /movies/showtimes/detail/:id
+        fetch(`http://localhost:3000/showtimes/${showtimeId}`)
+            .then(res => (res.ok ? res.json() : null))
+            .then(raw => {
+                const data = Array.isArray(raw) ? raw[0] : raw;
+                if (!data) return;
+
+                setMeta(prev => ({
+                    showtime_id: Number(showtimeId),
+                    movie_title: data.movie_title || data.title || prev.movie_title,
+                    mpaa_rating: data.mpaa_rating || prev.mpaa_rating,
+                    trailer_image_url: data.trailer_image_url || prev.trailer_image_url,
+                    showroom_name: data.showroom_name || data.name || (data.showroom_id ? `Showroom ${data.showroom_id}` : prev.showroom_name),
+                    show_time: data.show_time || prev.show_time
+                }));
+
+                // If the showtime endpoint only returned movie_id (not title/image), fetch the movie row directly
+                if (data.movie_id && !data.movie_title && !data.title) {
+                    fetch(`http://localhost:3000/movies/get/${data.movie_id}`)
+                        .then(r => (r.ok ? r.json() : null))
+                        .then(mRaw => {
+                            const m = Array.isArray(mRaw) ? mRaw[0] : mRaw;
+                            if (m) {
+                                setMeta(prev => ({
+                                    ...prev,
+                                    movie_title: m.title,
+                                    mpaa_rating: m.mpaa_rating,
+                                    trailer_image_url: m.trailer_image_url
+                                }));
+                            }
+                        })
+                        .catch(() => { });
+                }
+            })
+            .catch(() => { });
+
+        // Seat map & booked seats
+        fetch(`http://localhost:3000/showtimes/${showtimeId}/seats`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data && data.seats && data.seats.length > 0) {
+                    setSeats(data.seats);
+                    const occupied = new Set<string>();
+                    data.seats.forEach((s: ShowtimeSeatData) => {
+                        if (s.status === 'BOOKED' || s.status === 'HELD' || s.status === 'UNAVAILABLE') {
+                            occupied.add(`${s.row_label}${s.seat_number}`);
+                        }
+                    });
+                    setOccupiedSeatLabels(occupied);
+                }
+            })
+            .catch(() => { });
+
+        // Pricing 
+        fetch(`http://localhost:3000/pricing/ticket-prices`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (Array.isArray(data)) {
+                    const priceMap: any = {};
+                    data.forEach((p: { ticket_type: string; price: number }) => {
+                        priceMap[p.ticket_type.toLowerCase()] = Number(p.price);
+                    });
+                    setPrices(prev => ({ ...prev, ...priceMap }));
+                }
+            })
+            .catch(() => { });
+    }, [showtimeId]);
+
+    // Save user selection to session for guest login 
+    useEffect(() => {
+        sessionStorage.setItem(`booking_tickets_${showtimeId}`, JSON.stringify(tickets));
+        sessionStorage.setItem(`booking_seats_${showtimeId}`, JSON.stringify(selectedSeats));
+    }, [tickets, selectedSeats, showtimeId]);
+
+    // Stepper Counter
     const handleTicketChange = (category: keyof ITickets, delta: number) => {
-        const currentCount = tickets[category];
-        const newCount = Math.max(0, currentCount + delta);
+        const nextCount = Math.max(0, tickets[category] + delta);
+        const nextTickets = { ...tickets, [category]: nextCount };
+        const nextTotal = nextTickets.adult + nextTickets.senior + nextTickets.child;
 
-        const updatedTickets = { ...tickets, [category]: newCount };
-        const newTotalNeeded = updatedTickets.adult + updatedTickets.senior + updatedTickets.child;
+        setTickets(nextTickets);
 
-        if (newTotalNeeded < 1) {
-            showToast('Please, select at least one ticket.');
+        // Auto-trim seats if ticket count drops below selected count
+        if (selectedSeats.length > nextTotal) {
+            setSelectedSeats(selectedSeats.slice(0, nextTotal));
+            showToast(`Seats adjusted to ${nextTotal} based on your tickets.`);
+        }
+    };
+
+    // Seat selection and validate tickets
+    const toggleSeat = (seatId: string) => {
+        if (totalTicketsNeeded === 0) {
+            showToast('Please select at least 1 ticket before choosing seats.');
             return;
         }
 
-        setTickets(updatedTickets);
+        if (occupiedSeatLabels.has(seatId)) return;
 
-        // If new ticket total is less than currently selected seats, trim excess seats
-        if (selectedSeats.length > newTotalNeeded) {
-            const trimmedSeats = selectedSeats.slice(0, newTotalNeeded);
-            setSelectedSeats(trimmedSeats);
-            showToast(`Adjusted to ${newTotalNeeded} seat(s) based on the number of tickets.`);
-        }
-    };
-
-    const toggleSeat = (seatId: string) => {
-        if (occupiedSeats.has(seatId)) return;
-
+        // Unselect seat
         if (selectedSeats.includes(seatId)) {
             setSelectedSeats(selectedSeats.filter(s => s !== seatId));
-        } else {
-            if (selectedSeats.length >= totalTicketsNeeded) {
-                showToast(`You have already selected ${totalTicketsNeeded} seat(s). Increase the number of tickets to select more seats.`);
-                return;
-            }
-            setSelectedSeats([...selectedSeats, seatId]);
+            return;
         }
-    };
 
-    // Rows configuration (A to F)
-    const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
+        // Exact ticket matching rule
+        if (selectedSeats.length >= totalTicketsNeeded) {
+            showToast(`You have already selected all ${totalTicketsNeeded} seats for your tickets.`);
+            return;
+        }
+
+
+
+        setSelectedSeats([...selectedSeats, seatId]);
+    };
+    // Rows configuration
+    const rowMap = useMemo(() => {
+        if (seats.length > 0) {
+            const map: Record<string, number[]> = {};
+            seats.forEach(s => {
+                if (!map[s.row_label]) map[s.row_label] = [];
+                map[s.row_label].push(s.seat_number);
+            });
+            return map;
+        }
+        return {
+            'A': [1, 2, 3, 4, 5],
+            'B': [1, 2, 3, 4, 5],
+            'C': [1, 2, 3, 4, 5],
+            'D': [1, 2, 3, 4, 5]
+        };
+    }, [seats]);
+
+    const formattedDate = useMemo(() => {
+        const d = new Date(meta.show_time.includes('T') ? meta.show_time : meta.show_time.replace(' ', 'T'));
+        return isNaN(d.getTime()) ? meta.show_time : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }, [meta.show_time]);
+
+    const formattedTime = useMemo(() => {
+        const d = new Date(meta.show_time.includes('T') ? meta.show_time : meta.show_time.replace(' ', 'T'));
+        return isNaN(d.getTime()) ? meta.show_time : d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    }, [meta.show_time]);
+
+    // Checkout 
+
+
+
 
     return (
         <div className="booking-container">
@@ -93,21 +264,37 @@ export const BookingPage: React.FC = () => {
             {toastMsg && <div className="toast-popup">{toastMsg}</div>}
             <main className="main-canvas">
                 <section className="cinema-header">
-                    <img
-                        src="https://img.youtube.com/vi/Ho10_4IX1jE/maxresdefault.jpg"
-                        alt="Practical Magic 2"
-                        className="movie-poster-thumb"
-                    />
+                    {meta.trailer_image_url && (
+                        <img
+                            src={meta.trailer_image_url}
+                            alt={meta.movie_title}
+                            className="movie-poster-thumb"
+                        />
+                    )}
                     <div className="header-details">
-                        <h1 className="movie-title">Practical Magic 2</h1>
+                        <h1 className="movie-title">{meta.movie_title}</h1>
                         <div className="movie-meta-bar">
-                            <span className="meta-item">ROOM 1</span>
-                            <span className="meta-divider">|</span>
-                            <span className="meta-item">SEP 21, 2026</span>
-                            <span className="meta-divider">|</span>
-                            <span>2:00 PM</span>
-                            <span className="meta-divider">|</span>
-                            <span className="rating-badge">PG-13</span>
+                            {meta.showroom_name && (
+                                <>
+                                    <span className="meta-item">{meta.showroom_name.toUpperCase()}</span>
+                                    <span className="meta-divider">|</span>
+                                </>
+                            )}
+                            {formattedDate && (
+                                <>
+                                    <span className="meta-item">{formattedDate.toUpperCase()}</span>
+                                    <span className="meta-divider">|</span>
+                                </>
+                            )}
+                            {formattedTime && (
+                                <>
+                                    <span>{formattedTime}</span>
+                                    <span className="meta-divider">|</span>
+                                </>
+                            )}
+                            {meta.mpaa_rating && (
+                                <span className="rating-badge">{meta.mpaa_rating}</span>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -121,7 +308,7 @@ export const BookingPage: React.FC = () => {
                         <div className={`category-card ${tickets.adult > 0 ? 'active' : ''}`}>
                             <div className="category-info">
                                 <span className="category-name">Adult</span>
-                                <span className="category-price">${TICKET_PRICES.adult.toFixed(2)}</span>
+                                <span className="category-price">${prices.adult.toFixed(2)}</span>
                                 <span className="category-subtext">Regular ticket</span>
                             </div>
                             <div className="stepper">
@@ -140,7 +327,7 @@ export const BookingPage: React.FC = () => {
                         <div className={`category-card ${tickets.senior > 0 ? 'active' : ''}`}>
                             <div className="category-info">
                                 <span className="category-name">Senior (60+)</span>
-                                <span className="category-price">${TICKET_PRICES.senior.toFixed(2)}</span>
+                                <span className="category-price">${prices.senior.toFixed(2)}</span>
                                 <span className="category-subtext">Seniors aged 60 and over</span>
                             </div>
                             <div className="stepper">
@@ -159,7 +346,7 @@ export const BookingPage: React.FC = () => {
                         <div className={`category-card ${tickets.child > 0 ? 'active' : ''}`}>
                             <div className="category-info">
                                 <span className="category-name">Child (2-12)</span>
-                                <span className="category-price">${TICKET_PRICES.child.toFixed(2)}</span>
+                                <span className="category-price">${prices.child.toFixed(2)}</span>
                                 <span className="category-subtext">Children aged 2 to 12</span>
                             </div>
                             <div className="stepper">
@@ -187,41 +374,37 @@ export const BookingPage: React.FC = () => {
                     </div>
                     <div className="seats-card">
                         <div className="grid-rows">
-                            {rows.map((row) => {
-                                return (
-                                    <div key={row} className="row-container">
-                                        <span className="row-label">{row}</span>
-                                        <div className="row-seats">
-                                            {[[1, 2], [3, 4], [5, 6], [7, 8]].map((pair, pIdx) => (
-                                                <div key={pIdx} className="seat-pair">
-                                                    {pair.map((col) => {
-                                                        const seatId = `${row}${col}`;
-                                                        const isOccupied = occupiedSeats.has(seatId);
-                                                        const isSelected = selectedSeats.includes(seatId);
+                            {Object.keys(rowMap).sort().map((row) => (
+                                <div key={row} className="row-container">
+                                    <span className="row-label">{row}</span>
+                                    <div className="row-seats">
+                                        {rowMap[row].map((num) => {
+                                            const seatId = `${row}${num}`;
+                                            const isOccupied = occupiedSeatLabels.has(seatId);
+                                            const isSelected = selectedSeats.includes(seatId);
 
-                                                        let seatClass = 'seat-available';
-                                                        if (isOccupied) seatClass = 'seat-occupied';
-                                                        if (isSelected) seatClass = 'seat-selected';
+                                            let seatClass = 'seat-available';
+                                            if (isOccupied) seatClass = 'seat-occupied';
+                                            if (isSelected) seatClass = 'seat-selected';
 
-                                                        return (
-                                                            <button
-                                                                key={seatId}
-                                                                className={`seat-btn ${seatClass}`}
-                                                                onClick={() => toggleSeat(seatId)}
-                                                                disabled={isOccupied}
-                                                                title={`Seat ${seatId} ${isOccupied ? '(Occupied)' : isSelected ? '(Selected)' : '(Available)'}`}
-                                                            >
-                                                                <ReclinerSeatSVG />
-                                                            </button>
-                                                        );
-                                                    })}
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <span className="row-label">{row}</span>
+                                            return (
+                                                <button
+                                                    key={seatId}
+                                                    type="button"
+                                                    className={`seat-btn ${seatClass}`}
+                                                    onClick={() => toggleSeat(seatId)}
+                                                    disabled={isOccupied}
+                                                    title={`Seat ${seatId} ${isOccupied ? '(Booked)' : isSelected ? '(Selected)' : '(Available)'}`}
+                                                >
+                                                    <ReclinerSeatSVG />
+                                                    <span className="seat-badge-label">{num}</span>
+                                                </button>
+                                            );
+                                        })}
                                     </div>
-                                );
-                            })}
+                                    <span className="row-label">{row}</span>
+                                </div>
+                            ))}
                         </div>
                         <div className="legend-bar">
                             <div className="legend-item">
@@ -241,8 +424,8 @@ export const BookingPage: React.FC = () => {
                 </section>
                 <button
                     className="checkout-btn"
-                    disabled={selectedSeats.length !== totalTicketsNeeded}
-                    onClick={() => { }}
+                    disabled={selectedSeats.length !== totalTicketsNeeded || selectedSeats.length == 0}
+                    onClick={handleProceedToPayment}
                 >
                     <span>Continue to Checkout</span>
                     <span>→</span>
