@@ -133,10 +133,10 @@ export const ManageShowtime: React.FC = () => {
                 ? value.split(" ")[1]
                 : value;
 
-        if (time) {
+        if (time !== undefined) {
             const [hours, minutes] = time.split(":").map(Number);
 
-            return hours && minutes ? hours * 60 + minutes : 0;
+            return hours !== undefined && minutes !== undefined ? hours * 60 + minutes : 0;
         }
 
         return 0
@@ -199,7 +199,7 @@ export const ManageShowtime: React.FC = () => {
         const [hours, minutes] = time.split(":").map(Number);
         const date = new Date();
 
-        if (hours && minutes) {
+        if (hours !== undefined && minutes !== undefined) {
             date.setHours(hours, minutes, 0, 0);
 
             return date.toLocaleTimeString([], {
