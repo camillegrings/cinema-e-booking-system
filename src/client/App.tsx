@@ -13,6 +13,8 @@ import { ProfilePage } from './pages/ProfilePage.js'
 import { FavoritePage } from './pages/FavoritePage.js'
 import { VerifyCode } from './components/VerifyCode.js'
 import { ResetPassword } from './components/ResetPassword.js'
+import { ManageMovie } from './pages/ManageMovie.js'
+import { ManageShowtime } from './pages/ManageShowtime.js'
 
 export default function App() {
   return (
@@ -37,6 +39,8 @@ export default function App() {
         {/* Admin only */}
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
+          <Route path='/admin/movies' element={<ManageMovie />} />
+          <Route path='/admin/showtime' element={<ManageShowtime />} />
         </Route>
       </Routes>
     </AuthProvider>

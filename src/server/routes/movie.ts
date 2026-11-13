@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get("/get/all", optionalAuth, controller.getAllMovies);
 router.get("/get/:id", optionalAuth, controller.getMovie);
+router.get("/catalog", extractJWT, controller.getMoviesPaginated);
+router.post("/add", extractJWT, controller.addMovie);
 router.get("/favorites", extractJWT, controller.getAllFavorites);
 router.post("/favorites/:movieId", extractJWT, controller.addFavorite);
 router.delete("/favorites/:movieId", extractJWT, controller.deleteFavorite);

@@ -1,0 +1,292 @@
+.manage-movie-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.manage-movie-container {
+    padding: 0.8rem 1.5rem;
+}
+
+.manage-movie-container h2 {
+    margin-bottom: 20px;
+}
+
+.manage-movie-container h3 {
+    border-bottom: 1px solid white;
+    padding-bottom: 0.5rem;
+    margin: 15px 0;
+}
+
+.manage-movie-form .input-group {
+    margin-bottom: 20px;
+}
+
+.manage-movie-form .fields-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.manage-movie-form .fields-wrapper .input-group {
+    width: 100%;
+}
+
+.manage-movie-form select {
+    max-width: none;
+}
+
+
+/* Form description */
+.manage-movie-page .form-description {
+    color: #b0b3c6;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* Form sections */
+.manage-movie-form .form-section {
+    margin-bottom: 32px;
+}
+
+.manage-movie-form .form-section h3 {
+    margin-bottom: 20px;
+}
+
+/* Field hints */
+.manage-movie-form .field-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: #b0b3c6;
+}
+
+/* Validation errors */
+.manage-movie-form .field-error {
+    display: block;
+    color: #d93025;
+    font-size: 0.85rem;
+    margin-top: 6px;
+}
+
+.manage-movie-form input[aria-invalid="true"],
+.manage-movie-form textarea[aria-invalid="true"],
+.manage-movie-form select[aria-invalid="true"] {
+    border-color: #d93025;
+}
+
+/* Movie status preview */
+.status-preview {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #b0b3c6;
+}
+
+.status-preview strong {
+    color: #c6c9de;
+}
+
+/* Movie poster preview */
+.image-preview {
+    margin-top: 16px;
+}
+
+.image-preview p {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.image-preview img {
+    display: block;
+    width: 180px;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Form actions */
+.manage-movie-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.manage-movie-form .btn-cancel,
+.manage-movie-form .btn-submit {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.manage-movie-form .btn-cancel {
+    background: transparent;
+    border: 1px solid #ccc;
+    color: white;
+}
+
+.manage-movie-form .btn-submit {
+    border: none;
+    margin-top: 0;
+}
+
+.manage-movie-form .btn-cancel:hover,
+.manage-movie-form .btn-submit:hover {
+    opacity: 0.85;
+}
+
+.manage-movie-form .btn-cancel:disabled,
+.manage-movie-form .btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.manage-movie-form .input-group label,
+.manage-movie-form .input-group input,
+.manage-movie-form .input-group select,
+.manage-movie-form .input-group textarea {
+    font-size: 1.1rem;
+}
+
+
+/* Modal background overlay */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+}
+
+/* Modal container */
+.confirmation-modal {
+    background: #1c1d24;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;
+    padding: 32px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.2s ease-out;
+}
+
+/* Modal title */
+.confirmation-modal h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 20px;
+}
+
+/* Modal description */
+.confirmation-modal p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #8f92a1;
+    margin-bottom: 14px;
+}
+
+.confirmation-modal p strong {
+    color: #8f92a1;
+}
+
+/* Modal buttons */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.modal-actions button {
+    padding: 11px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+/* Cancel button */
+.modal-actions .btn-cancel {
+    background: none;
+    border: 1px solid #ccc;
+    color: white;
+}
+
+.modal-actions .btn-cancel:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+/* Confirm button */
+.modal-actions .btn-submit {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    margin-top: 0;
+}
+
+.modal-actions .btn-submit:hover {
+    background: #111116;
+}
+
+/* Disabled buttons */
+.modal-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Modal animation */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .manage-movie-form .btn-cancel,
+    .manage-movie-form .btn-submit {
+        width: 100%;
+    }
+
+    .image-preview img {
+        width: 150px;
+    }
+}
+
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .confirmation-modal {
+        padding: 24px 20px;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-actions button {
+        width: 100%;
+    }
+}
