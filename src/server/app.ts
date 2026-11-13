@@ -6,6 +6,8 @@ import config from "./db/config.js";
 import userRoutes from "./routes/user.js";
 import homeRoutes from "./routes/home.js";
 import movieRoutes from "./routes/movie.js";
+import showroomsRoutes from "./routes/showrooms.js";
+import showtimesRoutes from "./routes/showtimes.js";
 
 const NAMESPACE = "Server";
 const router = express();
@@ -51,6 +53,8 @@ router.use((req, res, next) => {
 router.use("/", homeRoutes); // so like this highkey does not do anything bc it isnt being called by HomePage.tsx lol
 router.use("/movies", movieRoutes);
 router.use("/users", userRoutes);
+router.use("/showrooms", showroomsRoutes);
+router.use("/showtimes", showtimesRoutes);
 
 // Error handling
 router.use((req, res, next) => {
