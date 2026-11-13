@@ -8,11 +8,13 @@ import { BookingPage } from './pages/BookingPage.js'
 import { Login } from './components/Login.js';
 import { Register } from './components/Register.js';
 import { ForgotPassword } from './components/ForgotPassword.js';
-import { AdminDashboard } from "./pages/AdminDashboard.js";
-import { ProfilePage } from './pages/ProfilePage.js';
-import { FavoritePage } from './pages/FavoritePage.js';
-import { VerifyCode } from './components/VerifyCode.js';
-import { ResetPassword } from './components/ResetPassword.js';
+import { AdminDashboard } from "./pages/AdminDashboard.js"
+import { ProfilePage } from './pages/ProfilePage.js'
+import { FavoritePage } from './pages/FavoritePage.js'
+import { VerifyCode } from './components/VerifyCode.js'
+import { ResetPassword } from './components/ResetPassword.js'
+import { ManageMovie } from './pages/ManageMovie.js'
+import { ManageShowtime } from './pages/ManageShowtime.js'
 import { PaymentPage } from './pages/PaymentPage.js';
 
 export default function App() {
@@ -39,6 +41,8 @@ export default function App() {
         {/* Admin only */}
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
+          <Route path='/admin/movies' element={<ManageMovie />} />
+          <Route path='/admin/showtime' element={<ManageShowtime />} />
         </Route>
       </Routes>
     </AuthProvider>

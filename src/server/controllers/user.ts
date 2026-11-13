@@ -310,7 +310,7 @@ const register = (req: Request, res: Response, next: NextFunction) => {
 const login = (req: Request, res: Response, next: NextFunction) => {
 	let { email, password } = req.body;
 
-	let query = `SELECT * FROM users WHERE email = '${email}' LIMIT 1`;
+	let query = `SELECT * FROM user_accounts WHERE email = '${email}' LIMIT 1`;
 
 	Connect().then((connection) => {
 		connection.beginTransaction((err) => {

@@ -131,6 +131,12 @@ export const MovieDetails: React.FC = () => {
 					<div className='movie-details-banner-content'>
 						<h1 className='movie-details-title'>{movie.title}</h1>
 						<p className='movie-details-rating'>Rating: {movie.mpaa_rating}</p>
+						<div>
+							<Link to={"/"} className='back-btn'>
+								{" "}
+								Back{" "}
+							</Link>
+						</div>
 
 						{(movie.status?.toLowerCase().includes("running") ||
 							movie.status?.toLowerCase().includes("playing")) && (
