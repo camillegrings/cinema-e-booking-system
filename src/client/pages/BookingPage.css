@@ -421,6 +421,21 @@
     align-self: end;
 }
 
+.back-to-movie-btn {
+    background-color: #d30e00;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    padding: 6px 14px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    align-self: end;
+}
+
 .checkout-btn:disabled {
     background: #1e293b;
     color: #475569;
