@@ -1,11 +1,12 @@
 .movie-details-banner {
+    margin-top:0;
     width: 100%;
-    height: 400px;
+    min-height: 500px;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     padding: 2rem;
-    padding-bottom: 0;
+    padding-bottom: 1rem;
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 70%, transparent 100%);
 }
 
@@ -14,7 +15,22 @@
     flex-direction: column;
     justify-content: center;
     padding: 0 60px;
-    height: calc(400px - 71.5px - 32px - 50px);
+}
+
+.back-btn {
+     background-color: #d30e00;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    padding: 6px 14px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    align-self: end;
+    width:fit-content;
 }
 
 .movie-details-get-ticket-btn {
@@ -49,10 +65,28 @@
 .movie-details-title {
     margin-bottom: 10px;
     text-shadow: 2px 1px 2px black;
+    font-size: 2.2rem;
+    color: #fff;
 }
 
 .movie-details-rating {
     margin-bottom: 20px;
+    font-weight: 600;
+    color: #eee;
+    text-shadow: 1px 1px 2px black;
+}
+
+.movie-details-showtimes-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.movie-details-content {
+    display: flex;
+    padding: 10px 30px 30px;
 }
 
 .movie-details-content {
@@ -64,16 +98,79 @@
     flex: 1;
 }
 
+.movie-details-empty-showtimes {
+    color: #ccc;
+    font-style: italic;
+    font-size: 14px;
+}
+
 .movie-details-content>div:first-child {
     margin-right: 20px;
 }
 
-.movie-details-subtitle {
-    margin: 10px 0;
+.showtime-date-group {
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 0;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.showtime-date-title {
+    color: #f1f1f1;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    text-shadow: 1px 1px 2px black;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 4px;
 }
 
 .movie-details-showtime-wrapper {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.movie-details-subtitle {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.movie-details-showtime-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #90002b;
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px 18px;
+    text-decoration: none;
+    min-width: 90px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.movie-details-showtime-badge:hover {
+    background-color: #b50036;
+    transform: translateY(-2px);
+}
+
+.badge-time {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.badge-hall {
+    font-size: 11px;
+    opacity: 0.85;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .movie-details-showtime {
@@ -84,14 +181,28 @@
     border-radius: 4px;
     padding: 10px 30px;
     text-decoration: none;
+    display: inline-block;
+}
+
+.movie-details-showtime:hover {
+    background-color: #b50036;
 }
 
 .movie-details-trailer-wrapper {
     padding: 10px 30px 50px;
 }
 
+.movie-details-iframe {
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.movie-details-loading,
 .movie-details-not-found {
     display: flex;
-    padding: 30px 30px;
+    padding: 30px;
     justify-content: center;
+    font-size: 1.1rem;
+    color: #ccc;
 }
