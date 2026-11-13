@@ -2,6 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import './BookingPage.css';
 import { Header } from '../components/Header.js';
+import { Link } from "react-router-dom";
+
 
 const ReclinerSeatSVG = () => (
     <svg className="seat-svg" viewBox="0 0 32 34">
@@ -29,6 +31,7 @@ interface ShowtimeSeatData {
 
 interface ShowtimeDetails {
     showtime_id: number;
+    movie_id?: number;
     movie_title: string;
     mpaa_rating: string;
     trailer_image_url: string;
@@ -255,6 +258,14 @@ export const BookingPage: React.FC = () => {
 
     // Checkout 
 
+    const handleBackToMovie = () => {
+        if (meta.movie_id) {
+            navigate(`/movie/${meta.movie_id}`);
+        } else {
+            navigate(-1);
+        }
+    };
+
 
 
 
@@ -295,6 +306,14 @@ export const BookingPage: React.FC = () => {
                             {meta.mpaa_rating && (
                                 <span className="rating-badge">{meta.mpaa_rating}</span>
                             )}
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                className="back-to-movie-btn"
+                                onClick={handleBackToMovie}
+                            > ← Back to Movie
+                            </button>
                         </div>
                     </div>
                 </section>

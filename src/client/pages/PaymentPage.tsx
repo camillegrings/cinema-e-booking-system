@@ -158,20 +158,7 @@ export const PaymentPage: React.FC = () => {
             <Header />
 
             <main className="payment-main-wrapper">
-                {/* Step Progress Indicator */}
-                <div className="checkout-stepper">
-                    <span className={`step-badge ${step === 'SUMMARY' ? 'active' : 'completed'}`}>
-                        1. Order Summary
-                    </span>
-                    <span className="step-line"></span>
-                    <span className={`step-badge ${step === 'PAYMENT' ? 'active' : step === 'CONFIRMED' ? 'completed' : ''}`}>
-                        2. Payment
-                    </span>
-                    <span className="step-line"></span>
-                    <span className={`step-badge ${step === 'CONFIRMED' ? 'active' : ''}`}>
-                        3. Confirmation
-                    </span>
-                </div>
+               
                 {step === 'CONFIRMED' ? (
                     <section className="payment-card confirmation-box">
                         <div className="confirm-icon">✓</div>
@@ -400,7 +387,7 @@ export const PaymentPage: React.FC = () => {
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label>Billing ZIP</label>
+                                                    <label>Zipcode</label>
                                                     <input
                                                         type="text"
                                                         maxLength={10}
