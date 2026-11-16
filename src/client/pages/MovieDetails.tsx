@@ -74,6 +74,13 @@ export const MovieDetails: React.FC = () => {
 
 	const parseSafeDate = (timeStr: string) => {
 		if (!timeStr) return new Date();
+
+		// Date-only string: parse as local time
+		if (/^\d{4}-\d{2}-\d{2}$/.test(timeStr)) {
+			const [year, month, day] = timeStr.split("-").map(Number);
+			return year && month ? new Date(year, month - 1, day) : new Date(timeStr);
+		}
+
 		const normalized = timeStr.includes("T")
 			? timeStr
 			: timeStr.replace(" ", "T");
